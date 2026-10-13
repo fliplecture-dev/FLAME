@@ -1,0 +1,190 @@
+{
+  "date": "2026-10-13",
+  "scope": "Remove work files unrelated to interactive activities; retain live server controls",
+  "removed": [
+    {
+      "path": "E:\\FLAME\\work\\add-gravity-sample-videos.py",
+      "bytes": 8799
+    },
+    {
+      "path": "E:\\FLAME\\work\\b11-baseline-source.zip",
+      "bytes": 46144
+    },
+    {
+      "path": "E:\\FLAME\\work\\b11-verification.json",
+      "bytes": 1000
+    },
+    {
+      "path": "E:\\FLAME\\work\\b14-explore-backend.txt",
+      "bytes": 939
+    },
+    {
+      "path": "E:\\FLAME\\work\\b14-explore-performance.json",
+      "bytes": 293
+    },
+    {
+      "path": "E:\\FLAME\\work\\b8-live-baseline.json",
+      "bytes": 25215
+    },
+    {
+      "path": "E:\\FLAME\\work\\b8-study-api-check.json",
+      "bytes": 746
+    },
+    {
+      "path": "E:\\FLAME\\work\\conversation-image-selection-fix.md",
+      "bytes": 5474
+    },
+    {
+      "path": "E:\\FLAME\\work\\current-mapping-paths.json",
+      "bytes": 1801360
+    },
+    {
+      "path": "E:\\FLAME\\work\\curriculum-replacement-import-fix.md",
+      "bytes": 2862
+    },
+    {
+      "path": "E:\\FLAME\\work\\curriculum-workspace-flow-fix.md",
+      "bytes": 7971
+    },
+    {
+      "path": "E:\\FLAME\\work\\external-video-resources.md",
+      "bytes": 11111
+    },
+    {
+      "path": "E:\\FLAME\\work\\gravity-resource-mappings.jpg",
+      "bytes": 82092
+    },
+    {
+      "path": "E:\\FLAME\\work\\gravity-resource-mappings.svg",
+      "bytes": 109613
+    },
+    {
+      "path": "E:\\FLAME\\work\\gravity-sample-resources.json",
+      "bytes": 30326
+    },
+    {
+      "path": "E:\\FLAME\\work\\gravity-sample-resources.md",
+      "bytes": 3026
+    },
+    {
+      "path": "E:\\FLAME\\work\\import_final_curriculum.py",
+      "bytes": 5740
+    },
+    {
+      "path": "E:\\FLAME\\work\\keyless-video-category-mapping.md",
+      "bytes": 4846
+    },
+    {
+      "path": "E:\\FLAME\\work\\map-gravity-category-samples.py",
+      "bytes": 5085
+    },
+    {
+      "path": "E:\\FLAME\\work\\media-family-tests.txt",
+      "bytes": 951
+    },
+    {
+      "path": "E:\\FLAME\\work\\mvp-learning-recommendations.md",
+      "bytes": 8273
+    },
+    {
+      "path": "E:\\FLAME\\work\\prepare-gravity-html.py",
+      "bytes": 4557
+    },
+    {
+      "path": "E:\\FLAME\\work\\project-stages-before-consolidation-2026-09-25.zip",
+      "bytes": 59175
+    },
+    {
+      "path": "E:\\FLAME\\work\\publish-light-shadow.py",
+      "bytes": 2223
+    },
+    {
+      "path": "E:\\FLAME\\work\\published-media-mapping-result.jpg",
+      "bytes": 57451
+    },
+    {
+      "path": "E:\\FLAME\\work\\register-light-shadow.py",
+      "bytes": 3709
+    },
+    {
+      "path": "E:\\FLAME\\work\\related-media-mapping-result.jpg",
+      "bytes": 56960
+    },
+    {
+      "path": "E:\\FLAME\\work\\resource-library-enhancement.md",
+      "bytes": 10363
+    },
+    {
+      "path": "E:\\FLAME\\work\\resource-library-fix.md",
+      "bytes": 8684
+    },
+    {
+      "path": "E:\\FLAME\\work\\resource-mapping-deletion.md",
+      "bytes": 7632
+    },
+    {
+      "path": "E:\\FLAME\\work\\upgrade-interactive.py",
+      "bytes": 6478
+    },
+    {
+      "path": "E:\\FLAME\\work\\verify_published_study.py",
+      "bytes": 5073
+    },
+    {
+      "path": "E:\\FLAME\\work\\recommendation-quality\\educator-review.md",
+      "bytes": 2895
+    },
+    {
+      "path": "E:\\FLAME\\work\\recommendation-quality\\ranking-before-token-reuse.json",
+      "bytes": 9854
+    },
+    {
+      "path": "E:\\FLAME\\work\\recommendation-quality\\recommendation-evaluation.json",
+      "bytes": 9855
+    },
+    {
+      "path": "E:\\FLAME\\work\\recommendation-quality\\tutor-query-check.json",
+      "bytes": 183
+    },
+    {
+      "path": "E:\\FLAME\\work\\bulk-sample-builder\\build.mjs",
+      "bytes": 6864
+    },
+    {
+      "path": "E:\\FLAME\\work\\bulk-sample-builder\\node_modules",
+      "bytes": 0,
+      "kind": "junction only; shared dependencies preserved"
+    },
+    {
+      "path": "E:\\FLAME\\work\\bulk-sample-builder\\spec.json",
+      "bytes": 967
+    }
+  ],
+  "files_removed": 39,
+  "bytes_removed": 2414789,
+  "remaining_root_files": [
+    "README.md",
+    "dev-session.json",
+    "dev-session.stderr.log",
+    "dev-session.stdout.log",
+    "gravity-before-autoreset.html",
+    "gravity-before-object-actions.html",
+    "gravity-before-phaser.html",
+    "gravity-lab-html5.html",
+    "gravity-phaser-upgrade.json",
+    "interactive-cleanup-audit.json",
+    "interactive-cleanup-receipt.json",
+    "interactive-folder-migration.json",
+    "light-before-object-actions.html",
+    "light-shadow-paths.json",
+    "light-shadow-registered.json",
+    "matter-registered.json",
+    "rive-cat-registered.json",
+    "what-is-light-before-phaser.html",
+    "what-is-light-phaser-upgrade.json"
+  ],
+  "preserved_directories": [
+    "tools",
+    "qa"
+  ]
+}

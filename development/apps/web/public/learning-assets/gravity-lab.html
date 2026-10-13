@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'">
+<title>Gravity lab</title>
+<style>
+*{box-sizing:border-box}body{margin:0;padding:20px;font:15px/1.5 "Segoe UI",sans-serif;color:#243b62;background:#f6f8fc}
+label{display:block;margin-bottom:10px}select,button{font:inherit;border:1px solid #bac9dd;padding:9px 14px;border-radius:8px;background:white;color:#243b62}button{cursor:pointer}button:focus-visible,select:focus-visible{outline:3px solid #3f77be;outline-offset:3px}
+.scene{height:220px;position:relative;border-bottom:3px solid #9cbaaa;margin:18px 0;background:linear-gradient(#edf3ff,#fff)}
+.ball{position:absolute;left:calc(50% - 14px);top:0;width:28px;height:28px;border-radius:50%;background:#ed8a36}p{font-size:13px}.controls{display:flex;gap:10px;flex-wrap:wrap}output{display:block;margin-top:12px;font-weight:600}
+</style></head><body>
+<label for="world">Choose gravity</label><div class="controls"><select id="world"><option value="9.81">Earth</option><option value="1.62">Moon</option></select><button id="drop">Drop ball</button><button id="reset">Reset</button></div>
+<div class="scene" aria-hidden="true"><div class="ball"></div></div>
+<output id="result" aria-live="polite">Drop height: 2 metres</output><p>Simplified model: no air resistance. The Moon's weaker gravity makes the same fall take longer.</p>
+<script>
+const world=document.querySelector('#world'),ball=document.querySelector('.ball'),result=document.querySelector('#result');let animation;
+function reset(){animation?.cancel();ball.style.transform='translateY(0)';result.textContent='Drop height: 2 metres';}
+document.querySelector('#reset').onclick=reset;world.onchange=reset;
+document.querySelector('#drop').onclick=()=>{reset();const duration=Math.sqrt(4/Number(world.value))*1000;const frames=Array.from({length:61},(_,i)=>({transform:'translateY('+(190*(i/60)**2)+'px)',offset:i/60}));animation=ball.animate(frames,{duration,fill:'forwards'});animation.onfinish=()=>{result.textContent='Fall time: '+(duration/1000).toFixed(2)+' seconds on '+world.selectedOptions[0].text;};};
+</script></body></html>

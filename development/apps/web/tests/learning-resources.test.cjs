@@ -1,0 +1,5 @@
+const {test}=require('node:test');const assert=require('node:assert/strict');const fs=require('node:fs');const {stripTypeScriptTypes}=require('node:module');
+const source=fs.readFileSync('src/features/learning/learning-resources.ts','utf8');
+const modulePromise=import('data:text/javascript;base64,'+Buffer.from(stripTypeScriptTypes(source)).toString('base64'));
+test('resource URLs reject executable and ambiguous schemes',async()=>{const {resourceUrl}=await modulePromise;for(const value of ['javascript:alert(1)','data:text/html,hello','//evil.test/a','/\\evil.test/a','https:\\evil.test',' https://example.com','https://example.com/\n'])assert.equal(resourceUrl(value),undefined,value);assert.equal(resourceUrl('/learning-assets/gravity.svg'),'/learning-assets/gravity.svg');assert.equal(resourceUrl('https://example.com/guide'),'https://example.com/guide');});
+test('interactive catalog resolves only packaged experiences',async()=>{const {approvedExperiences}=await modulePromise;for(const path of Object.values(approvedExperiences))assert(fs.existsSync('public'+path));});

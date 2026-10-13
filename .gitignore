@@ -1,0 +1,39 @@
+# Local dependencies, environments, and package caches
+**/node_modules/
+**/.venv/
+**/.npm-cache/
+
+# Generated application and test output
+**/.next/
+**/out/
+**/dist/
+**/build/
+**/__pycache__/
+**/.pytest_cache/
+**/.ruff_cache/
+**/.mypy_cache/
+**/.coverage
+**/*.tsbuildinfo
+**/next-env.d.ts
+*.log
+/work/dev-session.json
+/work/dev-session.stop
+
+# Local configuration and credentials
+/Private_Key/
+/flame-resources/
+# Local reference documents and scratch assets are not public application source
+/Curriculum Documents/
+/Ref UI/
+/Planning/
+/work/
+.env
+.env.*
+!.env.example
+!**/.env.example
+
+# Editor and operating-system files
+.kilo/
+development/FLAME/
+.DS_Store
+Thumbs.db

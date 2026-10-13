@@ -1,0 +1,15 @@
+.viewer { width: 100%; background: #fff; color: #111827; }
+.stage { display: flex; flex-direction: column; width: 100%; }
+.viewport { width: 100%; }
+.toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 12px; flex: 0 0 auto; border-bottom: 1px solid #e6e8ed; }
+.title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; font-weight: 600; }
+.toggle { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; width: 44px; height: 44px; border: 1px solid #e6e8ed; border-radius: 8px; background: #fff; color: #111827; cursor: pointer; }
+.toggle:hover { background: #f1f5f9; }
+.toggle:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
+.viewer .frame { display: block; width: 100%; height: min(72vh, 760px); min-height: 360px; border: 0; border-radius: 0; }
+.expanded { position: fixed; inset: 0; z-index: 10000; width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; overflow: hidden; }
+.expanded .stage { height: 100%; padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); box-sizing: border-box; }
+.expanded .viewport { flex: 1 1 0; min-height: 0; overflow: auto; }
+.expanded .frame { width: 100%; min-width: max(100dvw, 100dvh); height: 100%; min-height: 0; }
+.expanded .stage > button { flex: 0 0 auto; align-self: flex-start; margin: 8px 12px !important; }
+/* Wide, upright HTML canvas; device rotation is entirely controlled by the user. */

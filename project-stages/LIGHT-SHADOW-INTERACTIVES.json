@@ -1,0 +1,1241 @@
+[
+  {
+    "title": "Light · Discovery Lab",
+    "type": "interactive",
+    "file": "E:\\FLAME\\flame-resources\\interactive\\2e236527a8495aa2afbbbba0a2e108bb.html",
+    "grade_min": 1,
+    "grade_max": 1,
+    "purposes": [
+      "explain",
+      "demonstrate"
+    ],
+    "teaching_languages": [
+      "en"
+    ],
+    "concepts": [
+      "Light"
+    ],
+    "subtopics": [
+      "What is Light?",
+      "Sources of Light",
+      "Reflection of Light",
+      "Absorption and Transmission of Light",
+      "How We See Objects"
+    ],
+    "paths": [
+      {
+        "curriculum": "FlipLecture",
+        "level": "Grade 1",
+        "subject": "Science",
+        "domain": "Light (How Do I See?)",
+        "topic": "Light",
+        "topic_id": "da672014-83c8-4f9d-8dc4-fd96efdc5475",
+        "outcome": null,
+        "subtopics": [
+          {
+            "name": "What is Light?",
+            "id": "f3697b3e-6325-4a11-9568-ca610864586a"
+          },
+          {
+            "name": "Sources of Light",
+            "id": "75a130cb-8497-4f16-b82f-52c00be2d1b6"
+          },
+          {
+            "name": "Reflection of Light",
+            "id": "8fac84a5-2905-4a4c-a1ab-c0bbffd426c0"
+          },
+          {
+            "name": "Absorption and Transmission of Light",
+            "id": "9ac28e78-629b-4b70-8f19-d9b2b8b8c8ca"
+          },
+          {
+            "name": "How We See Objects",
+            "id": "110005b3-b5dd-477d-a2c8-832adfa98f93"
+          }
+        ]
+      },
+      {
+        "curriculum": "TN Stateboard",
+        "level": "Grade 1",
+        "subject": "Science",
+        "domain": "Light (How Do I See?)",
+        "topic": "Light",
+        "topic_id": "f027df15-80e5-4c50-8c56-c58a2c7679bb",
+        "outcome": null,
+        "subtopics": [
+          {
+            "name": "What is Light?",
+            "id": "519d74b3-eb84-4870-a7ed-472aef1e2e16"
+          },
+          {
+            "name": "Sources of Light",
+            "id": "71585971-1db1-45fa-bdd6-6e76ac1edbfd"
+          },
+          {
+            "name": "Reflection of Light",
+            "id": "fea544e0-b28d-4efb-bd62-aa1e2713cb2a"
+          },
+          {
+            "name": "Absorption and Transmission of Light",
+            "id": "758155f8-c351-4fb1-a5b6-887aa3c92b32"
+          },
+          {
+            "name": "How We See Objects",
+            "id": "09abc1c8-e8b5-4619-ab3a-bd2ab8f70f03"
+          }
+        ]
+      }
+    ],
+    "resource_id": "2e236527-a849-5aa2-afbb-bba0a2e108bb",
+    "published": true,
+    "resource_version": 3
+  },
+  {
+    "title": "Light and Sound Signals · Discovery Lab",
+    "type": "interactive",
+    "file": "E:\\FLAME\\flame-resources\\interactive\\3864862cab015e76baeb33038680e39a.html",
+    "grade_min": 1,
+    "grade_max": 1,
+    "purposes": [
+      "explain",
+      "demonstrate"
+    ],
+    "teaching_languages": [
+      "en"
+    ],
+    "concepts": [
+      "Light and Sound Signals"
+    ],
+    "subtopics": [
+      "What are Signals?",
+      "Light Signals",
+      "Sound Signals",
+      "Signals for Communication",
+      "Everyday Uses of Signals"
+    ],
+    "paths": [
+      {
+        "curriculum": "FlipLecture",
+        "level": "Grade 1",
+        "subject": "Science",
+        "domain": "Signals - Light and Sound",
+        "topic": "Light and Sound Signals",
+        "topic_id": "5d49d545-99ab-4c65-b207-c7dcf247b1a2",
+        "outcome": null,
+        "subtopics": [
+          {
+            "name": "What are Signals?",
+            "id": "eb6f2c21-5b82-4863-9c5f-9ed1b2c3bb4f"
+          },
+          {
+            "name": "Light Signals",
+            "id": "3bafbfcd-04af-45d4-b082-b3a3dfafe679"
+          },
+          {
+            "name": "Sound Signals",
+            "id": "94e719eb-162b-41dd-8bc6-be629fc74b6f"
+          },
+          {
+            "name": "Signals for Communication",
+            "id": "8cac158d-9472-4102-b9c5-9bb8dc6d8030"
+          },
+          {
+            "name": "Everyday Uses of Signals",
+            "id": "6f2ca3b0-c477-4b3b-a878-2151841f012a"
+          }
+        ]
+      },
+      {
+        "curriculum": "TN Stateboard",
+        "level": "Grade 1",
+        "subject": "Science",
+        "domain": "Signals - Light and Sound",
+        "topic": "Light and Sound Signals",
+        "topic_id": "a66304c0-ef23-40bb-9f11-4c267faea75b",
+        "outcome": null,
+        "subtopics": [
+          {
+            "name": "What are Signals?",
+            "id": "84fc4212-5bbc-47bc-877d-36966274befa"
+          },
+          {
+            "name": "Light Signals",
+            "id": "a802af2c-cd52-47ba-973e-4f7b8cf0affb"
+          },
+          {
+            "name": "Sound Signals",
+            "id": "270899e7-0300-437a-b11c-f2c423d867ae"
+          },
+          {
+            "name": "Signals for Communication",
+            "id": "e942fd59-d1c9-4466-bc1e-73bac4bf9c09"
+          },
+          {
+            "name": "Everyday Uses of Signals",
+            "id": "f46218b5-8440-43b0-9d0d-4e14ae2e9714"
+          }
+        ]
+      }
+    ],
+    "resource_id": "3864862c-ab01-5e76-baeb-33038680e39a",
+    "published": true,
+    "resource_version": 3
+  },
+  {
+    "title": "Shadows · Discovery Lab",
+    "type": "interactive",
+    "file": "E:\\FLAME\\flame-resources\\interactive\\8ec629e874115d668ba124cb391f2c98.html",
+    "grade_min": 1,
+    "grade_max": 1,
+    "purposes": [
+      "explain",
+      "demonstrate"
+    ],
+    "teaching_languages": [
+      "en"
+    ],
+    "concepts": [
+      "Shadows"
+    ],
+    "subtopics": [
+      "What is Light?",
+      "How Shadows Form",
+      "Light Travels in a Straight Line",
+      "Shadow Position",
+      "Shadow Size and Time of Day"
+    ],
+    "paths": [
+      {
+        "curriculum": "FlipLecture",
+        "level": "Grade 1",
+        "subject": "Science",
+        "domain": "Shadow (Me and My Shadow)",
+        "topic": "Shadows",
+        "topic_id": "7a44b2bf-ea73-4c7f-8c9d-0d3b56d4fcde",
+        "outcome": null,
+        "subtopics": [
+          {
+            "name": "What is Light?",
+            "id": "6ba5913a-fc91-4006-a103-0ec9868e5a07"
+          },
+          {
+            "name": "How Shadows Form",
+            "id": "bf9018ba-e3c4-4284-9f37-f7c4b9aef010"
+          },
+          {
+            "name": "Light Travels in a Straight Line",
+            "id": "35bebd03-f341-4c2a-8c3d-6cdb414383c1"
+          },
+          {
+            "name": "Shadow Position",
+            "id": "17c40d2c-7e1c-4da9-9daa-57ae8d9554c4"
+          },
+          {
+            "name": "Shadow Size and Time of Day",
+            "id": "f6fea66c-c504-4680-bcc3-15a2a9609c1b"
+          }
+        ]
+      },
+      {
+        "curriculum": "TN Stateboard",
+        "level": "Grade 1",
+        "subject": "Science",
+        "domain": "Shadow (Me and My Shadow)",
+        "topic": "Shadows",
+        "topic_id": "978d658c-4059-485d-b0b0-a509c9cf8089",
+        "outcome": null,
+        "subtopics": [
+          {
+            "name": "What is Light?",
+            "id": "8029f9d1-20d0-44af-af0d-39dcceff0dfe"
+          },
+          {
+            "name": "How Shadows Form",
+            "id": "4b269e83-2094-4b47-84f0-92a16a00e647"
+          },
+          {
+            "name": "Light Travels in a Straight Line",
+            "id": "b07b647c-b2f0-47c9-8cfc-36d7539a832f"
+          },
+          {
+            "name": "Shadow Position",
+            "id": "287bbac4-3a09-4695-9f03-d09b8e2eaded"
+          },
+          {
+            "name": "Shadow Size and Time of Day",
+            "id": "6f1ee3ec-cec1-4899-bba8-d91ae814a8e7"
+          }
+        ]
+      }
+    ],
+    "resource_id": "8ec629e8-7411-5d66-8ba1-24cb391f2c98",
+    "published": true,
+    "resource_version": 3
+  },
+  {
+    "title": "Story of lighthouse (Light and Sound Signals) · Discovery Lab",
+    "type": "interactive",
+    "file": "E:\\FLAME\\flame-resources\\interactive\\44f9d210fe0e5e0c8d4136f4a092ebab.html",
+    "grade_min": 1,
+    "grade_max": 1,
+    "purposes": [
+      "explain",
+      "demonstrate"
+    ],
+    "teaching_languages": [
+      "en"
+    ],
+    "concepts": [
+      "Story of lighthouse (Light and Sound Signals)"
+    ],
+    "subtopics": [
+      "Light Signals",
+      "Sound Signals",
+      "Signals for Communication",
+      "Signals for Safety",
+      "Everyday Signal Devices"
+    ],
+    "paths": [
+      {
+        "curriculum": "FlipLecture",
+        "level": "Grade 1",
+        "subject": "Science",
+        "domain": "The Lighthouse (Light & Sound)",
+        "topic": "Story of lighthouse (Light and Sound Signals)",
+        "topic_id": "a6bc105f-ff43-4715-80cb-336ec3dc95a5",
+        "outcome": null,
+        "subtopics": [
+          {
+            "name": "Light Signals",
+            "id": "5be54feb-a41a-4036-80c8-d7fbefd15787"
+          },
+          {
+            "name": "Sound Signals",
+            "id": "146e3f64-add4-4200-9e91-c74d1980f6ca"
+          },
+          {
+            "name": "Signals for Communication",
+            "id": "54b88899-cadb-48dc-a176-c4e4d9a75719"
+          },
+          {
+            "name": "Signals for Safety",
+            "id": "65d06fc1-aed1-4bf5-b03b-426178a482c4"
+          },
+          {
+            "name": "Everyday Signal Devices",
+            "id": "4d3a35cb-26cc-4d15-8653-baff88d32a00"
+          }
+        ]
+      },
+      {
+        "curriculum": "TN Stateboard",
+        "level": "Grade 1",
+        "subject": "Science",
+        "domain": "The Lighthouse (Light & Sound)",
+        "topic": "Story of lighthouse (Light and Sound Signals)",
+        "topic_id": "a59f247a-7e4f-48b2-a7f9-46fa8705ed02",
+        "outcome": null,
+        "subtopics": [
+          {
+            "name": "Light Signals",
+            "id": "12c9efe2-20ba-4b5f-9a9f-503363326494"
+          },
+          {
+            "name": "Sound Signals",
+            "id": "4cd378d4-4def-4bce-ad23-be129f642758"
+          },
+          {
+            "name": "Signals for Communication",
+            "id": "879d611c-57f9-4a75-824a-375b41ca462e"
+          },
+          {
+            "name": "Signals for Safety",
+            "id": "935185a0-45f0-4a76-beca-6dda7f9f42fe"
+          },
+          {
+            "name": "Everyday Signal Devices",
+            "id": "35527751-c134-4708-9fcb-04f740efac06"
+          }
+        ]
+      }
+    ],
+    "resource_id": "44f9d210-fe0e-5e0c-8d41-36f4a092ebab",
+    "published": true,
+    "resource_version": 3
+  },
+  {
+    "title": "Bending of Light · Discovery Lab",
+    "type": "interactive",
+    "file": "E:\\FLAME\\flame-resources\\interactive\\cc6d95516bf95ca0a0fdb173e9c6adeb.html",
+    "grade_min": 4,
+    "grade_max": 4,
+    "purposes": [
+      "explain",
+      "demonstrate"
+    ],
+    "teaching_languages": [
+      "en"
+    ],
+    "concepts": [
+      "Bending of Light"
+    ],
+    "subtopics": [
+      "Why Does Light Bend?",
+      "Light Entering a New Material at an Angle",
+      "When Light Does Not Appear to Bend",
+      "Direction Changes at the Boundary"
+    ],
+    "paths": [
+      {
+        "curriculum": "FlipLecture",
+        "level": "Grade 4",
+        "subject": "Science",
+        "domain": "Physical Science",
+        "topic": "Bending of Light",
+        "topic_id": "4625c19e-83d6-41cd-b57a-a99fa51300d6",
+        "outcome": null,
+        "subtopics": [
+          {
+            "name": "Why Does Light Bend?",
+            "id": "17ae4579-948f-4b5f-8b61-54482e0e1724"
+          },
+          {
+            "name": "Light Entering a New Material at an Angle",
+            "id": "cb7d97fb-1384-4378-ba83-f1d1a5e88f55"
+          },
+          {
+            "name": "When Light Does Not Appear to Bend",
+            "id": "85cdf0cb-a6c8-4589-81bf-8a482b9f12a0"
+          },
+          {
+            "name": "Direction Changes at the Boundary",
+            "id": "60f37eb9-9d3a-48fc-920d-e9a72a571461"
+          }
+        ]
+      },
+      {
+        "curriculum": "TN Stateboard",
+        "level": "Grade 4",
+        "subject": "Science",
+        "domain": "Physical Science",
+        "topic": "Bending of Light",
+        "topic_id": "cdc65e67-4c09-4b05-85e4-897686324d74",
+        "outcome": null,
+        "subtopics": [
+          {
+            "name": "Why Does Light Bend?",
+            "id": "c44c09ba-693d-44c6-b081-c762907c023f"
+          },
+          {
+            "name": "Light Entering a New Material at an Angle",
+            "id": "49a7c469-a7a4-42b4-922c-2a69252b91e4"
+          },
+          {
+            "name": "When Light Does Not Appear to Bend",
+            "id": "75a11b49-7f0a-48cc-8032-01037a78372c"
+          },
+          {
+            "name": "Direction Changes at the Boundary",
+            "id": "fc8b6ab8-f218-49cf-bb82-ad490bbdd6e7"
+          }
+        ]
+      }
+    ],
+    "resource_id": "cc6d9551-6bf9-5ca0-a0fd-b173e9c6adeb",
+    "published": true,
+    "resource_version": 3
+  },
+  {
+    "title": "Exploring Reflection · Discovery Lab",
+    "type": "interactive",
+    "file": "E:\\FLAME\\flame-resources\\interactive\\5e0caccd20ab54fa84d25db95c74ff11.html",
+    "grade_min": 4,
+    "grade_max": 4,
+    "purposes": [
+      "explain",
+      "demonstrate"
+    ],
+    "teaching_languages": [
+      "en"
+    ],
+    "concepts": [
+      "Exploring Reflection"
+    ],
+    "subtopics": [
+      "Predicting Where Light Will Go",
+      "Comparing Smooth and Rough Surfaces",
+      "Investigating Reflection with a Mirror"
+    ],
+    "paths": [
+      {
+        "curriculum": "FlipLecture",
+        "level": "Grade 4",
+        "subject": "Science",
+        "domain": "Physical Science",
+        "topic": "Exploring Reflection",
+        "topic_id": "a394d807-4823-4a3a-8a6c-47dbd72428b3",
+        "outcome": null,
+        "subtopics": [
+          {
+            "name": "Predicting Where Light Will Go",
+            "id": "a047029a-1ab4-43d7-8cfb-68be5c52b14f"
+          },
+          {
+            "name": "Comparing Smooth and Rough Surfaces",
+            "id": "41bb4686-badb-40a1-b31a-3ff61315d899"
+          },
+          {
+            "name": "Investigating Reflection with a Mirror",
+            "id": "a1d8c76c-fb6f-4ccd-9bb5-7cbeb02bb153"
+          }
+        ]
+      },
+      {
+        "curriculum": "TN Stateboard",
+        "level": "Grade 4",
+        "subject": "Science",
+        "domain": "Physical Science",
+        "topic": "Exploring Reflection",
+        "topic_id": "f0e92712-72c7-430a-bca9-933b44de52eb",
+        "outcome": null,
+        "subtopics": [
+          {
+            "name": "Predicting Where Light Will Go",
+            "id": "2c9afbf6-8af9-4c2d-b3a7-c9b3c3321079"
+          },
+          {
+            "name": "Comparing Smooth and Rough Surfaces",
+            "id": "de1e9c9e-c96e-4dd9-8d22-472f77ba8452"
+          },
+          {
+            "name": "Investigating Reflection with a Mirror",
+            "id": "f840569d-8866-4839-a2e0-82406a98954b"
+          }
+        ]
+      }
+    ],
+    "resource_id": "5e0caccd-20ab-54fa-84d2-5db95c74ff11",
+    "published": true,
+    "resource_version": 3
+  },
+  {
+    "title": "Exploring Refraction · Discovery Lab",
+    "type": "interactive",
+    "file": "E:\\FLAME\\flame-resources\\interactive\\3912b0540cec56f0a7fc1650582379c5.html",
+    "grade_min": 4,
+    "grade_max": 4,
+    "purposes": [
+      "explain",
+      "demonstrate"
+    ],
+    "teaching_languages": [
+      "en"
+    ],
+    "concepts": [
+      "Exploring Refraction"
+    ],
+    "subtopics": [
+      "Predicting How Light Will Bend",
+      "Comparing Light Through Air and Water",
+      "Investigating a Straw in Water",
+      "Observing Refraction with a Glass of Water"
+    ],
+    "paths": [
+      {
+        "curriculum": "FlipLecture",
+        "level": "Grade 4",
+        "subject": "Science",
+        "domain": "Physical Science",
+        "topic": "Exploring Refraction",
+        "topic_id": "e26c0b31-8e2f-412e-abdf-ec4417fb2a50",
+        "outcome": null,
+        "subtopics": [
+          {
+            "name": "Predicting How Light Will Bend",
+            "id": "13c5dd05-5f8f-4d27-ae3d-f43302c1138d"
+          },
+          {
+            "name": "Comparing Light Through Air and Water",
+            "id": "9f11591e-3791-412a-854e-62a7ff9bdb57"
+          },
+          {
+            "name": "Investigating a Straw in Water",
+            "id": "1f6ff8db-514c-4bad-93a8-cd4f9bcf0896"
+          },
+          {
+            "name": "Observing Refraction with a Glass of Water",
+            "id": "0292c6a7-7ad2-474d-8e86-3b6f58ffe65c"
+          }
+        ]
+      },
+      {
+        "curriculum": "TN Stateboard",
+        "level": "Grade 4",
+        "subject": "Science",
+        "domain": "Physical Science",
+        "topic": "Exploring Refraction",
+        "topic_id": "4e789c67-288b-4f3e-bd09-7eb54d8db2cb",
+        "outcome": null,
+        "subtopics": [
+          {
+            "name": "Predicting How Light Will Bend",
+            "id": "45ac3591-61c2-4188-9bce-08c50d4f1aca"
+          },
+          {
+            "name": "Comparing Light Through Air and Water",
+            "id": "0a294241-5f4c-4117-85f7-b9236ff1014b"
+          },
+          {
+            "name": "Investigating a Straw in Water",
+            "id": "47aadfe7-1b91-4909-a5fc-16df331cc26b"
+          },
+          {
+            "name": "Observing Refraction with a Glass of Water",
+            "id": "83a11565-b0f1-4051-a97d-8cef9aa22dc0"
+          }
+        ]
+      }
+    ],
+    "resource_id": "3912b054-0cec-56f0-a7fc-1650582379c5",
+    "published": true,
+    "resource_version": 3
+  },
+  {
+    "title": "How Light Interacts with Materials · Discovery Lab",
+    "type": "interactive",
+    "file": "E:\\FLAME\\flame-resources\\interactive\\bbfa64f2d0325850a2fc1cd71dd2566b.html",
+    "grade_min": 4,
+    "grade_max": 4,
+    "purposes": [
+      "explain",
+      "demonstrate"
+    ],
+    "teaching_languages": [
+      "en"
+    ],
+    "concepts": [
+      "How Light Interacts with Materials"
+    ],
+    "subtopics": [
+      "Light Can Be Reflected",
+      "Light Can Be Transmitted",
+      "Light Can Be Absorbed",
+      "Reflection, Transmission and Absorption"
+    ],
+    "paths": [
+      {
+        "curriculum": "FlipLecture",
+        "level": "Grade 4",
+        "subject": "Science",
+        "domain": "Physical Science",
+        "topic": "How Light Interacts with Materials",
+        "topic_id": "44d06a91-96ec-4ebc-9bbd-85896c64e24b",
+        "outcome": null,
+        "subtopics": [
+          {
+            "name": "Light Can Be Reflected",
+            "id": "adf6a88b-6e6a-4c2a-bf27-b5988688f670"
+          },
+          {
+            "name": "Light Can Be Transmitted",
+            "id": "c9fef4d0-65bd-466b-942d-8673f1990f46"
+          },
+          {
+            "name": "Light Can Be Absorbed",
+            "id": "cbacd511-b21d-4153-a364-11e38524de5b"
+          },
+          {
+            "name": "Reflection, Transmission and Absorption",
+            "id": "d1531f6f-38db-4519-b294-a9aed1241f2f"
+          }
+        ]
+      },
+      {
+        "curriculum": "TN Stateboard",
+        "level": "Grade 4",
+        "subject": "Science",
+        "domain": "Physical Science",
+        "topic": "How Light Interacts with Materials",
+        "topic_id": "5d46bb1d-ff3c-4f2a-87ef-c1af405c5bd6",
+        "outcome": null,
+        "subtopics": [
+          {
+            "name": "Light Can Be Reflected",
+            "id": "6aba3c9c-a737-41bf-b6c0-75f682173d0b"
+          },
+          {
+            "name": "Light Can Be Transmitted",
+            "id": "0ec24ae4-cb13-4139-aac2-1efcc7d9220c"
+          },
+          {
+            "name": "Light Can Be Absorbed",
+            "id": "57fb3f2b-3794-4c5f-9388-0b5efa1d0410"
+          },
+          {
+            "name": "Reflection, Transmission and Absorption",
+            "id": "402a02ee-564c-441b-9bce-660f5a7f7a51"
+          }
+        ]
+      }
+    ],
+    "resource_id": "bbfa64f2-d032-5850-a2fc-1cd71dd2566b",
+    "published": true,
+    "resource_version": 3
+  },
+  {
+    "title": "Law of Reflection · Discovery Lab",
+    "type": "interactive",
+    "file": "E:\\FLAME\\flame-resources\\interactive\\0e91aecc11da5537be072999ffe5fc9f.html",
+    "grade_min": 4,
+    "grade_max": 4,
+    "purposes": [
+      "explain",
+      "demonstrate"
+    ],
+    "teaching_languages": [
+      "en"
+    ],
+    "concepts": [
+      "Law of Reflection"
+    ],
+    "subtopics": [
+      "Incoming Light Ray",
+      "Reflected Light Ray",
+      "Angle of Reflection",
+      "Predicting the Path of Reflected Light"
+    ],
+    "paths": [
+      {
+        "curriculum": "FlipLecture",
+        "level": "Grade 4",
+        "subject": "Science",
+        "domain": "Physical Science",
+        "topic": "Law of Reflection",
+        "topic_id": "847240fe-f2ee-479c-9fe4-5648c26834d6",
+        "outcome": null,
+        "subtopics": [
+          {
+            "name": "Incoming Light Ray",
+            "id": "361af96c-7d9a-4e61-89d1-ea7728604f1b"
+          },
+          {
+            "name": "Reflected Light Ray",
+            "id": "53f9dcaf-5221-48e7-9f90-4519844cad4b"
+          },
+          {
+            "name": "Angle of Reflection",
+            "id": "db689fa1-50af-42f7-81f6-0e1598fed9a6"
+          },
+          {
+            "name": "Predicting the Path of Reflected Light",
+            "id": "1041fc68-4758-4ad2-827a-58867aa091fb"
+          }
+        ]
+      },
+      {
+        "curriculum": "TN Stateboard",
+        "level": "Grade 4",
+        "subject": "Science",
+        "domain": "Physical Science",
+        "topic": "Law of Reflection",
+        "topic_id": "a9d1a1f2-fb5b-479b-9e44-416e710c88d3",
+        "outcome": null,
+        "subtopics": [
+          {
+            "name": "Incoming Light Ray",
+            "id": "e7a6879e-f9c8-46e0-b15c-5a688fb29ae4"
+          },
+          {
+            "name": "Reflected Light Ray",
+            "id": "cf7d80db-b77b-4b63-a717-0a23f6bafb23"
+          },
+          {
+            "name": "Angle of Reflection",
+            "id": "532d92f7-a768-445c-b708-87871d3cfdee"
+          },
+          {
+            "name": "Predicting the Path of Reflected Light",
+            "id": "3b44b804-3574-4045-b026-050706667342"
+          }
+        ]
+      }
+    ],
+    "resource_id": "0e91aecc-11da-5537-be07-2999ffe5fc9f",
+    "published": true,
+    "resource_version": 3
+  },
+  {
+    "title": "Light and Different Materials · Discovery Lab",
+    "type": "interactive",
+    "file": "E:\\FLAME\\flame-resources\\interactive\\001d2916654554bbbd5006372b60f026.html",
+    "grade_min": 4,
+    "grade_max": 4,
+    "purposes": [
+      "explain",
+      "demonstrate"
+    ],
+    "teaching_languages": [
+      "en"
+    ],
+    "concepts": [
+      "Light and Different Materials"
+    ],
+    "subtopics": [
+      "Light Travels Through Empty Space",
+      "Light Travels Through Matter",
+      "Light Travels at Different Speeds in Different Materials",
+      "Air, Water and Glass"
+    ],
+    "paths": [
+      {
+        "curriculum": "FlipLecture",
+        "level": "Grade 4",
+        "subject": "Science",
+        "domain": "Physical Science",
+        "topic": "Light and Different Materials",
+        "topic_id": "b95576a4-0388-4606-810d-f98a1a11abaa",
+        "outcome": null,
+        "subtopics": [
+          {
+            "name": "Light Travels Through Empty Space",
+            "id": "a9f461cb-2f85-4f47-9683-5e1fabd1a54e"
+          },
+          {
+            "name": "Light Travels Through Matter",
+            "id": "b14c0cc4-b6cf-44ba-a4b4-52de25209c85"
+          },
+          {
+            "name": "Light Travels at Different Speeds in Different Materials",
+            "id": "243b12b6-23f6-4e49-b970-85d6ce4c6abe"
+          },
+          {
+            "name": "Air, Water and Glass",
+            "id": "62e69445-771f-4b4c-98cb-0bcaea011131"
+          }
+        ]
+      },
+      {
+        "curriculum": "TN Stateboard",
+        "level": "Grade 4",
+        "subject": "Science",
+        "domain": "Physical Science",
+        "topic": "Light and Different Materials",
+        "topic_id": "ebd28b67-3804-48e4-a4ef-b61a5c144958",
+        "outcome": null,
+        "subtopics": [
+          {
+            "name": "Light Travels Through Empty Space",
+            "id": "31c64a79-56f4-44db-9729-e3e5699aad35"
+          },
+          {
+            "name": "Light Travels Through Matter",
+            "id": "2cf68b49-933a-4744-a7ce-42d185149748"
+          },
+          {
+            "name": "Light Travels at Different Speeds in Different Materials",
+            "id": "dca62ba7-e3ea-456d-a7c1-740d109c76a8"
+          },
+          {
+            "name": "Air, Water and Glass",
+            "id": "5f337519-3305-4f73-b51d-478180236c5a"
+          }
+        ]
+      }
+    ],
+    "resource_id": "001d2916-6545-54bb-bd50-06372b60f026",
+    "published": true,
+    "resource_version": 3
+  },
+  {
+    "title": "Light and Electromagnetic Energy · Discovery Lab",
+    "type": "interactive",
+    "file": "E:\\FLAME\\flame-resources\\interactive\\6b74f82b1e945aa6b937c5cb1a5ce549.html",
+    "grade_min": 4,
+    "grade_max": 4,
+    "purposes": [
+      "explain",
+      "demonstrate"
+    ],
+    "teaching_languages": [
+      "en"
+    ],
+    "concepts": [
+      "Light and Electromagnetic Energy"
+    ],
+    "subtopics": [
+      "Light as Energy",
+      "Energy from the Sun",
+      "Light in Everyday Devices",
+      "Other Forms of Electromagnetic Energy"
+    ],
+    "paths": [
+      {
+        "curriculum": "FlipLecture",
+        "level": "Grade 4",
+        "subject": "Science",
+        "domain": "Physical Science",
+        "topic": "Light and Electromagnetic Energy",
+        "topic_id": "4bccc9bb-85cd-4d28-804d-26549ef597bc",
+        "outcome": null,
+        "subtopics": [
+          {
+            "name": "Light as Energy",
+            "id": "bdaefb67-32c1-497a-af77-21fa76b215d5"
+          },
+          {
+            "name": "Energy from the Sun",
+            "id": "185c452b-8330-4df6-a60c-02047a9a7f0c"
+          },
+          {
+            "name": "Light in Everyday Devices",
+            "id": "6209934e-d8a7-4c3e-81d9-001ffe753f19"
+          },
+          {
+            "name": "Other Forms of Electromagnetic Energy",
+            "id": "4b329779-eb0a-4902-8c3b-f468e5884470"
+          }
+        ]
+      },
+      {
+        "curriculum": "TN Stateboard",
+        "level": "Grade 4",
+        "subject": "Science",
+        "domain": "Physical Science",
+        "topic": "Light and Electromagnetic Energy",
+        "topic_id": "1d8cffa6-2133-46cd-915e-398f1ff5f44e",
+        "outcome": null,
+        "subtopics": [
+          {
+            "name": "Light as Energy",
+            "id": "47452a7f-432f-4472-8087-5c82121ae6a3"
+          },
+          {
+            "name": "Energy from the Sun",
+            "id": "478693fd-a72a-4570-a2b0-7f7b324989c0"
+          },
+          {
+            "name": "Light in Everyday Devices",
+            "id": "44887b26-fb3c-4552-ac30-03940f86dcf0"
+          },
+          {
+            "name": "Other Forms of Electromagnetic Energy",
+            "id": "f7079dc4-bd0f-4069-92a7-fc387aa69a42"
+          }
+        ]
+      }
+    ],
+    "resource_id": "6b74f82b-1e94-5aa6-b937-c5cb1a5ce549",
+    "published": true,
+    "resource_version": 3
+  },
+  {
+    "title": "Reflection of Light · Discovery Lab",
+    "type": "interactive",
+    "file": "E:\\FLAME\\flame-resources\\interactive\\3984048afb545843aacdc5c255a4eccb.html",
+    "grade_min": 4,
+    "grade_max": 4,
+    "purposes": [
+      "explain",
+      "demonstrate"
+    ],
+    "teaching_languages": [
+      "en"
+    ],
+    "concepts": [
+      "Reflection of Light"
+    ],
+    "subtopics": [
+      "What Is Reflection?",
+      "How Light Bounces Off a Surface",
+      "Reflecting Surfaces",
+      "Everyday Examples of Reflection"
+    ],
+    "paths": [
+      {
+        "curriculum": "FlipLecture",
+        "level": "Grade 4",
+        "subject": "Science",
+        "domain": "Physical Science",
+        "topic": "Reflection of Light",
+        "topic_id": "c9356a3f-556f-4690-a12b-2c1ef56227ad",
+        "outcome": null,
+        "subtopics": [
+          {
+            "name": "What Is Reflection?",
+            "id": "5fc77388-6fc7-44c3-8362-906858d2e605"
+          },
+          {
+            "name": "How Light Bounces Off a Surface",
+            "id": "2beb432f-3544-4030-961d-14629ec8b3ff"
+          },
+          {
+            "name": "Reflecting Surfaces",
+            "id": "6812f060-6972-41ea-8fbc-d54bbbf087a8"
+          },
+          {
+            "name": "Everyday Examples of Reflection",
+            "id": "69c3ec19-6e16-490b-89dc-66ea38bc1bf4"
+          }
+        ]
+      },
+      {
+        "curriculum": "TN Stateboard",
+        "level": "Grade 4",
+        "subject": "Science",
+        "domain": "Physical Science",
+        "topic": "Reflection of Light",
+        "topic_id": "466c2b1b-1cad-4f73-a81a-5024ee824bd7",
+        "outcome": null,
+        "subtopics": [
+          {
+            "name": "What Is Reflection?",
+            "id": "9a17c240-5a84-480d-a531-a4b3c617a140"
+          },
+          {
+            "name": "How Light Bounces Off a Surface",
+            "id": "5264cb08-b6f1-49d9-a0e6-defeebc5f3e1"
+          },
+          {
+            "name": "Reflecting Surfaces",
+            "id": "7367ba1c-7eaa-4707-b360-173d03aeb947"
+          },
+          {
+            "name": "Everyday Examples of Reflection",
+            "id": "5ffe812e-15ae-4db7-a755-1ec105623c54"
+          }
+        ]
+      }
+    ],
+    "resource_id": "3984048a-fb54-5843-aacd-c5c255a4eccb",
+    "published": true,
+    "resource_version": 3
+  },
+  {
+    "title": "Refraction Through Glass · Discovery Lab",
+    "type": "interactive",
+    "file": "E:\\FLAME\\flame-resources\\interactive\\766fe1758cb7523ea82ae0478c5bc05d.html",
+    "grade_min": 4,
+    "grade_max": 4,
+    "purposes": [
+      "explain",
+      "demonstrate"
+    ],
+    "teaching_languages": [
+      "en"
+    ],
+    "concepts": [
+      "Refraction Through Glass"
+    ],
+    "subtopics": [
+      "Light Passing from Air to Glass",
+      "Light Passing from Glass to Air",
+      "Change in Direction"
+    ],
+    "paths": [
+      {
+        "curriculum": "FlipLecture",
+        "level": "Grade 4",
+        "subject": "Science",
+        "domain": "Physical Science",
+        "topic": "Refraction Through Glass",
+        "topic_id": "0acca173-c2e5-45c9-91df-631bc5beb691",
+        "outcome": null,
+        "subtopics": [
+          {
+            "name": "Light Passing from Air to Glass",
+            "id": "bc7b2c18-3564-45d3-a4bf-3ae1a72bfb46"
+          },
+          {
+            "name": "Light Passing from Glass to Air",
+            "id": "c0bacaa9-2ab2-47b1-8054-987517b7b98c"
+          },
+          {
+            "name": "Change in Direction",
+            "id": "330359b4-a995-4a21-ba06-7c8aab0194b7"
+          }
+        ]
+      },
+      {
+        "curriculum": "TN Stateboard",
+        "level": "Grade 4",
+        "subject": "Science",
+        "domain": "Physical Science",
+        "topic": "Refraction Through Glass",
+        "topic_id": "56cce7f3-c178-4829-b02b-bfcb02a6e44a",
+        "outcome": null,
+        "subtopics": [
+          {
+            "name": "Light Passing from Air to Glass",
+            "id": "3a2984d5-b86c-4a30-a2a9-3e4ad65f1a0b"
+          },
+          {
+            "name": "Light Passing from Glass to Air",
+            "id": "64c16472-fdb3-4df2-8ebd-68bdeb33e0c5"
+          },
+          {
+            "name": "Change in Direction",
+            "id": "dbbe2ad0-d1ce-49d6-82a1-bffd07e06a54"
+          }
+        ]
+      }
+    ],
+    "resource_id": "766fe175-8cb7-523e-a82a-e0478c5bc05d",
+    "published": true,
+    "resource_version": 3
+  },
+  {
+    "title": "Understanding Light · Discovery Lab",
+    "type": "interactive",
+    "file": "E:\\FLAME\\flame-resources\\interactive\\2861656651f65d8aaba356521612d064.html",
+    "grade_min": 4,
+    "grade_max": 4,
+    "purposes": [
+      "explain",
+      "demonstrate"
+    ],
+    "teaching_languages": [
+      "en"
+    ],
+    "concepts": [
+      "Understanding Light"
+    ],
+    "subtopics": [
+      "What Is Light?",
+      "Light Travels in Straight Lines",
+      "Light Can Travel Through Empty Space",
+      "Light Interacts with Objects"
+    ],
+    "paths": [
+      {
+        "curriculum": "FlipLecture",
+        "level": "Grade 4",
+        "subject": "Science",
+        "domain": "Physical Science",
+        "topic": "Understanding Light",
+        "topic_id": "5f85a6e4-91c3-4699-ae0e-574932318a78",
+        "outcome": null,
+        "subtopics": [
+          {
+            "name": "What Is Light?",
+            "id": "5bffa15a-fafc-4ee5-963d-0b40ddad8c27"
+          },
+          {
+            "name": "Light Travels in Straight Lines",
+            "id": "3dcee33b-41ed-4fa8-ae3f-47deeef469a6"
+          },
+          {
+            "name": "Light Can Travel Through Empty Space",
+            "id": "cd21695c-2c45-481b-81ea-53a3eb925b66"
+          },
+          {
+            "name": "Light Interacts with Objects",
+            "id": "9ac31cb6-a2c9-4c6a-b137-79b4f612d551"
+          }
+        ]
+      },
+      {
+        "curriculum": "TN Stateboard",
+        "level": "Grade 4",
+        "subject": "Science",
+        "domain": "Physical Science",
+        "topic": "Understanding Light",
+        "topic_id": "66f2b6e4-a469-447e-b7ca-95d96dc16c4d",
+        "outcome": null,
+        "subtopics": [
+          {
+            "name": "What Is Light?",
+            "id": "0a6fcecb-983e-4bf4-8444-688d0502de47"
+          },
+          {
+            "name": "Light Travels in Straight Lines",
+            "id": "b2984274-7c07-4025-abf0-9b4726255562"
+          },
+          {
+            "name": "Light Can Travel Through Empty Space",
+            "id": "efaeaa3e-b0b2-4c21-a36b-ca0099497889"
+          },
+          {
+            "name": "Light Interacts with Objects",
+            "id": "422025e1-3559-420c-971b-e9e7153f3f24"
+          }
+        ]
+      }
+    ],
+    "resource_id": "28616566-51f6-5d8a-aba3-56521612d064",
+    "published": true,
+    "resource_version": 3
+  },
+  {
+    "title": "Understanding Refraction · Discovery Lab",
+    "type": "interactive",
+    "file": "E:\\FLAME\\flame-resources\\interactive\\c823c4430fe85438b87b2480e6ec2b9d.html",
+    "grade_min": 4,
+    "grade_max": 4,
+    "purposes": [
+      "explain",
+      "demonstrate"
+    ],
+    "teaching_languages": [
+      "en"
+    ],
+    "concepts": [
+      "Understanding Refraction"
+    ],
+    "subtopics": [
+      "What Is Refraction?",
+      "Light Changes Direction",
+      "Light Moving from One Material to Another"
+    ],
+    "paths": [
+      {
+        "curriculum": "FlipLecture",
+        "level": "Grade 4",
+        "subject": "Science",
+        "domain": "Physical Science",
+        "topic": "Understanding Refraction",
+        "topic_id": "c948119c-5132-496a-81a5-0e3bccef9a32",
+        "outcome": null,
+        "subtopics": [
+          {
+            "name": "What Is Refraction?",
+            "id": "496b807c-c76e-4f3e-a52d-62da9ca5db29"
+          },
+          {
+            "name": "Light Changes Direction",
+            "id": "1c2c190a-8618-466d-aee6-7b5be41f6944"
+          },
+          {
+            "name": "Light Moving from One Material to Another",
+            "id": "cada8d23-16e9-438a-abb1-b457daa653f8"
+          }
+        ]
+      },
+      {
+        "curriculum": "TN Stateboard",
+        "level": "Grade 4",
+        "subject": "Science",
+        "domain": "Physical Science",
+        "topic": "Understanding Refraction",
+        "topic_id": "38df74db-ba50-4358-92c8-15c1d1122bd6",
+        "outcome": null,
+        "subtopics": [
+          {
+            "name": "What Is Refraction?",
+            "id": "e0dff0a5-bf58-4593-8279-92494cdfd949"
+          },
+          {
+            "name": "Light Changes Direction",
+            "id": "839ad073-7252-4d63-b030-6c6681d6f4d3"
+          },
+          {
+            "name": "Light Moving from One Material to Another",
+            "id": "2a981753-582b-40c1-9db3-35c3d23a18e2"
+          }
+        ]
+      }
+    ],
+    "resource_id": "c823c443-0fe8-5438-b87b-2480e6ec2b9d",
+    "published": true,
+    "resource_version": 3
+  }
+]

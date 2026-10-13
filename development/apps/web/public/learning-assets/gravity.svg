@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" role="img" aria-labelledby="title desc">
+<title id="title">Gravity points toward Earth's centre</title><desc id="desc">Three orange objects around a blue Earth. Each arrow points towards its centre.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#355d9b"/></marker></defs>
+<rect width="800" height="480" rx="20" fill="#f4f7fc"/>
+<circle cx="400" cy="275" r="135" fill="#dbeafe" stroke="#5487c7" stroke-width="3"/>
+<path d="M305 190q70-50 110 0l-20 45-60 15-25 55-35-30M450 285l60 15-15 60-55 30-15-55z" fill="#9acdad"/>
+<g fill="#ed8a36"><circle cx="400" cy="55" r="16"/><circle cx="165" cy="275" r="16"/><circle cx="635" cy="275" r="16"/></g>
+<g stroke="#355d9b" stroke-width="4" marker-end="url(#arrow)"><path d="M400 83V245"/><path d="M193 275H370"/><path d="M607 275H430"/></g>
+<circle cx="400" cy="275" r="7" fill="#243b62"/>
+<g font-family="Segoe UI, sans-serif" text-anchor="middle" fill="#243b62"><text x="400" y="452" font-size="22">Down means toward Earth's centre</text><text x="520" y="82" font-size="17">A dropped object</text><text x="400" y="320" font-size="17">Earth</text></g>
+</svg>

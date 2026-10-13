@@ -1,0 +1,858 @@
+{
+  "date": "2026-10-13",
+  "removed_count": 160,
+  "bytes_removed": 20941040,
+  "moved": [
+    {
+      "from": "E:\\FLAME\\work\\check-light-object-actions.cjs",
+      "to": "E:\\FLAME\\work\\qa\\check-light-object-actions.cjs"
+    },
+    {
+      "from": "E:\\FLAME\\work\\light-object-actions-isolated.html",
+      "to": "E:\\FLAME\\work\\qa\\light-object-actions-isolated.html"
+    },
+    {
+      "from": "E:\\FLAME\\work\\check-gravity-object-actions.cjs",
+      "to": "E:\\FLAME\\work\\qa\\check-gravity-object-actions.cjs"
+    },
+    {
+      "from": "E:\\FLAME\\work\\gravity-object-isolated.html",
+      "to": "E:\\FLAME\\work\\qa\\gravity-object-isolated.html"
+    },
+    {
+      "from": "E:\\FLAME\\work\\check-matter-sandbox.cjs",
+      "to": "E:\\FLAME\\work\\qa\\check-matter-sandbox.cjs"
+    },
+    {
+      "from": "E:\\FLAME\\work\\matter-isolated.html",
+      "to": "E:\\FLAME\\work\\qa\\matter-isolated.html"
+    },
+    {
+      "from": "E:\\FLAME\\work\\check-rive-sandbox.cjs",
+      "to": "E:\\FLAME\\work\\qa\\check-rive-sandbox.cjs"
+    },
+    {
+      "from": "E:\\FLAME\\work\\rive-cat-isolated.html",
+      "to": "E:\\FLAME\\work\\qa\\rive-cat-isolated.html"
+    },
+    {
+      "from": "E:\\FLAME\\work\\check-weather-sandbox.cjs",
+      "to": "E:\\FLAME\\work\\qa\\check-weather-sandbox.cjs"
+    },
+    {
+      "from": "E:\\FLAME\\work\\weather-isolated.html",
+      "to": "E:\\FLAME\\work\\qa\\weather-isolated.html"
+    }
+  ],
+  "removed": [
+    {
+      "path": "E:\\FLAME\\work\\admin-compact-video-preview.png",
+      "bytes": 21370,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\admin-curriculum-ux.png",
+      "bytes": 87230,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\admin-hierarchy-compact.png",
+      "bytes": 69461,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\admin-import-ux.png",
+      "bytes": 141098,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\admin-mobile-ux.png",
+      "bytes": 45540,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\annotations-header-1090.png",
+      "bytes": 31779,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\api-8001-network.stderr.log",
+      "bytes": 133890,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\api-8001-network.stdout.log",
+      "bytes": 9,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\api-8001-recovery.stderr.log",
+      "bytes": 895,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\api-8001-recovery.stdout.log",
+      "bytes": 0,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\api-auth-recovery.stderr.log",
+      "bytes": 11165,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\api-auth-recovery.stdout.log",
+      "bytes": 0,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\api-b11.stderr.log",
+      "bytes": 16508,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\api-b11.stdout.log",
+      "bytes": 0,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\api-external-video.stderr.log",
+      "bytes": 23646,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\api-external-video.stdout.log",
+      "bytes": 0,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\api-image-selection.stderr.log",
+      "bytes": 22343,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\api-image-selection.stdout.log",
+      "bytes": 0,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\api-keyless-video.stderr.log",
+      "bytes": 86415,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\api-keyless-video.stdout.log",
+      "bytes": 0,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\api-mapping-deletion.stderr.log",
+      "bytes": 29571,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\api-mapping-deletion.stdout.log",
+      "bytes": 0,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\api-mvp-recommendations.stderr.log",
+      "bytes": 11878,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\api-mvp-recommendations.stdout.log",
+      "bytes": 0,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\api-resource-library.stderr.log",
+      "bytes": 10111,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\api-resource-library.stdout.log",
+      "bytes": 0,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\bulk-api.stderr.log",
+      "bytes": 16451,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\bulk-api.stdout.log",
+      "bytes": 8125,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\bulk-transfer-narrow.png",
+      "bytes": 41573,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\canonical-dev-restart.stderr.log",
+      "bytes": 306212,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\canonical-dev-restart.stdout.log",
+      "bytes": 12276,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\canonical-dev.stderr.log",
+      "bytes": 3523,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\canonical-dev.stdout.log",
+      "bytes": 1262,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\check-gravity-autoreset.cjs",
+      "bytes": 2455,
+      "reason": "superseded one-off sandbox check"
+    },
+    {
+      "path": "E:\\FLAME\\work\\check-gravity-phaser.cjs",
+      "bytes": 4598,
+      "reason": "superseded one-off sandbox check"
+    },
+    {
+      "path": "E:\\FLAME\\work\\check-light-shadow.cjs",
+      "bytes": 3582,
+      "reason": "superseded one-off sandbox check"
+    },
+    {
+      "path": "E:\\FLAME\\work\\check-what-is-light-phaser.cjs",
+      "bytes": 3408,
+      "reason": "superseded one-off sandbox check"
+    },
+    {
+      "path": "E:\\FLAME\\work\\conversation-inline-images.png",
+      "bytes": 62457,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\curriculum-import-workspace.png",
+      "bytes": 177422,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\curriculum-workspace-failure.html",
+      "bytes": 11527,
+      "reason": "temporary build or failed-test snapshot"
+    },
+    {
+      "path": "E:\\FLAME\\work\\curriculum-workspace-failure.png",
+      "bytes": 33883,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\curriculum-workspace.png",
+      "bytes": 77809,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\desktop-resizable-panes.png",
+      "bytes": 134896,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\dev-recovery.stderr.log",
+      "bytes": 33463,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\dev-recovery.stdout.log",
+      "bytes": 3456,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\explore-api-8001.stderr.log",
+      "bytes": 127180,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\explore-api-8001.stdout.log",
+      "bytes": 6,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\explore-breadcrumb-toggle.png",
+      "bytes": 56594,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\explore-chevron-panel.png",
+      "bytes": 77487,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\explore-curiosity-gravity.png",
+      "bytes": 94166,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\explore-curiosity.png",
+      "bytes": 90090,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\explore-desktop.png",
+      "bytes": 132519,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\explore-follows-learning-path.png",
+      "bytes": 72483,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\explore-mobile.png",
+      "bytes": 40427,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\explore-search-filter-toolbar.png",
+      "bytes": 76162,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\explore-single-toggle-open.png",
+      "bytes": 78788,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\external-video-mobile.png",
+      "bytes": 75287,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\flame-menu-edge-explore.png",
+      "bytes": 57417,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\google-sheets-live-setup.jpg",
+      "bytes": 72661,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\google-sheets-sync-verified.jpg",
+      "bytes": 158332,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\gravity-autoreset-candidate.html",
+      "bytes": 1210392,
+      "reason": "temporary build or failed-test snapshot"
+    },
+    {
+      "path": "E:\\FLAME\\work\\gravity-autoreset-isolated.html",
+      "bytes": 1210720,
+      "reason": "temporary build or failed-test snapshot"
+    },
+    {
+      "path": "E:\\FLAME\\work\\gravity-object-candidate.html",
+      "bytes": 1213752,
+      "reason": "temporary build or failed-test snapshot"
+    },
+    {
+      "path": "E:\\FLAME\\work\\gravity-object-desktop.png",
+      "bytes": 72962,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\gravity-object-mobile.png",
+      "bytes": 49400,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\gravity-phaser-candidate.html",
+      "bytes": 1210150,
+      "reason": "temporary build or failed-test snapshot"
+    },
+    {
+      "path": "E:\\FLAME\\work\\gravity-phaser-desktop.png",
+      "bytes": 62107,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\gravity-phaser-isolated.html",
+      "bytes": 1210478,
+      "reason": "temporary build or failed-test snapshot"
+    },
+    {
+      "path": "E:\\FLAME\\work\\gravity-phaser-mobile.png",
+      "bytes": 40526,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\gravity-videos-live.png",
+      "bytes": 75967,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\html-source-editor.png",
+      "bytes": 116851,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\interactive-api-8001.err.log",
+      "bytes": 134915,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\interactive-api-8001.out.log",
+      "bytes": 13,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\interactive-desktop.png",
+      "bytes": 114066,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\interactive-fullscreen-desktop.png",
+      "bytes": 109410,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\interactive-fullscreen-mobile.png",
+      "bytes": 34518,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\interactive-mobile.png",
+      "bytes": 46254,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\light-object-actions-candidate.html",
+      "bytes": 1210040,
+      "reason": "temporary build or failed-test snapshot"
+    },
+    {
+      "path": "E:\\FLAME\\work\\light-object-actions-desktop.png",
+      "bytes": 63037,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\light-object-actions-mobile.png",
+      "bytes": 38755,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\light-shadow-desktop.png",
+      "bytes": 72365,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\light-shadow-mobile.png",
+      "bytes": 42278,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\local-api-topic.stderr.log",
+      "bytes": 22017,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\local-api-topic.stdout.log",
+      "bytes": 0,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\local-api.stderr.log",
+      "bytes": 57802,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\local-api.stdout.log",
+      "bytes": 0,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\matter-candidate.html",
+      "bytes": 1365419,
+      "reason": "temporary build or failed-test snapshot"
+    },
+    {
+      "path": "E:\\FLAME\\work\\matter-gas-desktop.png",
+      "bytes": 62937,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\matter-solid-mobile.png",
+      "bytes": 38232,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\mvp-recommendations-mobile.png",
+      "bytes": 66562,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\recommendation-metadata-editor-narrow.png",
+      "bytes": 112051,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\recommendation-metadata-editor.png",
+      "bytes": 126853,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\reference-shell-desktop-compact.png",
+      "bytes": 34164,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\reference-shell-desktop.png",
+      "bytes": 59305,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\reference-shell-mobile-navigation.png",
+      "bytes": 29052,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\reference-shell-mobile.png",
+      "bytes": 28976,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\replacement-import-preview.png",
+      "bytes": 78139,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\replacement-import-recovery.png",
+      "bytes": 70766,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\resource-bulk-failure.html",
+      "bytes": 15128,
+      "reason": "temporary build or failed-test snapshot"
+    },
+    {
+      "path": "E:\\FLAME\\work\\resource-bulk-failure.png",
+      "bytes": 118636,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\resource-bulk-library.png",
+      "bytes": 409042,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\resource-bulk-mapping-wide.png",
+      "bytes": 115035,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\resource-editor-narrow.png",
+      "bytes": 136475,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\resource-library-desktop.png",
+      "bytes": 107115,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\resource-library-enhancement-failure.html",
+      "bytes": 43566,
+      "reason": "temporary build or failed-test snapshot"
+    },
+    {
+      "path": "E:\\FLAME\\work\\resource-library-enhancement-failure.png",
+      "bytes": 162037,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\resource-library-failure.html",
+      "bytes": 29239,
+      "reason": "temporary build or failed-test snapshot"
+    },
+    {
+      "path": "E:\\FLAME\\work\\resource-library-failure.png",
+      "bytes": 165304,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\resource-library-narrow.png",
+      "bytes": 119611,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\resource-library-workflow.png",
+      "bytes": 174714,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\resource-mapping-deletion-failure.html",
+      "bytes": 24814,
+      "reason": "temporary build or failed-test snapshot"
+    },
+    {
+      "path": "E:\\FLAME\\work\\resource-mapping-deletion-failure.png",
+      "bytes": 113536,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\resource-mapping-dialog-narrow.png",
+      "bytes": 71151,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\resource-media-mapping-deletion.png",
+      "bytes": 79499,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\resource-topic-column.png",
+      "bytes": 252537,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\rive-cat-candidate.html",
+      "bytes": 1373153,
+      "reason": "temporary build or failed-test snapshot"
+    },
+    {
+      "path": "E:\\FLAME\\work\\rive-cat-desktop.png",
+      "bytes": 76872,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\rive-cat-mobile.png",
+      "bytes": 39314,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\sidebar-conversations-narrow.png",
+      "bytes": 39791,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\subtopic-view.png",
+      "bytes": 61026,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\test-animation.gif",
+      "bytes": 397,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\topic-view.png",
+      "bytes": 53411,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\weather-cloudy-desktop.png",
+      "bytes": 109958,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\weather-rainy-desktop.png",
+      "bytes": 120378,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\weather-snowy-desktop.png",
+      "bytes": 130777,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\weather-snowy-mobile.png",
+      "bytes": 68277,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\weather-sunny-desktop.png",
+      "bytes": 146276,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\weather-windy-desktop.png",
+      "bytes": 131218,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\web-auth-recovery.stderr.log",
+      "bytes": 2954,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\web-auth-recovery.stdout.log",
+      "bytes": 36041,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\web-dev.stderr.log",
+      "bytes": 16808,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\web-dev.stdout.log",
+      "bytes": 55771,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\what-is-light-phaser-candidate.html",
+      "bytes": 1208540,
+      "reason": "temporary build or failed-test snapshot"
+    },
+    {
+      "path": "E:\\FLAME\\work\\what-is-light-phaser-desktop.png",
+      "bytes": 43417,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\what-is-light-phaser-isolated.html",
+      "bytes": 1208878,
+      "reason": "temporary build or failed-test snapshot"
+    },
+    {
+      "path": "E:\\FLAME\\work\\what-is-light-phaser-mobile.png",
+      "bytes": 34186,
+      "reason": "generated screenshot/test image"
+    },
+    {
+      "path": "E:\\FLAME\\work\\work-api-stderr.log",
+      "bytes": 33796,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\work-api-stdout.log",
+      "bytes": 0,
+      "reason": "old dev/test log"
+    },
+    {
+      "path": "E:\\FLAME\\work\\runtime\\flame-api-20260927.stderr.log",
+      "bytes": 14783,
+      "reason": "old log or generated spreadsheet inspection"
+    },
+    {
+      "path": "E:\\FLAME\\work\\runtime\\flame-api-20260927.stdout.log",
+      "bytes": 0,
+      "reason": "old log or generated spreadsheet inspection"
+    },
+    {
+      "path": "E:\\FLAME\\work\\recommendation-quality\\api.stderr.log",
+      "bytes": 13575,
+      "reason": "old log or generated spreadsheet inspection"
+    },
+    {
+      "path": "E:\\FLAME\\work\\recommendation-quality\\api.stdout.log",
+      "bytes": 6194,
+      "reason": "old log or generated spreadsheet inspection"
+    },
+    {
+      "path": "E:\\FLAME\\work\\bulk-sample-builder\\activity-kits-Guide.png",
+      "bytes": 63412,
+      "reason": "old log or generated spreadsheet inspection"
+    },
+    {
+      "path": "E:\\FLAME\\work\\bulk-sample-builder\\activity-kits-Mappings.png",
+      "bytes": 9362,
+      "reason": "old log or generated spreadsheet inspection"
+    },
+    {
+      "path": "E:\\FLAME\\work\\bulk-sample-builder\\activity-kits-Paths.png",
+      "bytes": 5371,
+      "reason": "old log or generated spreadsheet inspection"
+    },
+    {
+      "path": "E:\\FLAME\\work\\bulk-sample-builder\\activity-kits-Records.png",
+      "bytes": 13924,
+      "reason": "old log or generated spreadsheet inspection"
+    },
+    {
+      "path": "E:\\FLAME\\work\\bulk-sample-builder\\activity-kits.inspect.ndjson",
+      "bytes": 20513,
+      "reason": "old log or generated spreadsheet inspection"
+    },
+    {
+      "path": "E:\\FLAME\\work\\bulk-sample-builder\\resources-Guide.png",
+      "bytes": 60798,
+      "reason": "old log or generated spreadsheet inspection"
+    },
+    {
+      "path": "E:\\FLAME\\work\\bulk-sample-builder\\resources-Mappings.png",
+      "bytes": 5619,
+      "reason": "old log or generated spreadsheet inspection"
+    },
+    {
+      "path": "E:\\FLAME\\work\\bulk-sample-builder\\resources-Paths.png",
+      "bytes": 5371,
+      "reason": "old log or generated spreadsheet inspection"
+    },
+    {
+      "path": "E:\\FLAME\\work\\bulk-sample-builder\\resources-Records.png",
+      "bytes": 17817,
+      "reason": "old log or generated spreadsheet inspection"
+    },
+    {
+      "path": "E:\\FLAME\\work\\bulk-sample-builder\\resources.inspect.ndjson",
+      "bytes": 22250,
+      "reason": "old log or generated spreadsheet inspection"
+    },
+    {
+      "path": "E:\\FLAME\\work\\bulk-sample-builder\\students-Guide.png",
+      "bytes": 56437,
+      "reason": "old log or generated spreadsheet inspection"
+    },
+    {
+      "path": "E:\\FLAME\\work\\bulk-sample-builder\\students-Records.png",
+      "bytes": 9903,
+      "reason": "old log or generated spreadsheet inspection"
+    },
+    {
+      "path": "E:\\FLAME\\work\\bulk-sample-builder\\students.inspect.ndjson",
+      "bytes": 7347,
+      "reason": "old log or generated spreadsheet inspection"
+    },
+    {
+      "path": "E:\\FLAME\\work\\bulk-sample-builder\\teachers-Guide.png",
+      "bytes": 57973,
+      "reason": "old log or generated spreadsheet inspection"
+    },
+    {
+      "path": "E:\\FLAME\\work\\bulk-sample-builder\\teachers-Mappings.png",
+      "bytes": 5619,
+      "reason": "old log or generated spreadsheet inspection"
+    },
+    {
+      "path": "E:\\FLAME\\work\\bulk-sample-builder\\teachers-Paths.png",
+      "bytes": 5371,
+      "reason": "old log or generated spreadsheet inspection"
+    },
+    {
+      "path": "E:\\FLAME\\work\\bulk-sample-builder\\teachers-Records.png",
+      "bytes": 12427,
+      "reason": "old log or generated spreadsheet inspection"
+    },
+    {
+      "path": "E:\\FLAME\\work\\bulk-sample-builder\\teachers.inspect.ndjson",
+      "bytes": 16179,
+      "reason": "old log or generated spreadsheet inspection"
+    }
+  ],
+  "skipped": [],
+  "preserved": [
+    "tools/rive-cli",
+    "current dev-session files",
+    "backups",
+    "change receipts and reports",
+    "sample builder source/shared dependency link",
+    "current sandbox checks/fixtures under qa"
+  ]
+}

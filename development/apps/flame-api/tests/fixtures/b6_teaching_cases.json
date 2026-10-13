@@ -1,0 +1,107 @@
+{
+  "review_status": "candidate_for_educator_review",
+  "source_workbook": "Curriculum Documents/Fliplecture Curriculum Grade 1 to 5.xlsx",
+  "cases": [
+    {
+      "id": "kg_gravity_fall",
+      "level": "Grade KG",
+      "subject": "Science",
+      "domain": "Forces & Motion",
+      "topic": "Gravity",
+      "subtopic": "Gravity Makes Things Fall",
+      "question": "Why does a ball fall to the ground?",
+      "expected_facts": [
+        "Earth pulls the ball downward",
+        "A dropped ball falls toward the ground"
+      ],
+      "teaching_constraints": [
+        "Use a familiar dropped-object example",
+        "Avoid equations and advanced force terminology"
+      ],
+      "source_sheet": "Grade KG",
+      "source_row": 8,
+      "category": "Forces & Motion"
+    },
+    {
+      "id": "g1_shadows_form",
+      "level": "Grade 1",
+      "subject": "Science",
+      "domain": "Shadow (Me and My Shadow)",
+      "topic": "Shadows",
+      "subtopic": "How Shadows Form",
+      "question": "How does my shadow form?",
+      "expected_facts": [
+        "Light travels from a source",
+        "An object blocking light makes a darker area behind it"
+      ],
+      "teaching_constraints": [
+        "Use sunlight or a lamp as an example",
+        "Do not claim a shadow is a physical object"
+      ],
+      "source_sheet": "Grade 1",
+      "source_row": 3,
+      "category": "Shadow"
+    },
+    {
+      "id": "g2_forms_water",
+      "level": "Grade 2",
+      "subject": "Science",
+      "domain": "A World of Ice and Water",
+      "topic": "Water",
+      "subtopic": "Forms of Water",
+      "question": "How are ice and water different?",
+      "expected_facts": [
+        "Ice is solid water",
+        "Liquid water can flow",
+        "Heating and cooling can change the form"
+      ],
+      "teaching_constraints": [
+        "Use everyday examples",
+        "Avoid molecular-level claims unless asked"
+      ],
+      "source_sheet": "Grade 2",
+      "source_row": 2,
+      "category": "Ice and water"
+    },
+    {
+      "id": "g3_push_pull",
+      "level": "Grade 3",
+      "subject": "Science",
+      "domain": "Physical Science",
+      "topic": "Understanding Force",
+      "subtopic": "Pushes and Pulls",
+      "question": "Is opening a drawer a push or a pull?",
+      "expected_facts": [
+        "A pull moves the drawer toward you",
+        "Closing the drawer usually uses a push"
+      ],
+      "teaching_constraints": [
+        "Name the direction of motion",
+        "Avoid equations"
+      ],
+      "source_sheet": "Grade 3",
+      "source_row": 2,
+      "category": "Forces"
+    },
+    {
+      "id": "g5_atoms",
+      "level": "Grade 5",
+      "subject": "Science",
+      "domain": "Physical Science",
+      "topic": "Atoms",
+      "subtopic": "Atoms",
+      "question": "What is an atom?",
+      "expected_facts": [
+        "Atoms are very small building blocks of matter",
+        "Different elements have different kinds of atoms"
+      ],
+      "teaching_constraints": [
+        "Use a simple analogy but state its limit",
+        "Do not present an atom as a tiny solar system"
+      ],
+      "source_sheet": "Grade 5",
+      "source_row": 2,
+      "category": "Atoms"
+    }
+  ]
+}
