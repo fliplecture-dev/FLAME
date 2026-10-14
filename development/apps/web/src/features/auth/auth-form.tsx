@@ -31,7 +31,11 @@ export function AuthForm({ mode, admin = false }: { mode: Mode; admin?: boolean 
       body: JSON.stringify(body),
     });
     const result = await response.json();
-    if (!response.ok) throw new Error(result.error?.message ?? "The request could not be completed.");
+    if (!response.ok) {
+      if (action === "login" && response.status === 401)
+        throw new Error("We couldn't sign you in. Check your email and password, and make sure you've confirmed your email. Use Forgot password if you need to reset it.");
+      throw new Error(result.error?.message ?? "The request could not be completed.");
+    }
     return result;
   }
   async function submit(event: FormEvent<HTMLFormElement>) {
