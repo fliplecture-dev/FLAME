@@ -1130,3 +1130,9 @@ Remaining hosted acceptance includes real admin/member journeys, model answers/r
 ### Hosted sign-in rejection message — 2026-10-14
 
 Owner reported the generic sign-in error on the hosted site. Runtime logs showed repeated `/api/v1/auth/login` responses with HTTP 401, while the earlier synthetic-member login and database readiness passed. No provider outage or database exception was observed. The client now explains rejected credentials and possible incomplete email confirmation, with the existing Forgot password recovery route, instead of displaying the generic request failure for login 401. The message does not reveal whether an account exists. Other authentication error paths and account credentials are unchanged. Local TypeScript and all 27 frontend unit checks passed. Real account credential acceptance remains user-controlled; no password was read or reset.
+
+### Hosted media browse latency correction — 2026-10-14
+
+Owner reported missing media and slow responses. Production logs showed successful curiosity Explore responses taking 14.9–16.8 seconds while the website timed out after 12 seconds. Subsequent Git deployments were in `iad1`, although the database is in Mumbai and the initial deployments used `bom1`. Both app roots now pin `bom1` in source. Explore transport permits 30 seconds for cold starts. Resource eligibility reuses repeated object-existence checks only within the current request's database session; a regression test verifies that subsequent requests observe a removed asset. Sample private cloud objects and signed delivery URLs returned 200 before this change, so no asset migration was needed.
+
+Local verification: 172 backend tests passed, 53 opt-in checks skipped; all 27 frontend unit checks, TypeScript and whitespace validation passed. Hosted verification follows deployment. Existing release gate statuses/counts remain unchanged.

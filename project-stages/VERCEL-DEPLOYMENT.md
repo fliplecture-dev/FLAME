@@ -56,6 +56,8 @@ The API entry point and transfer BFF specify a 300-second maximum; confirmation/
 
 ## Release and recovery procedure
 
+Both app roots include `vercel.json` with `regions: ["bom1"]` so Git-triggered deployments keep server functions near the Mumbai database. The initial deployment's region override did not persist for later builds; pinning the region in source fixes that. Explore requests allow 30 seconds for cold starts. Repeated checks of the same private asset are reused only within one request's database session; later requests still check object availability.
+
 Prepare both projects and their secrets, apply reviewed migrations separately, then check API `/health/live` and `/health/ready`. Run the signed-in member/admin journeys against the chosen preview environment, including answers/reload/continuation, denied access, imports, resource delivery and withdrawal. Record exact evidence in the tracker. Publish the MVP only after the owner release decision and remaining acceptance inputs are recorded.
 
 For rollback, restore the previously accepted website and API deployments together. Preserve shared keys, session encryption key, database and private bucket. Do not downgrade or purge retained data as part of a code rollback. Use compatible migration/application versions; rehearse database restoration separately under B10.6.

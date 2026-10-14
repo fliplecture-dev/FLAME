@@ -6,6 +6,7 @@ const csrfName = "flame_csrf";
 const api = process.env.FLAME_API_URL ?? "http://127.0.0.1:8000";
 
 function upstreamTimeoutMs(path: string) {
+  if (path.split("?")[0].startsWith("explore")) return 30000;
   if (path.startsWith("admin/transfers/")) return 240000;
   if (path.startsWith("admin/bulk/")) return 240000;
   if (path.endsWith("/ask")) return 45000;

@@ -10,7 +10,7 @@ from app.modules.resources.storage import ResourceStorage, StorageUnavailable
 from app.modules.resources.validation import validate_external_url, MediaRejected
 
 
-def playable(row, config):
+def playable(row, config, asset_checks=None):
     try:
         if row.type in {"video", "external_video"} and is_provider_url(row.external_url):
             parse_video(row.external_url)
@@ -18,14 +18,29 @@ def playable(row, config):
             if is_provider_url(row.external_url):
                 return False
             validate_external_url(row.external_url, {h.strip().lower() for h in config.resource_allowed_hosts.split(",") if h.strip()})
-        elif not row.storage_key or not ResourceStorage(config).exists(row.storage_key):
+        elif not row.storage_key:
             return False
+        else:
+            key = (config.resource_storage_backend, config.resource_local_dir,
+                   config.supabase_url, config.resource_storage_bucket, row.storage_key)
+            # A curiosity browse can match the same media through multiple paths.
+            # Reuse checks only within this request's database session; the next
+            # request must observe removed objects and changed storage settings.
+            if asset_checks is not None and key in asset_checks:
+                exists = asset_checks[key]
+            else:
+                exists = ResourceStorage(config).exists(row.storage_key)
+                if asset_checks is not None:
+                    asset_checks[key] = exists
+            if not exists:
+                return False
         return True
     except (HTTPException, MediaRejected, StorageUnavailable):
         return False
 
 
 def eligible_candidates(db, topic_id, subtopic_id, config):
+    asset_checks = db.info.setdefault("resource_asset_checks", {})
     rows = db.scalars(select(Resource).join(ResourceTopic).where(
         Resource.type.in_(["image", "video", "interactive"]), Resource.deleted_at.is_(None), Resource.published.is_(True), Resource.availability == "available",
         *learner_video_policy(Resource), ResourceTopic.topic_id == topic_id,
@@ -37,4 +52,4 @@ def eligible_candidates(db, topic_id, subtopic_id, config):
         description=r.description, metadata=" ".join(filter(None, [r.alt_text, r.caption_or_transcript, r.accessibility_note])),
         availability_state="available", precise_mapping=r.id in precise, card=public_data(r), mime_type=r.mime_type,
         alt_text=r.alt_text, caption_or_transcript=r.caption_or_transcript, accessibility_note=r.accessibility_note)
-        for r in rows if playable(r, config)]
+        for r in rows if playable(r, config, asset_checks)]
