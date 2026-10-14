@@ -68,12 +68,14 @@ class OpenAIResponsesGateway:
                     raise GatewayError("provider_unavailable")
                 try:
                     data = response.json()
+                    if not isinstance(data, dict):
+                        raise ValueError("invalid response envelope")
                     if data.get("status") != "completed" or data.get("error"):
                         raise ValueError("response incomplete")
                     # Reasoning items may precede the assistant message. Reject tool,
                     # refusal, or other visible output rather than treating it as an answer.
                     output = data["output"]
-                    if not isinstance(output, list):
+                    if not isinstance(output, list) or any(not isinstance(item, dict) for item in output):
                         raise ValueError("invalid output")
                     messages = [item for item in output if item.get("type") == "message"]
                     if len(messages) != 1 or any(item.get("type") not in ("message", "reasoning")
@@ -84,11 +86,13 @@ class OpenAIResponsesGateway:
                         raise ValueError("invalid assistant message")
                     parts = message.get("content")
                     if not isinstance(parts, list) or not parts or any(
-                            part.get("type") != "output_text" or not isinstance(part.get("text"), str)
+                            not isinstance(part, dict) or part.get("type") != "output_text" or not isinstance(part.get("text"), str)
                             for part in parts):
                         raise ValueError("expected text output")
                     answer_text = "".join(part["text"] for part in parts)
                     usage = data["usage"]
+                    if not isinstance(usage, dict) or not isinstance(data.get("model"), str) or not data["model"].strip():
+                        raise ValueError("invalid response metadata")
                     input_tokens, output_tokens = usage["input_tokens"], usage["output_tokens"]
                     if type(input_tokens) is not int or type(output_tokens) is not int:
                         raise ValueError("invalid usage")

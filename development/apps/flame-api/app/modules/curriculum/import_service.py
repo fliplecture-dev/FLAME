@@ -123,7 +123,7 @@ class CurriculumImportService:
     def __init__(self, session_factory):
         self.session_factory = session_factory
 
-    def upload(self, *, owner: str, curriculum_id: UUID, filename: str, payload: bytes) -> dict:
+    def upload(self, *, owner: str, curriculum_id: UUID, filename: str, payload: bytes, reserved_id: UUID | None = None) -> dict:
         if not filename or len(filename) > 255 or "/" in filename or "\\" in filename:
             raise ImportFailure("invalid_filename")
         if not filename.casefold().endswith(".xlsx"):
@@ -144,6 +144,14 @@ class CurriculumImportService:
             raise WorkbookRejected("invalid_workbook") from exc
         with self.session_factory() as session, session.begin():
             _require_admin(session, owner)
+            if reserved_id:
+                existing = session.get(CurriculumImport, reserved_id)
+                if existing:
+                    if existing.owner_subject != owner or existing.curriculum_id != curriculum_id:
+                        raise ImportFailure("import_not_found")
+                    return {"import_id": str(existing.id), "curriculum_id": str(curriculum_id),
+                            "file_hash": existing.file_hash, "status": existing.status, "sheets": sheets,
+                            "metadata": metadata, "round_trip": bool(metadata)}
             curriculum = session.get(Curriculum, curriculum_id)
             if curriculum is None or curriculum.state == "archived":
                 raise ImportFailure("curriculum_not_found")
@@ -167,6 +175,8 @@ class CurriculumImportService:
                 preview_result={"events": [{"status": "uploaded", "at": datetime.now(timezone.utc).isoformat()}]},
                 payload_expires_at=datetime.now(timezone.utc) + timedelta(days=30),
             )
+            if reserved_id:
+                batch.id = reserved_id
             session.add(batch)
             session.flush()
             result = {"import_id": str(batch.id), "curriculum_id": str(curriculum_id),

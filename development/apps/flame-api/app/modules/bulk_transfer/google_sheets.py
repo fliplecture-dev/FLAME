@@ -38,11 +38,13 @@ def spreadsheet_id(value):
 
 
 def credentials(config):
-    if not config.google_sheets_credentials_file:
-        fail(503, "Google Sheets is not configured. Set FLAME_GOOGLE_SHEETS_CREDENTIALS_FILE on the API server.")
+    if not (config.google_sheets_credentials_json or config.google_sheets_credentials_file):
+        fail(503, "Google Sheets is not configured. Set server-only Google service-account credentials on the API server.")
     try:
-        info = json.loads(Path(config.google_sheets_credentials_file).read_text(encoding="utf-8"))
-        if info.get("type") != "service_account" or info.get("token_uri") != "https://oauth2.googleapis.com/token":
+        raw = (config.google_sheets_credentials_json.get_secret_value() if config.google_sheets_credentials_json
+               else Path(config.google_sheets_credentials_file).read_text(encoding="utf-8"))
+        info = json.loads(raw)
+        if not isinstance(info, dict) or info.get("type") != "service_account" or info.get("token_uri") != "https://oauth2.googleapis.com/token":
             raise ValueError()
         return Credentials.from_service_account_info(info, scopes=["https://www.googleapis.com/auth/spreadsheets"])
     except (OSError, ValueError, KeyError):

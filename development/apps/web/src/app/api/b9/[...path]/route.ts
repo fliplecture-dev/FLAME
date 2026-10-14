@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
+export const maxDuration = 300;
 import { apiJson, apiRequest, checkMutation, sessionValue } from "@/lib/api/auth-bff";
 
 const allowed = [
+  /^admin\/transfers\/(?:configuration|authorize|complete|export)$/,
   /^admin\/bulk\/google-sheets\/(?:configuration|connections|template|preview|[0-9a-f-]+\/(?:commit|writeback))$/,
   /^explore(?:\/(?:context|curiosity)|\/(?:resource|tutor|kit)\/[0-9a-f-]+)?$/,
   /^admin\/bulk\/(?:resources|teachers|students|activity-kits)\/(?:preview|export|template)$/,

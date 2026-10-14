@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { B9Error, b9Get, b9Mutation } from "@/lib/api/b9-client";
+import { uploadPrivateFile, privateExport } from "@/lib/api/private-transfers";
 
 type Kind = "resources" | "teachers" | "students" | "activity-kits";
 type Job = { id:string; filename:string; status:string; preview_token:string; total:number; counts:Record<string,number>;
@@ -23,11 +24,14 @@ export function BulkTransfer({ kind, onImported }: { kind:Kind; onImported:()=>v
   async function show(){setOpen(true);setError("");const saved=localStorage.getItem(storageKey);if(saved&&!job)await act(async()=>{try{remember(await b9Get<Job>("admin/bulk/imports/"+saved));}catch(cause){if(cause instanceof B9Error&&cause.status===404)localStorage.removeItem(storageKey);else throw cause;}});}
   async function close(){if(guard.current)return;if(job?.status==="review"){if(!window.confirm("Cancel this import? No catalogue changes will be applied. Staged unused media will be removed."))return;await act(async()=>{remember(await b9Mutation<Job>("admin/bulk/imports/"+job.id+"/cancel","POST",{}));setOpen(false);});}else setOpen(false);}
   async function download(action:"template"|"export",packageFiles=false){await act(async()=>{
+    const direct=await privateExport({purpose:"bulk",kind,action,package:packageFiles});
+    if(direct){const url=URL.createObjectURL(direct.blob);const a=document.createElement("a");a.href=url;a.download=direct.filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);return;}
     const result=await fetch(`/api/b9/admin/bulk/${kind}/${action}${packageFiles?"?package=true":""}`,{cache:"no-store"});
     if(!result.ok)throw new B9Error(await result.json(),result.status);
     const url=URL.createObjectURL(await result.blob());const a=document.createElement("a");a.href=url;a.download=kind+(action==="template"?"-template":"")+(packageFiles?".zip":".xlsx");a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
   });}
   async function preview(){if(!file)return;await act(async()=>{
+    const direct=await uploadPrivateFile<Job>(file,{purpose:"bulk",kind});if(direct){remember(direct);return;}
     const csrf=await fetch("/api/auth/csrf",{cache:"no-store"}).then(r=>r.json());const body=new FormData();body.append("file",file);
     const response=await fetch(`/api/b9/admin/bulk/${kind}/preview`,{method:"POST",headers:{"x-flame-csrf":csrf.csrf},body});const data=await response.json();if(!response.ok)throw new B9Error(data,response.status);remember(data);
   });}

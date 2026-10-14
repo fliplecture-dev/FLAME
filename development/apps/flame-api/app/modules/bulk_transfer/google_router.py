@@ -57,7 +57,7 @@ def template(request: Request, principal: Admin):
 
 @router.get("/configuration")
 def configuration(request: Request, principal: Admin):
-    if not request.app.state.settings.google_sheets_credentials_file:
+    if not (request.app.state.settings.google_sheets_credentials_json or request.app.state.settings.google_sheets_credentials_file):
         return {"configured": False, "service_account_email": None}
     auth = credentials(request.app.state.settings)
     return {"configured": True, "service_account_email": auth.service_account_email}

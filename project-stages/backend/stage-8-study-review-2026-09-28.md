@@ -2,6 +2,8 @@
 
 Date: 2026-09-28. Reviewer: FlipLecture founder. Status: **awaiting founder scoring and case approval**.
 
+Reviewer reconfirmed by the owner on 2026-10-14. The 17 recorded outputs below retain their original run dates and versions. Please mark each sample's four checkboxes, add any correction, and approve or amend the thresholds in [the evaluation rubric](stage-8-evaluation.md). Agreeing to review does not yet approve the cases, scores or release quality.
+
 This packet contains synthetic Study questions only. Curiosity remains open to any learning question and was not changed or evaluated in this run. The five workbook-linked cases are candidate facts, not educator-approved answers. Outputs came from the B6 Study prompt, configured B7 model, and B8 output guard directly; they did not pass through a signed-in browser or a published Study path.
 
 ## Run summary

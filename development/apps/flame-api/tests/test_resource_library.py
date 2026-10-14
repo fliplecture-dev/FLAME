@@ -8,6 +8,7 @@ import pytest
 from PIL import Image
 from pydantic import SecretStr
 from app.modules.resources.models import Resource
+from app.modules.resources.storage import ResourceStorage
 from app.modules.resources.validation import declared_format, inspect_media, MediaRejected
 from app.modules.conversations.models import ConversationSession, Message
 from app.modules.identity.dependencies import require_admin
@@ -22,7 +23,7 @@ def gif_bytes():
 
 
 def test_gif_validation_rejects_disguised_and_corrupt_media(tmp_path):
-    assert declared_format('force.gif', 'image/gif')[2] == 'animation'
+    assert declared_format('force.gif', 'image/gif')[2] == 'video'
     with pytest.raises(MediaRejected): declared_format('force.gif', 'image/png')
     good = tmp_path/'good.gif'; good.write_bytes(gif_bytes()); inspect_media(good,'image/gif')
     bad = tmp_path/'bad.gif'; bad.write_bytes(b'GIF89a' + b'broken')
@@ -55,7 +56,7 @@ def test_server_filters_and_gif_draft_publish_delivery_lifecycle():
         def upload():
             response=client.post('/api/v1/admin/resources/uploads',files={'file':('force-motion.gif',payload,'image/gif')})
             assert response.status_code==201,response.text
-            assert response.json()['mime_type']=='image/gif' and response.json()['media_type']=='animation'
+            assert response.json()['mime_type']=='image/gif' and response.json()['media_type']=='video'
             return response.json()['upload_id']
         assert client.post('/api/v1/admin/resources/uploads',files={'file':('bad.gif',b'GIF89a broken','image/gif')}).status_code==422
         assert client.post('/api/v1/admin/resources/uploads',files={'file':('bad.gif',payload,'image/png')}).status_code==422
@@ -70,7 +71,7 @@ def test_server_filters_and_gif_draft_publish_delivery_lifecycle():
         preview=client.get('/api/v1/admin/resources/'+rid+'/preview-content')
         assert preview.status_code==200 and preview.content==payload and preview.headers['content-type']=='image/gif'
         with client.app.state.database.session() as db:
-            assert (Path(directory)/db.get(Resource,UUID(rid)).storage_key).read_bytes()==payload
+            assert ResourceStorage(client.app.state.settings).local_path(db.get(Resource,UUID(rid)).storage_key).read_bytes()==payload
         def external(title,paths):
             response=client.post('/api/v1/admin/resources',json={'type':'image','title':code+' '+title,'external_url':'https://media.example.test/figure.png','paths':paths})
             assert response.status_code==201,response.text
@@ -118,7 +119,9 @@ def test_server_filters_and_gif_draft_publish_delivery_lifecycle():
             db.add(answer);db.flush();sid=str(conversation.id);mid=str(answer.id)
         recommendation=client.get('/api/v1/sessions/'+sid+'/recommendations',params={'message_id':mid})
         assert recommendation.status_code==200,recommendation.text
-        assert recommendation.json()['image_decision']['resource_id']==rid and recommendation.json()['image_decision']['display_mode']=='inline'
+        assert recommendation.json()['image_decision']['resource_id'] is None
+        choice = recommendation.json()['recommendation_decision']['primary']
+        assert choice['candidate_id'] == rid and choice['display_mode'] == 'optional card'
         assert recommendation.json()['resources'][0]['mime_type']=='image/gif'
         removed=client.post('/api/v1/admin/resources/'+rid+'/unpublish',json={'expected_version':row['version']})
         assert removed.status_code==200,removed.text

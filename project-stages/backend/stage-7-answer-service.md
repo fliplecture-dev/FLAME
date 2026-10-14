@@ -1,6 +1,10 @@
 # B7 answer service handoff (development, 2026-09-27)
 
-Status: **PARTIAL**. B7.1–B7.6 are complete in development; B7.7 remains partial. The API loads the server-only key and `gpt-6-luna`, the only permitted project model (200,000 TPM and 500 RPM, per owner). The owner confirms a USD $5/month project hard spend limit. One direct gateway call and rollback-only Study and open Curiosity answer/replay checks succeeded. B8 answer-quality evaluation has not run; no educator acceptance is claimed.
+Status: **COMPLETED in development**, verified 2026-10-14. All seven B7 steps now have development evidence; hosted function termination/load and pilot quality acceptance remain B10/B8. The owner-reported USD $5/month spend ceiling and permitted model are unchanged. Earlier dated run/configuration snapshots below retain their original scope.
+
+October 14 verification: signed-in Study and Curiosity generation, reload/recent restoration and same-conversation follow-ups passed; reloading during a pending Curiosity follow-up restored one persisted answer. The live deadline probe observed two ReadTimeouts and returned a bounded provider_unavailable result without changing application settings. Loopback HTTP timeout/disconnect/503 tests and malformed response-shape tests passed. Rollback-only terminal-failure replay, expired interrupted-worker recovery, owned history references and answer replay passed. Client disconnect recovery does not promise immediate provider cancellation: synchronous work may finish, while a terminated worker uses lease expiry/fencing. See [canonical delivery evidence](../STAGES-STEPS.md#pending-stage-delivery--2026-10-14).
+
+Successful and restored answers now expose an optional Answer reference, using the stored server request ID. History resolves references in one bounded owner/session-scoped page query; older messages without a reference remain readable.
 
 ## Implemented path
 
@@ -29,7 +33,7 @@ The owner confirmed `gpt-6-luna` is the only allowed project model. Its project 
 
 ## Remaining B7 and B8 gates
 
-1. Complete B7.7 live timeout/cancellation and restored-session continuation checks; the direct gateway and owned Study answer/replay already passed. A live open Curiosity answer passed; the signed-in real browser/BFF journey remains useful integration evidence.
+1. B7.7 development deadline/recovery and signed-in continuation checks are complete. Verify hosted function termination/recovery and load in B10 before pilot release.
 2. Review the cases and measurable thresholds in [B8 evaluation](stage-8-evaluation.md) with an educator, then evaluate actual model outputs for accuracy, topic adherence, age suitability and policy override resistance. B8.2 and B8.6 have not started.
 3. Check project usage against the owner-reported USD $5 hard limit during pilot operation. The local request record measures completed turns; provider-side usage is authoritative for billing.
 

@@ -34,5 +34,8 @@ include = ["app*"]
 testpaths = ["tests"]
 markers = ["db_integration: rollback-only tests against configured development PostgreSQL"]
 
+[tool.vercel]
+entrypoint = "app.main:app"
+
 
 

@@ -30,6 +30,7 @@ export function restoredTurns(messages: SavedMessage[], sessionId?: string): Con
       ["text", "heading", "list", "table", "callout"].includes(block.kind)
     ).map((block, index) => ({ ...block, id: block.id ?? pair.assistant!.id + "-" + index })) as LearningBlock[];
     if (!blocks.length) return [];
-    return [{ id: pair.assistant.id, question, attachments: [], status: "complete" as const, blocks, sessionId, messageId: pair.assistant.id }];
+    const requestId = typeof pair.assistant.request_id === "string" && /^[0-9a-f-]{36}$/i.test(pair.assistant.request_id) ? pair.assistant.request_id : undefined;
+    return [{ id: pair.assistant.id, question, attachments: [], status: "complete" as const, blocks, sessionId, messageId: pair.assistant.id, requestId }];
   });
 }

@@ -5,6 +5,15 @@ from starlette.exceptions import HTTPException
 import logging
 
 RESOURCE_ERRORS = {
+    "direct_storage_unavailable": ("Private file storage is unavailable. Keep the selected file and retry when storage is available.", "file"),
+    "staged_upload_missing": ("The selected file has not reached private storage. Retry the upload.", "file"),
+    "upload_ticket_expired_or_invalid": ("The upload authorization expired or is invalid. Select the file and upload again.", "file"),
+    "upload_content_mismatch": ("The uploaded bytes do not match the selected file. Select the file again and retry.", "file"),
+    "upload_size_mismatch": ("The uploaded file size does not match the selected file.", "file"),
+    "upload_content_conflict": ("This upload already contains different bytes. Select the file again.", "file"),
+    "upload_target_conflict": ("This upload belongs to a different import target. Select the file again.", "file"),
+    "upload_in_progress": ("This file is still being validated. Retry the same upload shortly.", "file"),
+    "export_too_large": ("This export exceeds the supported package size. Export the workbook without media.", None),
     "video_thumbnail_required": ("Upload a PNG, JPEG or WebP video thumbnail, save the draft, then publish.", "thumbnail_upload_id"),
     "video_thumbnail_image_required": ("Choose a static PNG, JPEG or WebP image for the video thumbnail.", "thumbnail_upload_id"),
     "video_thumbnail_type_required": ("Thumbnails can be attached only to Video resources.", "thumbnail_upload_id"),
@@ -116,7 +125,7 @@ def install_error_handlers(app: FastAPI):
         if detail_code in RESOURCE_ERRORS:
             message, field = RESOURCE_ERRORS[detail_code]
             response = error_response(request, exc.status_code, detail_code, message,
-                                      retryable=exc.status_code == 503, headers=exc.headers)
+                                      retryable=exc.status_code == 503 or detail_code == "upload_in_progress", headers=exc.headers)
             import json
             content = json.loads(response.body)
             if isinstance(exc.detail, dict) and detail_code == "distribution_rights_required":

@@ -5,7 +5,7 @@ from io import BytesIO
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from typing import Annotated, Literal
-from uuid import UUID
+from uuid import UUID, uuid5
 from zipfile import ZipFile, ZIP_DEFLATED
 import httpx
 from fastapi import APIRouter, Depends, File, Request, UploadFile, HTTPException
@@ -20,7 +20,7 @@ from app.modules.identity.models import StudentProfile, AdminRole
 from app.modules.bulk_transfer.models import BulkImport, BulkIdentity
 from app.modules.bulk_transfer.workbooks import KINDS, MAX_PACKAGE, decode, workbook, EDUCATION
 from app.modules.bulk_transfer.service import MODELS, plan, apply, digest, snapshot, split
-from app.modules.resources.router import upload_resource
+from app.modules.resources.router import upload_resource, store_upload
 from app.modules.resources.models import ResourceUpload, Resource
 from app.modules.activity_kits.models import ActivityKit
 from app.modules.resources.storage import ResourceStorage
@@ -71,6 +71,18 @@ def review_payload(db, config, job):
 
 @router.post("/{kind}/preview")
 def preview(request: Request, principal: Admin, kind: Kind, file: UploadFile = File(...)):
+    return preview_file(request, principal, kind, file)
+
+
+def preview_file(request, principal, kind, file, *, reserved_id=None):
+    database, config = request.app.state.database, request.app.state.settings
+    if reserved_id:
+        with database.session() as db:
+            existing = db.get(BulkImport, reserved_id)
+            if existing:
+                if existing.owner_subject != principal_subject(db, principal) or existing.kind != kind:
+                    fail(404, "Bulk import not found.")
+                return response(existing)
     content = file.file.read(MAX_PACKAGE + 1)
     if len(content) > MAX_PACKAGE: fail(413, "Import exceeds 120 MiB.")
     payload, assets = decode(kind, file.filename or "", content)
@@ -90,16 +102,22 @@ def preview(request: Request, principal: Admin, kind: Kind, file: UploadFile = F
                     suffix = Path(name).suffix.lower()
                     if suffix not in FORMATS: fail(422, "Unsupported bundled media: " + name)
                     upload = UploadFile(BytesIO(assets[name]), filename=Path(name).name, headers=Headers({"content-type": FORMATS[suffix][0]}))
-                    saved = upload_resource(request, principal, upload)
+                    saved = (store_upload(request, principal, upload, reserved_id=uuid5(reserved_id, asset_key))
+                             if reserved_id else upload_resource(request, principal, upload))
                     staged.append(saved["upload_id"]); payload["uploads"][asset_key] = saved["upload_id"]
         with database.session() as db, db.begin():
             review = plan(db, config, kind, payload)
             job = BulkImport(kind=kind, owner_subject=owner, filename=Path((file.filename or "import.xlsx").replace("\\", "/")).name[:255], payload=payload,
                 preview=review, token=digest(review))
+            if reserved_id:
+                job.id = reserved_id
             db.add(job); db.flush(); result = response(job)
         return result
     except Exception:
-        with database.session() as db, db.begin(): cleanup(db, config, staged, owner)
+        # A concurrent direct completion may have committed these same reserved
+        # asset IDs. Preserve them for receipt replay or unused-upload cleanup.
+        if not reserved_id:
+            with database.session() as db, db.begin(): cleanup(db, config, staged, owner)
         raise
 
 

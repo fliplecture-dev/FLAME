@@ -77,6 +77,37 @@ class ResourceStorage:
         except (OSError, httpx.HTTPError) as exc:
             raise StorageUnavailable("resource_storage_unavailable") from exc
 
+    def download_to(self, key: str, destination: Path, limit: int) -> None:
+        """Bounded server-side asset retrieval; bytes never pass through a browser BFF."""
+        key = self.checked_key(key)
+        size = 0
+        try:
+            with destination.open("wb") as out:
+                if self.settings.resource_storage_backend == "local":
+                    with self.local_path(key).open("rb") as source:
+                        while chunk := source.read(65536):
+                            size += len(chunk)
+                            if size > limit:
+                                raise StorageUnavailable("resource_asset_too_large")
+                            out.write(chunk)
+                else:
+                    secret = self.settings.supabase_secret_key or self.settings.supabase_service_role_key
+                    if not self.settings.supabase_url or not secret or not self.settings.resource_storage_bucket:
+                        raise StorageUnavailable("resource_storage_unconfigured")
+                    token = secret.get_secret_value()
+                    url = f"{self.settings.supabase_url}/storage/v1/object/{self.settings.resource_storage_bucket}/{key}"
+                    with httpx.Client(timeout=120, follow_redirects=False) as client:
+                        with client.stream("GET", url, headers={"apikey": token, "Authorization": "Bearer " + token}) as response:
+                            if response.status_code != 200:
+                                raise StorageUnavailable("resource_asset_missing")
+                            for chunk in response.iter_bytes(65536):
+                                size += len(chunk)
+                                if size > limit:
+                                    raise StorageUnavailable("resource_asset_too_large")
+                                out.write(chunk)
+        except (OSError, httpx.HTTPError) as exc:
+            raise StorageUnavailable("resource_storage_unavailable") from exc
+
     def put(self, key: str, source: Path, mime_type: str) -> None:
         key = self.checked_key(key)
         if self.settings.resource_storage_backend == "local":
@@ -136,7 +167,8 @@ class ResourceStorage:
         try:
             with httpx.Client(timeout=10, follow_redirects=False) as client:
                 response = client.head(url, headers={"apikey": token, "Authorization": f"Bearer {token}"})
-            if response.status_code == 404:
+            # Supabase's storage-js exists() treats missing HEADs as 400 or 404.
+            if response.status_code in (400, 404):
                 return False
             if response.status_code != 200:
                 raise StorageUnavailable("resource_storage_unavailable")

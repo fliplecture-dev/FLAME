@@ -10,6 +10,7 @@ export interface ConversationTurn {
   resources?: LearningResource[];
   sessionId?: string;
   messageId?: string;
+  requestId?: string;
   notice?: string;
 }
 export interface ConversationSession { draft: string; attachments: PromptAttachment[]; attachmentNotice: string; turns: ConversationTurn[] }

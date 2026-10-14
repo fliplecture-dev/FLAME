@@ -23,6 +23,7 @@ class Settings(BaseSettings):
     web_origin: str | None = None
     bff_shared_key: SecretStr | None = None
     google_sheets_credentials_file: str | None = None
+    google_sheets_credentials_json: SecretStr | None = None
     resource_storage_backend: Literal["local", "supabase"] = "local"
     resource_local_dir: str = ".private-resources"
     resource_storage_bucket: str | None = None

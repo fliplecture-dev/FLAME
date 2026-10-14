@@ -16,7 +16,7 @@ const rows = [
   { id: uid(11), mode: 'curiosity', context: null, revision: null, pinned: false, first_question: 'How do enormous aeroplanes stay in the air when they are so heavy?', created_at: now, updated_at: now, recent_at: now },
   { id: uid(12), mode: 'curiosity', context: null, revision: null, pinned: true, first_question: 'Why is the sky blue?', created_at: now, updated_at: now, recent_at: now },
 ];
-let opens = 0;
+let opens = 0, asks = 0;
 const messages = new Map(rows.map((row, index) => [row.id, [
   { id: uid(20 + index * 2), role: 'user', turn_number: 1, blocks: [{ kind: 'text', text: row.first_question }] },
   { id: uid(21 + index * 2), role: 'assistant', turn_number: 1, blocks: [{ kind: 'text', text: 'Fixture answer for ' + row.first_question }] },
@@ -25,6 +25,7 @@ const json = (response, value, status = 200) => { response.writeHead(status, { '
 const body = async request => { const chunks = []; for await (const chunk of request) chunks.push(chunk); return JSON.parse(Buffer.concat(chunks).toString() || '{}'); };
 const mock = http.createServer(async (request, response) => {
   const route = new URL(request.url, 'http://fixture').pathname.replace('/api/v1/', '');
+  if (route.endsWith('/ask')) asks++;
   if (request.headers['x-bff-key'] !== 'sidebar-test-secret' || request.headers['x-flame-session'] !== 'sidebar-test-session') return json(response, {}, 401);
   if (route === 'me') return json(response, { id: uid(99), role: 'member', email: 'sidebar@example.test' });
   if (route === 'curricula') return json(response, { items: [{ id: ids.c }] });
@@ -56,11 +57,19 @@ const mock = http.createServer(async (request, response) => {
     for (let i = 0; i < 40; i++) { try { if ((await fetch(base + '/sign-in')).ok) { ready = true; break; } } catch {} await new Promise(resolve => setTimeout(resolve, 500)); }
     assert(ready, log);
     browser = await chromium.launch({ channel: 'msedge', headless: true });
+    const anonymous = await browser.newContext();
+    const anonymousPage = await anonymous.newPage();
+    await anonymousPage.goto(base, { waitUntil: 'networkidle' });
+    assert.equal(new URL(anonymousPage.url()).pathname, '/sign-in');
+    await anonymous.close();
     const browserContext = await browser.newContext({ viewport: { width: 1200, height: 850 } });
     await browserContext.addCookies([{ name: 'flame_session', value: 'sidebar-test-session', url: base, httpOnly: true }]);
     const page = await browserContext.newPage();
     const errors = []; page.on('pageerror', error => errors.push(error.message));
     await page.goto(base, { waitUntil: 'networkidle' });
+    assert.equal(await page.locator('.development-response').count(), 0);
+    assert(await page.getByLabel('Progress unavailable', {exact:true}).count() > 0);
+    assert.equal(await page.getByLabel(/^\d+% progress$/).count(), 0);
     const sidebar = page.locator('.desktop-sidebar');
     const sections = sidebar.locator('.shortcut-section');
     assert.deepEqual(await sections.locator('.shortcut-toggle span').allTextContents(), ['Pinned', 'Recent']);
@@ -165,7 +174,16 @@ const mock = http.createServer(async (request, response) => {
     const artifact = path.resolve(cwd, '../../../work/sidebar-conversations-narrow.png');
     fs.mkdirSync(path.dirname(artifact), { recursive: true });
     await page.screenshot({ path: artifact });
+    await page.setViewportSize({ width: 1200, height: 850 });
+    await page.getByLabel('Choose attachments', {exact:true}).setInputFiles({
+      name: 'synthetic.txt', mimeType: 'text/plain', buffer: Buffer.from('Synthetic local-only attachment'),
+    });
+    await page.locator('#flame-prompt').fill('Please read this attachment.');
+    await page.getByRole('button', {name:'Send learning request', exact:true}).click();
+    await page.getByText("File processing and audio transcription aren't connected yet. Your attachments are kept in this tab; nothing has been uploaded.", {exact:true}).waitFor();
+    assert.equal(asks, 0);
+    assert(await page.getByLabel('Draft attachments', {exact:true}).getByText('synthetic.txt').isVisible());
     assert.deepEqual(errors, []);
-    console.log('PASS: section order, collapse persistence, title/sidebar pin sync, clear preservation, unpin all, reload persistence, My Learning restoration, keyboard menus, and narrow layout');
+    console.log('PASS: section order, collapse persistence, pin sync, clear preservation, reload, keyboard/narrow layout; production sign-in, no fixture answer/progress, and unsupported attachments retained without an ask');
   } finally { await browser?.close(); server.kill(); mock.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

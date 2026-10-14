@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const config = {
+  distDir: process.env.FLAME_NEXT_DIST_DIR || ".next",
   async headers() {
     return [{source:"/:path*",headers:[{
       key:"Content-Security-Policy",

@@ -81,9 +81,10 @@ def session_data(row):
             "recent_at": row.recent_at.isoformat() if row.recent_at else None, "created_at": row.created_at.isoformat(),
             "updated_at": row.updated_at.isoformat()}
 
-def message_data(row):
+def message_data(row, request_id=None):
     return {"id": str(row.id), "turn_number": row.turn_number, "role": row.role,
-            "blocks": row.blocks, "created_at": row.created_at.isoformat()}
+            "blocks": row.blocks, "created_at": row.created_at.isoformat(),
+            "request_id": str(request_id) if request_id else None}
 
 def decode_cursor(value):
     if value is None: return None
@@ -218,7 +219,12 @@ def list_messages(request: Request, session_id: UUID, principal: Member, cursor:
         role_index = case((Message.role == "assistant", 1), else_=0)
         if point: q = q.where(tuple_(Message.turn_number, role_index, Message.id) < point)
         rows = db.scalars(q.order_by(Message.turn_number.desc(), role_index.desc(), Message.id.desc()).limit(limit + 1)).all()
-        return {"items": [message_data(x) for x in rows[:limit]],
+        page = rows[:limit]
+        assistant_ids = [str(row.id) for row in page if row.role == "assistant"]
+        references = dict(db.execute(select(AnswerRequest.result["message_id"].astext, AnswerRequest.id).where(
+            AnswerRequest.student_id == UUID(principal["id"]), AnswerRequest.session_id == session_id,
+            AnswerRequest.status == "completed", AnswerRequest.result["message_id"].astext.in_(assistant_ids))).all()) if assistant_ids else {}
+        return {"items": [message_data(x, references.get(str(x.id))) for x in page],
                 "next_cursor": encode_message_cursor(rows[limit - 1]) if len(rows) > limit else None}
 
 @router.patch("/sessions/{session_id}/pin")

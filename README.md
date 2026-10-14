@@ -60,8 +60,10 @@ Database integration tests are opt-in; consult the API README before enabling th
 
 For a Next.js deployment, set the project root to `development/apps/web`. Deploy the API from `development/apps/flame-api` with entry point `app.main:app`, and configure the website's `FLAME_API_URL` to its deployed address.
 
+The MVP hosting target is two Vercel projects with those exact Root Directory values. See [Vercel deployment preparation](project-stages/VERCEL-DEPLOYMENT.md) for environment settings, runtime requirements and remaining upload/storage acceptance.
+
 Production requires PostgreSQL, Supabase authentication, a private Supabase Storage bucket, matching shared keys, a session encryption key, and the correct website origin. Configure the OpenAI key and model together to enable learning answers. All credentials belong in the hosting platform's environment settings.
 
-The local launcher is for development. Production `npm start` does not start Python. Docker and CI/CD deployment configuration are not included yet. Large uploads currently pass through Next.js routes and require adaptation to run within Vercel Functions payload limits.
+The local launcher is for development. Production `npm start` does not start Python. GitHub Actions checks both applications; Docker and automatic deployment are not configured. With Supabase storage enabled, media/workbook/ZIP uploads and generated exports transfer directly through private storage; only authorization metadata and confirmation receipts cross Vercel Functions. Local storage retains multipart uploads. See the deployment guide for provider size limits and hosted acceptance.
 
 See the application READMEs and `project-stages/README.md` for more detail.

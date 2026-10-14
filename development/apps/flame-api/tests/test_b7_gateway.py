@@ -95,3 +95,22 @@ def test_responses_adapter_does_not_retry_spend_limit(monkeypatch):
         OpenAIResponsesGateway('test-key', 'test-model').generate([])
     assert exc.value.code == 'provider_budget_exceeded'
     assert calls == 1
+
+
+@pytest.mark.parametrize('data', [
+    [],
+    {'status': 'completed', 'output': [None]},
+    {'status': 'completed', 'output': [{'type': 'message', 'role': 'assistant', 'content': [None]}]},
+    {'status': 'completed', 'model': 'test-model', 'output': [{'type': 'message', 'role': 'assistant',
+        'content': [{'type': 'output_text', 'text': 'Hello.'}]}], 'usage': None},
+    {'status': 'completed', 'model': None, 'output': [{'type': 'message', 'role': 'assistant',
+        'content': [{'type': 'output_text', 'text': 'Hello.'}]}],
+        'usage': {'input_tokens': 10, 'output_tokens': 2}},
+])
+def test_malformed_provider_shapes_return_invalid_output(monkeypatch, data):
+    original = httpx.Client
+    monkeypatch.setattr(httpx, 'Client', lambda **kwargs: original(
+        transport=httpx.MockTransport(lambda request: httpx.Response(200, json=data)), **kwargs))
+    with pytest.raises(GatewayError) as error:
+        OpenAIResponsesGateway('test-key', 'test-model').generate([])
+    assert error.value.code == 'invalid_provider_output'

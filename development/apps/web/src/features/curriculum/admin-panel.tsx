@@ -6,6 +6,7 @@ import { B9Admin } from "./b9-admin";
 import { HierarchyGrid, type PathChange } from "./hierarchy-grid";
 import { ImportReviewGrid, type ReviewChange } from "./import-review-grid";
 import { UploadedWorkbookGrid } from "./uploaded-workbook-grid";
+import { uploadPrivateFile, privateExport } from "@/lib/api/private-transfers";
 
 type Node = { id: string; name: string; version: number; draft_revision?: number; published_revision?: number; base_revision?: number; has_draft?: boolean; description?: string | null; learning_outcome?: string | null; archived?: boolean; levels?: Node[]; subjects?: Node[]; domains?: Node[]; categories?: Node[]; topics?: Node[]; subtopics?: Node[] };
 type CurriculumRow = { id: string; code: string; name: string; state: string; version: number; revision: number; published_revision?: number; draft_revision?: number; has_draft?: boolean; updated_at?: string; can_delete?: boolean };
@@ -43,6 +44,8 @@ async function mutation(path: string, method: "POST" | "PATCH" | "DELETE", body:
   return data;
 }
 async function upload(curriculumId: string, file: File) {
+  const direct = await uploadPrivateFile<ImportResult>(file, { purpose: "curriculum", curriculum_id: curriculumId });
+  if (direct) return direct;
   const csrf = await fetch("/api/auth/csrf", { cache: "no-store" }).then(r => r.json());
   const body = new FormData();
   body.append("file", file);
@@ -442,10 +445,14 @@ export function AdminPanel() {
     if (!selectedRow) return;
     setExportBusy(true); setNotice(""); setNoticeError(false);
     try {
-      const response = await fetch("/api/b4/admin/curricula/" + selectedRow.id +
-        "/export?source=" + source, { cache: "no-store" });
-      if (!response.ok) throw new Error("Excel export could not be generated.");
-      const blob = await response.blob();
+      const direct = await privateExport({ purpose: "curriculum", curriculum_id: selectedRow.id, source });
+      let blob: Blob;
+      if (direct) blob = direct.blob;
+      else {
+        const response = await fetch("/api/b4/admin/curricula/" + selectedRow.id + "/export?source=" + source, { cache: "no-store" });
+        if (!response.ok) throw new Error("Excel export could not be generated.");
+        blob = await response.blob();
+      }
       const url = URL.createObjectURL(blob);
       const anchor = document.createElement("a");
       anchor.href = url;

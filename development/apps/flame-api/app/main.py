@@ -19,6 +19,7 @@ from app.modules.teaching.router import router as teaching_router
 from app.modules.teaching.answer_router import router as answer_router
 from app.modules.teaching.gateway import OpenAIResponsesGateway, UnconfiguredGateway
 from app.modules.resources.router import router as resources_router
+from app.modules.resources.direct_uploads import router as direct_uploads_router
 from app.modules.resources.member_router import router as member_resources_router
 from app.modules.recommendations.router import router as recommendations_router
 from app.modules.learning_response.explore_router import router as explore_router
@@ -88,6 +89,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     application.include_router(teaching_router)
     application.include_router(answer_router)
     application.include_router(resources_router)
+    application.include_router(direct_uploads_router)
     application.include_router(member_resources_router)
     application.include_router(recommendations_router)
     application.include_router(explore_router)

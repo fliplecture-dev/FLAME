@@ -1,3 +1,5 @@
+import { uploadPrivateFile } from "./private-transfers";
+
 export class B9Error extends Error {
   code: string;
   status: number;
@@ -35,6 +37,8 @@ export async function b9Mutation<T>(path: string, method: "POST" | "PATCH", body
 }
 
 export async function b9Upload(file: File): Promise<{ upload_id: string; mime_type: string; byte_size: number }> {
+  const direct = await uploadPrivateFile<{ upload_id: string; mime_type: string; byte_size: number }>(file, { purpose: "resource" });
+  if (direct) return direct;
   const csrfResponse = await fetch("/api/auth/csrf", { cache: "no-store" });
   if (!csrfResponse.ok) throw new Error("Could not authorize this upload.");
   const { csrf } = await csrfResponse.json();

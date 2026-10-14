@@ -11,7 +11,7 @@ import type { PublishedCurriculumTree } from "@/features/curriculum/map-publishe
 export type LearningRequest = { sessionId?: string; attachments?: PromptAttachment[]; history?: { question: string; blocks: LearningBlock[]; attachments?: PromptAttachment[] }[] } & (
   | { message: string; mode: "study"; context: LearningContext | null }
   | { message: string; mode: "curiosity"; context: null });
-export type LearningResult = { status: "available"; blocks: LearningBlock[]; resources?: LearningResource[]; sessionId: string; messageId: string } | { status: "unavailable" | "unsupported"; reason: string };
+export type LearningResult = { status: "available"; blocks: LearningBlock[]; resources?: LearningResource[]; sessionId: string; messageId: string; requestId?: string } | { status: "unavailable" | "unsupported"; reason: string };
 
 // The local curriculum provider remains a development fixture. Live answers and learning data use the authenticated BFF.
 // Proficiency aggregates and learning access remain server-owned.
@@ -50,7 +50,7 @@ export async function sendLearningRequest(request: LearningRequest, requestId?: 
   }
   const answer = await b4Mutation("sessions/" + sessionId + "/ask", "POST", {
     question: request.message.trim(), mode: request.mode, action: "explain", context,
-  }, answerKey ?? key) as { status: string; route?: string; knowledge_source?: string; grounded?: boolean; blocks?: LearningBlock[]; code?: string; message?: string; message_id?: string; learning_response?:ComposedLearningResponse };
+  }, answerKey ?? key) as { status: string; route?: string; knowledge_source?: string; grounded?: boolean; blocks?: LearningBlock[]; code?: string; message?: string; message_id?: string; request_id?: string; learning_response?:ComposedLearningResponse };
   if (answer.status === "unsupported" && answer.code && answer.message)
     return { status: "unsupported", reason: answer.message };
   if (answer.status !== "ok" || answer.route !== "direct_llm" ||
@@ -61,7 +61,8 @@ export async function sendLearningRequest(request: LearningRequest, requestId?: 
   }
   validateAnswerComposition(answer);
   window.dispatchEvent(new Event("flame:sessions-updated"));
-  return { status: "available", blocks: answer.blocks, sessionId, messageId: answer.message_id };
+  return { status: "available", blocks: answer.blocks, sessionId, messageId: answer.message_id,
+    requestId: typeof answer.request_id === "string" && /^[0-9a-f-]{36}$/i.test(answer.request_id) ? answer.request_id : undefined };
 }
 
 async function b4Get(path: string) {

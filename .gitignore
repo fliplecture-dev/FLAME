@@ -5,6 +5,7 @@
 
 # Generated application and test output
 **/.next/
+**/.next-verify/
 **/out/
 **/dist/
 **/build/

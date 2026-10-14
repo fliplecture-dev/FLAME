@@ -103,6 +103,23 @@ def inspect_external_video(request: Request, _: Admin, body: VideoInspect):
 
 @router.post("/uploads", status_code=201)
 def upload_resource(request: Request, _: Admin, file: UploadFile = File(...)):
+    return store_upload(request, _, file)
+
+
+def store_upload(request, principal, file, *, reserved_id=None):
+    """Validate bytes before storage; direct-transfer retries reuse a server-reserved ID."""
+    with db(request).session() as session:
+        profile = session.get(StudentProfile, UUID(principal["id"]))
+        if profile is None:
+            fail(401, "profile_not_found")
+        owner = profile.auth_subject
+        if reserved_id:
+            existing = session.get(ResourceUpload, reserved_id)
+            if existing:
+                if existing.owner_auth_subject != owner:
+                    fail(404, "upload_not_found")
+                return {"upload_id": str(existing.id), "mime_type": existing.mime_type,
+                        "byte_size": existing.byte_size, "media_type": existing.media_type}
     try:
         suffix, mime_type, media_type, limit = declared_format(file.filename or "", file.content_type or "")
     except MediaRejected as exc:
@@ -123,25 +140,37 @@ def upload_resource(request: Request, _: Admin, file: UploadFile = File(...)):
             inspect_media(temp, mime_type)
         except MediaRejected as exc:
             fail(422, str(exc))
-        key = storage.new_key(suffix)
+        key = "resource-uploads/" + reserved_id.hex + suffix if reserved_id else storage.new_key(suffix)
         try:
-            storage.put(key, temp, mime_type)
+            if reserved_id and storage.exists(key):
+                # An interrupted finalizer may have stored bytes before committing its row.
+                import hashlib
+                restored = Path(temp_dir) / "existing"
+                storage.download_to(key, restored, limit)
+                with temp.open("rb") as first, restored.open("rb") as second:
+                    if hashlib.file_digest(first, "sha256").digest() != hashlib.file_digest(second, "sha256").digest():
+                        fail(409, "upload_content_conflict")
+            else:
+                storage.put(key, temp, mime_type)
         except StorageUnavailable:
             fail(503, "resource_storage_unavailable")
     try:
         with db(request).session() as session, session.begin():
-            profile = session.get(StudentProfile, UUID(_["id"]))
+            profile = session.get(StudentProfile, UUID(principal["id"]))
             if profile is None:
                 fail(401, "profile_not_found")
             row = ResourceUpload(storage_key=key, owner_auth_subject=profile.auth_subject,
                                  mime_type=mime_type, byte_size=size, media_type=media_type,
                                  file_name=Path((file.filename or "media").replace("\\", "/")).name[:255])
+            if reserved_id:
+                row.id = reserved_id
             session.add(row)
             session.flush()
             result = {"upload_id": str(row.id), "mime_type": mime_type, "byte_size": size,
                       "media_type": media_type}
     except Exception:
-        storage.delete(key)
+        if not reserved_id:
+            storage.delete(key)
         raise
     return result
 

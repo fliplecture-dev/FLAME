@@ -76,6 +76,9 @@ def test_ask_replay_and_open_curiosity():
                 assert gateway.calls == 1
                 replay = client.post(route, json=body, headers={"Idempotency-Key": "b7-first"})
                 assert replay.json() == first.json() and gateway.calls == 1
+                history = client.get(f"/api/v1/sessions/{sid}/messages").json()['items']
+                assert next(row for row in history if row['role'] == 'assistant')['request_id'] == first.json()['request_id']
+                assert next(row for row in history if row['role'] == 'user')['request_id'] is None
                 changed = client.post(route, json={**body, "question": "Changed"},
                                       headers={"Idempotency-Key": "b7-first"})
                 assert changed.status_code == 409

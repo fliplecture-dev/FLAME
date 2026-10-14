@@ -6,6 +6,7 @@ const csrfName = "flame_csrf";
 const api = process.env.FLAME_API_URL ?? "http://127.0.0.1:8000";
 
 function upstreamTimeoutMs(path: string) {
+  if (path.startsWith("admin/transfers/")) return 240000;
   if (path.startsWith("admin/bulk/")) return 240000;
   if (path.endsWith("/ask")) return 45000;
   if (/^admin\/curriculum\/imports\/[0-9a-f-]+\/commit$/.test(path)) return 240000;
@@ -16,6 +17,8 @@ function upstreamTimeoutMs(path: string) {
 
 export function upstreamTimeoutMessage(path:string) {
   const route=path.split("?")[0];
+  if(route==="admin/transfers/complete")return "File validation took too long. Your selected file is preserved. Retry this upload to check for completed validation.";
+  if(route==="admin/transfers/export")return "Export generation took too long. Request the export again.";
   if(/^sessions\/[^/]+\/ask$/.test(route))return "The learning answer took too long. Your question is preserved. Use Retry on this question to check for a saved answer before trying again.";
   if(/^sessions\/[^/]+\/capability-check$/.test(route))return "The learning request check took too long. An LLM answer has not been requested yet. Your question is preserved; retry shortly.";
   if(route==="sessions")return "The conversation request took too long. Refresh your conversation list before retrying; completion could not be confirmed.";
