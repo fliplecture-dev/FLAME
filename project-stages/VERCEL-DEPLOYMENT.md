@@ -2,7 +2,7 @@
 
 Owner-selected target, 2026-10-14: two Vercel projects from this repository. Runtime acceptance is tracked only in [STAGES-STEPS.md](STAGES-STEPS.md), especially B5/B9.11/B10/F8. No deployment is recorded by this guide.
 
-Deployment handoff: the owner confirmed that neither Vercel project has been created and will handle setup/server testing in a separate thread. Local checks pass, so the source is ready for initial deployment testing after project configuration; production pilot acceptance remains open. Work locally, run affected checks, then commit/push reviewed changes to main. Once Git integration is configured, verify each Vercel deployment and hosted journey after the push; a successful Git push alone is not server-test evidence.
+Deployment performed on 2026-10-14 at the owner's request: `flame-web` and `flame-api` are connected to `fliplecture-dev/FLAME` with the roots below. Website: https://flame.fliplecture.com. API: https://flame-api.vercel.app. Both initial production builds from `93b2e8f33a424cd4229b4d8dd40e0e581a44b601` reached READY in Mumbai (`bom1`). Exact runtime evidence and remaining acceptance are recorded in STAGES-STEPS.md. Work locally, run affected checks, then commit/push reviewed changes to main. Git integration triggers applicable builds; verify deployment results and hosted journeys after each release. Full production pilot acceptance remains open.
 
 | Project | Root Directory | Framework / entry point |
 | --- | --- | --- |
