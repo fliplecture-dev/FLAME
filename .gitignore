@@ -6,6 +6,8 @@
 # Generated application and test output
 **/.next/
 **/.next-verify/
+**/.next-f11/
+**/.next-f13*/
 **/out/
 **/dist/
 **/build/

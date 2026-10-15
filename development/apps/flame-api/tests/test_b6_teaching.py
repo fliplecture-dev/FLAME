@@ -116,7 +116,7 @@ def test_candidate_teaching_cases_match_workbook_and_prompt_levels():
 def test_open_curiosity_prompt_accepts_any_topic_without_catalogue_context():
     from app.modules.teaching.prompt import assemble_open_curiosity
     prompt = assemble_open_curiosity('Explain black holes in Hindi.', [])
-    assert prompt.version == 'direct-curiosity-open-1'
+    assert prompt.version == 'direct-curiosity-open-3-math1'
     assert prompt.messages[-1] == {'role': 'user', 'content': 'Explain black holes in Hindi.'}
     policy = prompt.messages[0]['content']
     assert 'any subject or language' in policy

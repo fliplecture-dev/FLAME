@@ -2,6 +2,7 @@ import type { Curriculum, TopicContext } from "@/features/curriculum/types";
 import type { LearningBlock } from "./learning-content";
 import type { ConversationTurn } from "./conversation-types";
 import type { SavedMessage, SavedSession } from "./saved-sessions";
+import { responseBlock } from "./rich-blocks";
 
 export function findSavedContext(catalogue: Curriculum[], row: SavedSession): TopicContext | null {
   const path = row.context;
@@ -26,9 +27,8 @@ export function restoredTurns(messages: SavedMessage[], sessionId?: string): Con
   return [...pairs.entries()].sort(([a], [b]) => a - b).flatMap(([, pair]) => {
     const question = pair.user?.blocks.find(block => block.kind === "text")?.text;
     if (!question || !pair.assistant) return [];
-    const blocks = pair.assistant.blocks.filter(block =>
-      ["text", "heading", "list", "table", "callout"].includes(block.kind)
-    ).map((block, index) => ({ ...block, id: block.id ?? pair.assistant!.id + "-" + index })) as LearningBlock[];
+    const blocks: LearningBlock[] = pair.assistant.blocks.slice(0, 30)
+      .map((block, index) => responseBlock(block, pair.assistant!.id + "-" + index));
     if (!blocks.length) return [];
     const requestId = typeof pair.assistant.request_id === "string" && /^[0-9a-f-]{36}$/i.test(pair.assistant.request_id) ? pair.assistant.request_id : undefined;
     return [{ id: pair.assistant.id, question, attachments: [], status: "complete" as const, blocks, sessionId, messageId: pair.assistant.id, requestId }];

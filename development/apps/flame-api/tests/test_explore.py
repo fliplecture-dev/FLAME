@@ -63,8 +63,39 @@ def test_revision_is_not_ignored(monkeypatch):
 def test_member_routes_require_authentication():
     app = create_app(Settings(_env_file=None, environment="test"))
     with TestClient(app) as client:
-        for path in ("/api/v1/explore?topic_id=" + str(uuid4()), "/api/v1/explore/context?session_id=" + str(uuid4()) + "&message_id=" + str(uuid4())):
+        for path in ("/api/v1/explore?topic_id=" + str(uuid4()), "/api/v1/explore/context?session_id=" + str(uuid4()) + "&message_id=" + str(uuid4()), "/api/v1/explore/summary?session_id=" + str(uuid4()) + "&message_id=" + str(uuid4())):
             assert client.get(path).status_code in (401, 403)
+
+
+def test_answer_counts_cover_full_eligible_catalogue_and_deduplicate_paths(monkeypatch):
+    rows = [candidate(i, type="image") for i in range(80)] + [candidate(i, type="video") for i in range(60)]
+    rows += [candidate(type="interactive") for _ in range(3)]
+    rows += [candidate(type="video", mime_type="image/gif"), candidate(type="audio"), candidate(type="image", grade_min=4, grade_max=5)]
+    monkeypatch.setattr(explore, "media_candidates", lambda *args: rows)
+    path = dict(topic_id=uuid4(), subtopic_id=None, grade="Grade 2")
+    assert explore.resource_counts(None, None, [path, path]) == {"videos": 60, "images": 81, "interactives": 3}
+    assert explore.resource_counts(None, None, []) == {"videos": 0, "images": 0, "interactives": 0}
+
+
+def test_answer_counts_require_owned_saved_answer(monkeypatch):
+    from contextlib import nullcontext
+    from app.modules.identity.dependencies import require_member
+    from app.modules.learning_response import explore_router
+    owner, session, message = uuid4(), uuid4(), uuid4()
+    def denied(db, member, sid, mid):
+        assert (member, sid, mid) == (owner, session, message)
+        raise HTTPException(404, "message_unavailable")
+    monkeypatch.setattr(explore_router, "load_answer", denied)
+    monkeypatch.setattr(explore, "resource_counts", lambda *args: pytest.fail("foreign answer counted"))
+    app = create_app(Settings(_env_file=None, environment="test"))
+    app.dependency_overrides[require_member] = lambda: {"id": str(owner), "role": "member"}
+    with TestClient(app) as client:
+        database = app.state.database
+        try:
+            app.state.database = SimpleNamespace(session=lambda: nullcontext(None))
+            assert client.get(f"/api/v1/explore/summary?session_id={session}&message_id={message}").status_code == 404
+        finally:
+            app.state.database = database
 
 
 def test_curiosity_matches_topic_or_precise_subtopic_without_guessing(monkeypatch):

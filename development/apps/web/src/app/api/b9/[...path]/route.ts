@@ -5,7 +5,7 @@ import { apiJson, apiRequest, checkMutation, sessionValue } from "@/lib/api/auth
 const allowed = [
   /^admin\/transfers\/(?:configuration|authorize|complete|export)$/,
   /^admin\/bulk\/google-sheets\/(?:configuration|connections|template|preview|[0-9a-f-]+\/(?:commit|writeback))$/,
-  /^explore(?:\/(?:context|curiosity)|\/(?:resource|tutor|kit)\/[0-9a-f-]+)?$/,
+  /^explore(?:\/(?:context|curiosity|summary)|\/(?:resource|tutor|kit)\/[0-9a-f-]+)?$/,
   /^admin\/bulk\/(?:resources|teachers|students|activity-kits)\/(?:preview|export|template)$/,
   /^admin\/bulk\/imports\/[0-9a-f-]+(?:\/(?:review|commit|cancel))?$/,
   /^admin\/resources\/external-video\/inspect$/,

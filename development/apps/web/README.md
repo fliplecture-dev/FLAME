@@ -4,6 +4,26 @@ Current development progress and remaining integration/admin steps: [canonical t
 
 The student learning interface lives in the existing Next.js / React / TypeScript app. Run `npm ci` to restore dependencies, `npm run dev` for http://localhost:3000, and `npm run build` to validate the production build.
 
+### Rich response rendering (F11)
+
+Study, Curiosity and restored conversations share `LearningContent`. Explicit Markdown blocks use react-markdown/GFM/math/KaTeX; fenced programming code uses lazy Shiki tokens. Typed bar/line/pie blocks use lazy Recharts with a data-table alternative. Single `$` is literal currency; `$$...$$` is inline math and double-dollar lines delimit display math. Existing text blocks remain literal. Catalogue images/videos/interactives continue through their authorized viewers.
+
+Run `npm run test:unit` and `npm run typecheck`. For the isolated production browser check in PowerShell:
+
+```powershell
+$env:FLAME_NEXT_DIST_DIR='.next-f11'
+npm run build
+node tests/rich-response-browser.cjs
+```
+
+The browser script uses the existing `.kilo/ui-check/node_modules` Playwright/axe tooling (override with FLAME_UI_TOOLS), an isolated mock API and port 3115. It does not access real accounts/provider/database rows; screenshots go under `work/f11/`. Schema/generation/history integration and the coordinated frontend-first rollout requirement are described in [API contracts](../../../project-stages/backend/stage-1/api-contracts.md#f11-rich-response-blocks--2026-10-15). Keep the KaTeX override aligned with the direct version so parsing/rendering and local fonts use the patched installation.
+
+### Interactive mathematics (F12)
+
+F12 mathematics adds lazy React Konva/JSXGraph/Mafs activity templates through the same live/restored block adapter. Template definitions in `src/features/learning/math-templates.json` must match the backend registry (parity-tested). Change a template's wire shape only through an explicit versioned contract. Local control/drag state is not saved or sent to the model. Mafs uses a pinned React 19 observer override plus a small default-export adapter in `src/lib/mafs-resize-observer.ts`, configured for the app's Turbopack build; recheck this bridge when changing Mafs, the observer or the bundler.
+
+After the isolated `.next-f11` build above, run `node tests/math-visuals-browser.cjs` for F12's synthetic production-browser checks on port 3116. It covers all sixteen templates, controls, geometry/function behavior, loading fallback, history/retry and responsive accessibility. Screenshots go to `work/f12/`. The backend's opt-in `scripts/check_rich_answer.py --execute --math-template fraction_bar` (or triangle_angles/linear_function) performs one synthetic paid formatting/selection check with no student/database writes. Full field/decision rules are in [F12 API contracts](../../../project-stages/backend/stage-1/api-contracts.md#f12-interactive-mathematics-and-rendering-decisions--2026-10-15).
+
 ### Reliable local startup
 
 `npm run dev` starts/checks FastAPI at `http://127.0.0.1:8000`, waits for database readiness, then starts Next.js at `http://localhost:3000`. It pins local API routing and local media delivery to 8000, checks the frontend/backend BFF shared key, watches only backend app sources, and stops its owned process trees together. There is no automatic fallback to 8001 or 3001. If a separate FLAME API already runs on 8000 it is checked and reused; restart that external API after changing its `.env`. Unrelated services occupying a port are not terminated.
@@ -69,3 +89,12 @@ The protected `/admin` page has Resource Library, Teachers and Activity Kits scr
 
 Development recovery refinement: API health-check failures during reload no longer shut down the frontend. Unexpected owned backend/frontend process exits retry automatically, at most three times per minute. Persistent errors remain visible and retries pause instead of spinning. Ctrl+C still stops the whole owned tree. Closing the terminal or shutting down Windows stops local development; automatic recovery needs the launcher to stay running.
 
+
+
+## F13 generated simulations
+
+Eligible interactive questions now render a temporary simulation directly in the response box: Matter.js 2D physics, Three.js/R3F 3D science, restricted Phaser Matter activities, the existing FLAME-authored Rive Weather World asset, and HTML5 Canvas/SVG paths. Source compiles against fixed local dependencies and executes only in a terminable worker inside an opaque-origin iframe. Text streaming and its saved final explanation are independent of compilation. Rive runtime cannot generate new artwork; normal code fences remain display-only.
+
+Try “Interactive falling ball with adjustable gravity using Matter.js” or “Rotatable 3D solar system using React Three Fiber.” One additional bounded configured-provider generation can occur for a fresh eligible answer. Source stays in memory, outside conversation storage. Process-local opportunities/cache safely expire after API restart or on a different worker; hosted affinity and cancellation acceptance remain F13.11 work.
+
+For isolated verification in PowerShell, set `$env:FLAME_NEXT_DIST_DIR='.next-f13'` and run `npm run build`, then `node tests/simulations-browser.cjs`. The harness uses the same local Playwright/Edge tools as the existing UI suites and a synthetic signed-in API. `node tests/simulations-browser.cjs --live` explicitly runs the four synthetic configured-LLM demonstrations and holds their source only in a temporary memory server. Existing F11/F12 browser suites can target this build with `$env:FLAME_TEST_NEXT_DIST_DIR='.next-f13'`. See the [F13 report](../../../project-stages/F13-IMPLEMENTATION.md) for modified files, versions, evidence and remaining release limits.

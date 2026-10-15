@@ -41,8 +41,8 @@ export function useLearningConversations(live = false) {
     update(key, session => ({ ...session, turns: retryId ? session.turns.map(t => t.id === id ? pending : t) : [...session.turns, pending] }));
     let turn: ConversationTurn;
     try {
-      const result = await sendLearningRequest(submitted, id, live, answerKeys.current.get(id));
-      turn = result.status === "available" ? { ...pending, status: "complete", blocks: result.blocks, resources: result.resources ?? [], sessionId: result.sessionId, messageId: result.messageId, requestId: result.requestId } : { ...pending, status: result.status, notice: result.reason };
+      const result = await sendLearningRequest(submitted, id, live, answerKeys.current.get(id), text => update(key, session => ({ ...session, turns: session.turns.map(t => t.id === id ? { ...t, blocks: [{ id: id + "-stream", kind: "markdown", text }] } : t) })));
+      turn = result.status === "available" ? { ...pending, status: "complete", freshSimulation: true, blocks: result.blocks, resources: result.resources ?? [], sessionId: result.sessionId, messageId: result.messageId, requestId: result.requestId } : { ...pending, status: result.status, notice: result.reason };
     } catch (error) {
       if (error instanceof LearningApiError && ["provider_unavailable", "provider_rate_limited", "provider_budget_exceeded", "invalid_provider_output", "retry_exhausted"].includes(error.code))
         answerKeys.current.set(id, crypto.randomUUID());

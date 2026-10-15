@@ -13,10 +13,31 @@
     "test:ui": "node tests/frontend-browser.cjs"
   },
   "dependencies": {
+    "@react-three/fiber": "9.8.2",
+    "@rive-app/canvas-lite": "2.37.6",
+    "esbuild": "0.25.11",
+    "jsxgraph": "1.14.0",
+    "katex": "0.19.0",
+    "konva": "10.9.0",
     "lucide-react": "1.47.0",
+    "mafs": "0.21.0",
+    "matter-js": "0.20.0",
     "next": "16.3.5",
+    "phaser": "3.90.0",
     "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react-dom": "19.3.0",
+    "react-konva": "19.3.2",
+    "react-markdown": "10.1.0",
+    "recharts": "3.10.1",
+    "rehype-katex": "7.0.1",
+    "remark-gfm": "4.0.1",
+    "remark-math": "6.0.0",
+    "shiki": "4.5.0",
+    "three": "0.180.0"
+  },
+  "overrides": {
+    "katex": "$katex",
+    "use-resize-observer": "10.0.0"
   },
   "devDependencies": {
     "@types/node": "22.20.3",

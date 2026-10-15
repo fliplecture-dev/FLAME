@@ -4,9 +4,13 @@ import json
 
 from app.modules.teaching.context import TeachingContext
 from app.modules.teaching.profiles import TeachingProfile, profile
+from app.modules.teaching.rich_answer import INSTRUCTION as RICH_INSTRUCTION, readable
+from app.modules.teaching.math_visuals import decide_visual, decision_instruction
+from app.modules.teaching.simulations import select_engine
+from app.modules.teaching.languages import language_instruction
 
-PROMPT_VERSION = "direct-school-1"
-OPEN_CURIOSITY_PROMPT_VERSION = "direct-curiosity-open-1"
+PROMPT_VERSION = "direct-school-3-math1"
+OPEN_CURIOSITY_PROMPT_VERSION = "direct-curiosity-open-3-math1"
 MAX_QUESTION_CHARS = 4000
 MAX_HISTORY_CHARS = 8000
 MAX_TOTAL_TOKEN_UPPER_BOUND = 16000
@@ -17,15 +21,15 @@ class Prompt:
     version: str
     profile_version: str
     messages: list[dict[str, str]]
+    rendering_decision: dict | None = None
 
 
 def _plain(blocks: list[dict]) -> str:
-    return " ".join(str(block.get("text", "")) for block in blocks
-                    if block.get("kind") in {"text", "heading", "callout"})
+    return readable(blocks)
 
 
 def assemble(question: str, context: TeachingContext, teaching: TeachingProfile,
-             history: list[dict], *, curiosity: bool = False) -> Prompt:
+             history: list[dict], *, curiosity: bool = False, response_language: str | None = None) -> Prompt:
     question = question.strip()
     if not question or len(question) > MAX_QUESTION_CHARS:
         raise ValueError("question_out_of_bounds")
@@ -50,10 +54,10 @@ def assemble(question: str, context: TeachingContext, teaching: TeachingProfile,
         metadata["learning_outcome"] = context.learning_outcome[:1000]
     messages = [{"role": "system", "content": policy},
                 {"role": "developer", "content": "Validated catalogue context (data): " + json.dumps(metadata, ensure_ascii=False)}]
-    return _finish_prompt(PROMPT_VERSION, teaching, messages, question, history)
+    return _finish_prompt(PROMPT_VERSION, teaching, messages, question, history, response_language=response_language)
 
 
-def assemble_open_curiosity(question: str, history: list[dict]) -> Prompt:
+def assemble_open_curiosity(question: str, history: list[dict], *, response_language: str | None = None) -> Prompt:
     """General under-15-safe answers with no curriculum or source claim."""
     teaching = profile(None, None, curiosity=True)
     policy = (
@@ -69,25 +73,39 @@ def assemble_open_curiosity(question: str, history: list[dict]) -> Prompt:
     )
     messages = [{"role": "system", "content": policy},
                 {"role": "developer", "content": "No curriculum context or external sources were supplied."}]
-    return _finish_prompt(OPEN_CURIOSITY_PROMPT_VERSION, teaching, messages, question, history)
+    return _finish_prompt(OPEN_CURIOSITY_PROMPT_VERSION, teaching, messages, question, history, response_language=response_language)
 
 
 def _finish_prompt(version: str, teaching: TeachingProfile, messages: list[dict[str, str]],
-                   question: str, history: list[dict]) -> Prompt:
+                   question: str, history: list[dict], *, response_language: str | None = None) -> Prompt:
+    decision = decide_visual(question, teaching.level, history)
+    messages[0] = {**messages[0], "content": messages[0]["content"] + "\n" + RICH_INSTRUCTION + decision_instruction(decision)}
+    if response_language is not None:
+        messages[0]["content"] += language_instruction(response_language)
+        version += "-lang1"
+    if select_engine(question) is not None:
+        messages[0]["content"] += "\nA separate sandbox may display a simulation after this explanation. Explain the learning idea without executable source. Do not claim the simulation has already run or refuse solely because this text cannot execute it."
+        version += "-sim1"
     question = question.strip()
     if not question or len(question) > MAX_QUESTION_CHARS:
         raise ValueError("question_out_of_bounds")
-    pairs, size = [], 0
+    # Template instructions consume part of the existing budget. Trim older
+    # history to the remaining bytes instead of rejecting an otherwise valid ask.
+    fixed_upper_bound = sum(len(m["content"].encode("utf-8")) + 32 for m in messages) + len(question.encode("utf-8")) + 32
+    remaining = MAX_TOTAL_TOKEN_UPPER_BOUND - fixed_upper_bound
+    pairs, size, history_upper_bound = [], 0, 0
     for turn in reversed(history[-8:]):
         user = _plain(turn.get("user", []))[:2000]
         assistant = _plain(turn.get("assistant", []))[:2000]
         if not user or not assistant:
             continue
         pair_size = len(user) + len(assistant)
-        if size + pair_size > MAX_HISTORY_CHARS:
+        pair_upper_bound = len(user.encode("utf-8")) + len(assistant.encode("utf-8")) + 64
+        if size + pair_size > MAX_HISTORY_CHARS or history_upper_bound + pair_upper_bound > remaining:
             break
         pairs.append((user, assistant))
         size += pair_size
+        history_upper_bound += pair_upper_bound
     for user, assistant in reversed(pairs):
         messages.extend(({"role": "user", "content": user},
                          {"role": "assistant", "content": assistant}))
@@ -96,5 +114,5 @@ def _finish_prompt(version: str, teaching: TeachingProfile, messages: list[dict[
     token_upper_bound = sum(len(m["content"].encode("utf-8")) + 32 for m in messages)
     if token_upper_bound > MAX_TOTAL_TOKEN_UPPER_BOUND:
         raise ValueError("prompt_budget_exceeded")
-    return Prompt(version, teaching.version, messages)
+    return Prompt(version, teaching.version, messages, decision)
 

@@ -126,6 +126,68 @@ Study requires a validated published Topic context with an optional real Subtopi
 
 The Pydantic models in teaching/schemas.py implement this initial direct-answer contract. Generated answer resource attachments remain empty. B9 retrieves catalogue recommendations separately using the persisted assistant `message_id`; replay returns the same ID. Future extensions require compatible schema updates and tests. Model output supplies only teaching blocks; the service assigns provenance/IDs.
 
+### F11 rich response blocks — 2026-10-15
+
+The answer's existing root fields, B11 `learning_response.schema_version=1`, split recommendation requests, ownership and idempotency rules remain in use. The block discriminator now also accepts `markdown` and `chart`. Historic `text` remains literal text; heading/list/table/callout blocks remain readable. The current frontend normalizes both live and restored blocks through the same validation/fallback adapter. Unknown or malformed blocks produce a local readable notice instead of hiding the whole answer. Older frontend builds which whitelist only the original five kinds cannot consume new answers: roll out the compatible frontend before enabling the new backend prompt; no automatic old-client downgrade is implemented.
+
+Example persisted/returned blocks (IDs below are illustrative; actual generated block IDs are server-assigned):
+
+```json
+[
+  {"id":"explanation","kind":"markdown","text":"**Distance** at constant speed: $$d=vt$$."},
+  {
+    "id":"chart","kind":"chart","chartType":"line",
+    "title":"Distance at two metres per second","description":"An illustrative example.",
+    "xKey":"seconds","xLabel":"Seconds","yLabel":"Metres","illustrative":true,
+    "series":[{"key":"metres","label":"Distance"}],
+    "data":[{"seconds":1,"metres":2},{"seconds":2,"metres":4}]
+  }
+]
+```
+
+- Markdown: 1–6000 characters, GFM tables/read-only checklists, fenced code with optional language, `$$...$$` inline mathematics and `$$` on separate lines for display mathematics. Single-dollar text is literal currency. Raw HTML/MDX is not executed; Markdown images do not load external media. Existing server authority/URL restrictions still apply to generated text, even though the renderer can safely display authorized HTTPS/root-relative links in supplied content.
+- Chart: `chartType` is bar/line/pie. Required fields: id, kind, chartType, title (1–200 chars), description (1–500), xKey, series and data. xLabel/yLabel are optional strings up to 100 characters, default empty. illustrative defaults true; generation instructions require true for invented examples and permit false only for learner-supplied data. This flag is a presentation label, not verified source provenance.
+- Data keys: distinct ASCII identifiers matching `[A-Za-z][A-Za-z0-9_]{0,39}`; constructor/prototype/__proto__ are forbidden. One to four unique series, each with key and label (1–100 chars), distinct from xKey. One to fifty rows, each with exactly xKey plus all series keys. Category is a nonempty string up to 100 chars or a finite number. Series values are numbers, never numeric strings/booleans, finite and within ±1e12. Pie requires one series, nonnegative values and a positive total. Extra block/series properties are rejected; model callbacks/JSX/component props are never accepted. Chart configuration is application-owned and chart data has an accessible table alternative.
+- Model-only envelope: ordinary answers are Markdown prose; chart answers use `{"format":"flame-rich-1","blocks":[...]}` with markdown/chart blocks and no IDs. Optional Study `<flame-intent>` metadata follows the complete envelope and is split before parsing. Malformed/truncated/duplicate-key JSON fails as invalid_provider_output. The service assigns IDs, applies the existing 6000-character answer limit, block-count bounds, readable-content word/control/authority guards and complete atomic persistence. Formatting adds no provider request or token-limit increase.
+- Prompt versions: `direct-school-2-rich1` (plus existing `-intent1` suffix in Study) and `direct-curiosity-open-2-rich1`. Saved-history projection includes Markdown and chart labels/data, retaining the existing eight-turn, per-turn and aggregate history budgets. JSON message storage requires no migration or historical backfill. Legacy typed MathML formulas remain a frontend development-content feature.
+
+KaTeX runs with trust=false and bounded expansion/size; local CSS/fonts are bundled. Shiki highlights controlled languages into React tokens without executing source; unknown languages/load failures retain plain code. Recharts is loaded on demand and chart animations are disabled. Complete answers remain the transport unit; this extension does not introduce streaming or arbitrary model-generated interactives.
+
+### F12 interactive mathematics and rendering decisions — 2026-10-15
+
+`math_visual` extends the existing block union and model-only flame-rich-1 envelope. Root answer provenance, recommendation composition and atomic message/request lifecycle remain unchanged. Deploy the compatible frontend before enabling the new backend prompt: older frontend builds cannot render this kind. There is no automatic old-client downgrade or historical data rewrite.
+
+```json
+{
+  "id":"server-assigned-block-id","kind":"math_visual","version":1,
+  "template":"fraction_bar","title":"Three quarters",
+  "description":"Change the shaded parts to explore fractions.",
+  "parameters":{"numerator":3,"denominator":4}
+}
+```
+
+The model omits id; the service assigns it. Required fields are kind, integer version=1, template, title (1–200 chars), description (1–500) and parameters. Root extra fields are forbidden. Parameters must exactly match the trusted template's keys; numeric cells are finite actual numbers, bounded by the registry and limited to three decimal places. Integer controls require integral values, and boolean/numeric-string substitutes are rejected. Enumerated strings accept only registered options. Fractions represent a single whole: 0 ≤ numerator ≤ denominator ≤ 12; number-line bounds contain the chosen position. Initial constructions reject coincident endpoints and degenerate triangles. Transient local degeneracy is displayed with a readable mathematical explanation rather than persisted as a new example.
+
+Canonical definitions live in `app/modules/teaching/math_templates.json`, included as package data. The frontend `src/features/learning/math-templates.json` is a checked matching copy, enforced by parity tests. Version 1 contains seventeen templates:
+
+| Engine (application-owned) | Allowed templates |
+| --- | --- |
+| React Konva | counting_groups, fraction_bar, fraction_circle, shape_explorer, number_line, ruler_measurement |
+| JSXGraph | point_geometry, segment_geometry, triangle_angles, circle_geometry, parallel_lines, perpendicular_lines, perpendicular_bisector |
+| Mafs | coordinate_points, linear_function, quadratic_function, trigonometric_function |
+
+`trigonometric_function` uses only the trusted `sin`/`cos` enum and bounded numeric `a`, `k`, `h`, `d`, `x` parameters from the registry: `y=a*sin(k*(x-h))+d` or the cosine equivalent, with angles in radians. No expression string is accepted or evaluated. Selection recognizes sine/cosine before generic linear equations. Equations in explanatory Markdown remain KaTeX notation, separate from this interactive Mafs graph.
+
+The registry owns engine selection and parameter bounds. No model-supplied engine, library props, event handlers, JavaScript/JSX/HTML, JessieCode, general expression strings or remote assets are accepted. Linear/quadratic families use trusted numerical functions with bounded domains and sampling. Measurements are mathematical units, not physically calibrated screen centimetres. Recharts continues to handle data comparisons; KaTeX handles formula typography; approved catalogue interactives retain their separate sandbox and authorization rules.
+
+**Selection policy:** `teaching/math_visuals.py` derives a server-owned decision from the current question, known teaching level and, only for narrow follow-up wording, a previously saved math activity. Priority: explicit text-only request → data comparison/chart → specific mathematical goal (construction, function/coordinates, fraction, number line, measurement, counting or shape) → semantic auto selection in the existing model call. Construction/relationship questions select geometry; identifying basic shapes selects primary math. Known KG–5 levels restrict the template allowlist using registry minLevel; unknown/open Curiosity remains under-15 and can use semantic selection, including non-English questions, without assuming a grade. Explicit unsupported-depth requests use an age-suitable text explanation. Lexical hints are conservative and are not a full multilingual classifier.
+
+The same prompt includes only allowed template defaults/bounds. High-confidence math routing narrows to one preferred template. After parsing and validation, the backend filters visuals incompatible with the decision or teaching level and caps accepted math_visual blocks at one per answer. Text-only suppresses charts and math activities; data-chart routing suppresses math activities; explicit math routing suppresses data charts. Compatible explanatory Markdown remains. If filtering leaves no content, a short readable Markdown fallback is returned. The service does not fabricate missing activity parameters or make another model call; a suitable prose answer may have no activity.
+
+Successful ask results add optional server-owned `rendering_decision` metadata: mode (auto/text/chart/math), preferred_template (nullable), reason, and selected_templates/selected_engines derived from the final validated blocks. Empty selection arrays indicate that no math activity was retained. It is retained in the idempotent request result, not displayed as implementation detail or treated as source provenance. The saved message stores its canonical blocks/initial parameters. Replay returns the same answer/IDs/decision without another model request. Prompt versions are `direct-school-3-math1` (with existing Study -intent1 suffix) and `direct-curiosity-open-3-math1`; quota, 6000-character answer bound, token cap and recommendation-intent separation remain.
+
+**Local interaction/history:** numeric/select controls provide keyboard equivalents, descriptions expose current values, Reset restores the saved initial parameters and expand/restore adjusts the drawing area in place. Libraries load lazily on the client; board/resize subscriptions clean up on unmount. A failed engine load preserves controls and readable state. Changes to controls/dragging are local and are not sent to the model, graded, used as mastery, or persisted. Reload and bounded follow-up history use the original saved specification, explicitly described as the saved initial activity. Persisting adjusted state or sending it in follow-up context requires a separate validated contract. Existing JSON message storage needs no migration or backfill. History assembly trims older pairs to the remaining UTF-8/message allowance after template instructions and the current question, while preserving the existing total prompt budget.
+
 ## Current Study boundary, open Curiosity and recommendations
 
 Study questions require a validated published seven-ID path and pinned revision. Curiosity questions require null context and can cover general learning across subjects and languages; the ask route does not invoke B6 topic-check or attach a curriculum version or resolved subject/topic IDs. Under-15 response guidance and the explicit unsupported-capability check still apply. The B6 topic-check/clarification endpoints and records remain owned historical interfaces, but the current frontend does not use them to ask Curiosity questions.
@@ -292,3 +354,23 @@ The existing ask/recommendation/open/acknowledgement URLs and root response fiel
 ## Video thumbnail extension — 2026-10-09
 
 Admin resource create/PATCH accepts `thumbnail_upload_id`; null on PATCH removes a thumbnail. Video-only, owner-scoped validated PNG/JPEG/WebP images reuse ResourceUpload ownership. MP4/WebM publication requires a thumbnail; drafts may remain incomplete. Admin cards expose `has_thumbnail`/`thumbnail_upload_id`; member/Explore cards expose `has_thumbnail` and safe provider `thumbnail_url`. Scoped member delivery accepts `thumbnail=true` and retains eligibility/version/revision checks; private thumbnails use five-minute signing. Native-video delivery includes `poster_url`. Protected admin preview/preview-content accept `thumbnail=true`. See [thumbnail handoff](../stage-9-video-thumbnails.md) for signing, withdrawal, provider fallback and bulk-import limitations.
+
+
+## F13 transient simulations and independent text stream — 2026-10-15
+
+The stored answer block union is unchanged. Generated simulations are transient, message-bound response adjuncts rendered beside LearningContent inside `.flame-message`; executable source is never accepted as ordinary Markdown/F12 data or persisted in history/request receipts.
+
+- `POST /api/v1/sessions/{session_id}/ask-stream`: existing AnswerRequest body, member/session ownership, Origin/CSRF through the BFF and Idempotency-Key. Returns no-store `application/x-ndjson` events: `{type:"delta",text:"..."}`, optional heartbeat, then `{type:"answer",answer:<existing final answer envelope>}` or `{type:"failure",code:"..."}`. Final validation/persistence/replay remain authoritative. Existing `/ask` JSON remains available. Structured rich JSON is buffered for final rendering; Markdown previews are provisional.
+- `POST /api/v1/sessions/{session_id}/simulation`: strict body `{message_id:<assistant UUID>,start:false|true}`. The server owns engine selection from the saved user question and verifies both session/message ownership. Returns status `ineligible`, `expired`, `limited`, `pending`, `error`, or `ready`. Ready includes `{version:1,engine:"matter|three|r3f|phaser|rive|html5",title,description,source}`; title<=160, description<=500 and source<=16000 characters. No resource IDs, external assets or arbitrary dependencies can be requested. All responses are no-store.
+- A newly committed eligible answer arms one in-process generation opportunity for two minutes; replay does not arm another. `start:true` can consume it once. Completed/failed generation is deduplicated by owner/message for a 15-minute access TTL. `start:false` only retrieves an existing cache entry. Expiry or worker restart yields expired rather than another paid call. Limits are 128 process entries and at most min(20, configured question limit) starts per owner in an in-process 24-hour window.
+- The response client polls `pending` with `start:false` at one-second intervals between completed requests. Only the initial fresh-answer request can use `start:true`. A 90-second overall deadline aborts hanging transport and exits loading; “Check simulation” resumes retrieval with `start:false` after timeout/network failure. It never starts another generation. Terminal statuses stop polling; ready source is reduced to the strict compiler fields. Shared tab-memory promises cover the entire polling lifecycle, not an individual `pending` response.
+- Source starts execute in background threads, at most four active jobs per process, returning `pending` immediately while work continues. The configured OpenAI source job uses one 60-second transport attempt with the existing model and output-token cap, plus `reasoning.effort=low` for GPT-5/GPT-6/o3/o4 model families (omitted for other names); text requests retain their configured timing/retry policy. No HTTP poll starts another provider call. Failures expose/cache only allowlisted codes (`provider_unavailable`, `provider_rate_limited`, `provider_budget_exceeded`, `provider_output_limit`, `invalid_provider_output`, `invalid_simulation_output`) or the generic `simulation_generation_failed`. No source/provider error text is logged. Process restart/host termination still discards these transient jobs.
+- Same-origin `POST /api/simulations/compile`: member session plus Origin/CSRF required. Strict versioned source spec; bounded request, two concurrent jobs, ten-second terminable Node compilation worker, restricted engine import registry and maximum bundle size. Returns a transient trusted-frame/worker bundle or a sanitized error code; it does not execute generated code on the server. Model code runs only in the isolated browser worker. Parent messages validate active contentWindow plus nonce; no trust is assigned to an opaque `null` origin alone.
+
+The canonical [F13 report](../../F13-IMPLEMENTATION.md) defines supported helper APIs, actual test evidence and browser/GPU limitations. F13.11 is PARTIAL for hosted/serverless process affinity, cancellation and compiler packaging acceptance. No durable queue, schema migration, permanent simulation storage, approval workflow or new retrieval pipeline is introduced.
+
+## Answer output-language preference — 2026-10-15
+
+Study and Curiosity answer requests accept optional `response_language`: `en`, `ta`, `hi`, `ml`, `kn`, `te`, `mr`, `bn`, `gu`, `ur`, `or`, `pa`, `as`, `kok`, `mni`, `sa`. Unsupported values fail schema validation. The new composer defaults to `en`; omitted/null values preserve legacy prompt behavior and legacy idempotency hashes for older clients.
+
+The selected language is a trusted prompt preference for learner-facing prose, headings and generated simulation labels, independent of input language or conflicting language requests in the question. Mathematical notation, programming syntax and structured keys remain intact. The original question and history are not rewritten. Language participates in the request hash; changing it requires a new request key, while retries keep the original snapshot. The browser stores the preference locally; transient simulation generation retains it only in bounded owner-scoped memory. This does not translate application controls or add an account preference/database migration. LLM adherence remains probabilistic.

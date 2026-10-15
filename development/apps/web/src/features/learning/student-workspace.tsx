@@ -10,6 +10,7 @@ import { firstBranchKeys, contextKey, ancestorKeys, requestContext } from "@/fea
 import { CurriculumNavigator, type TreeViewState } from "@/features/curriculum/curriculum-navigator";
 import type { Curriculum, Subject, TopicContext } from "@/features/curriculum/types";
 import { FlamePromptInput } from "./flame-prompt-input";
+import { isResponseLanguage, type ResponseLanguage } from "./response-languages";
 import { LearningContent } from "./learning-content";
 import { StudentAppShell } from "./student-app-shell";
 import { ExploreWorkspace } from "./explore-workspace";
@@ -50,6 +51,14 @@ function TopicFamilyNavigation({ context, onSelect }: { context: TopicContext; o
 }
 
 export function StudentWorkspace({ curricula, catalogue = [], memberships = [], live = false }: { curricula: Curriculum[]; catalogue?: Curriculum[]; memberships?: Membership[]; live?: boolean }) {
+  const [responseLanguage, setResponseLanguage] = useState<ResponseLanguage>("en");
+  useEffect(() => {
+    try { const saved = localStorage.getItem("flame:response-language"); if (isResponseLanguage(saved)) setResponseLanguage(saved); } catch { /* Browser storage is optional. */ }
+  }, []);
+  function chooseResponseLanguage(value: ResponseLanguage) {
+    setResponseLanguage(value);
+    try { localStorage.setItem("flame:response-language", value); } catch { /* Current-tab selection still works. */ }
+  }
   const [learning, setLearning] = useState(curricula);
   const curiositySuggestions = [
     "Why is the sky blue?", "How do computers work?", "What are fractions?",
@@ -165,7 +174,7 @@ export function StudentWorkspace({ curricula, catalogue = [], memberships = [], 
     const attachments = retry?.attachments ?? session.attachments;
     if ((!message && !attachments.length) || pending || loadingHistory || (live && mode === "study" && resumed && !context)) return;
     const history = session.turns.filter(turn => turn.status === "complete").map(turn => ({ question: turn.question, blocks: turn.blocks, attachments: turn.attachments }));
-    void submit(activeId, mode === "study" ? { message, attachments, mode, context: context ? requestContext(context) : null, history, sessionId: resumed?.id } : { message, attachments, mode, context: null, history, sessionId: resumed?.id }, retry?.id);
+    void submit(activeId, mode === "study" ? { message, attachments, mode, context: context ? requestContext(context) : null, history, sessionId: resumed?.id, responseLanguage } : { message, attachments, mode, context: null, history, sessionId: resumed?.id, responseLanguage }, retry?.id);
     if (!live && mode === "curiosity") remember({ id: "curiosity", title: session.turns[0]?.question ?? message, mode });
   }
   function removeCurriculum(id: string) {
@@ -397,7 +406,7 @@ export function StudentWorkspace({ curricula, catalogue = [], memberships = [], 
       {session.turns.length > 0 && <FlameConversation turns={session.turns} pending={pending} onRetry={sendQuestion} />}
       {!session.turns.length && context?.subtopic?.id === "gravity" && process.env.NODE_ENV === "development" && <section className="development-response" aria-label="Development response preview"><p className="development-label">Development content · Static formatting preview, not an AI response</p><LearningContent blocks={gravityDevelopmentContent} /><ResourceRecommendations key={activeId} resources={gravityDevelopmentResources} /></section>}
     </ConversationViewport>
-    <FlamePromptInput key={activeId} attachments={session.attachments} attachmentNotice={session.attachmentNotice} onFiles={files => addFiles(activeId, files)} onRemoveAttachment={id => removeAttachment(activeId, id)} topicName={context?.subtopic?.name ?? context?.topic.name} value={session.draft} pending={pending || loadingHistory || Boolean(live && mode === "study" && resumed && !context)} onValueChange={draft => setDraft(activeId, draft)} onSubmit={() => sendQuestion()} />
+    <FlamePromptInput key={activeId} responseLanguage={responseLanguage} onResponseLanguageChange={chooseResponseLanguage} attachments={session.attachments} attachmentNotice={session.attachmentNotice} onFiles={files => addFiles(activeId, files)} onRemoveAttachment={id => removeAttachment(activeId, id)} topicName={context?.subtopic?.name ?? context?.topic.name} value={session.draft} pending={pending || loadingHistory || Boolean(live && mode === "study" && resumed && !context)} onValueChange={draft => setDraft(activeId, draft)} onSubmit={() => sendQuestion()} />
     {libraryOpen && <LearningLibrary live={live} catalogue={live ? catalogue : undefined} onRemoveCurriculum={(id, after) => requestRemoval(id, undefined, undefined, after)} onRemoveSubject={(id, levelId, subjectId, after) => requestRemoval(id, levelId, subjectId, after)} learning={learning} onAdd={addLearning} onClose={() => setLibraryOpen(false)} />}
     {removal && <RemovalConfirmation name={removal.subject?.name ?? removal.curriculum.name} kind={removal.subject ? "subject" : "curriculum"} context={removal.subject ? `${removal.curriculum.name} / ${removal.curriculum.levels.find(l => l.id === removal.levelId)?.name ?? ""}` : undefined} onCancel={() => setRemoval(null)} onConfirm={confirmRemoval} />}
   </StudentAppShell>}</ExploreWorkspace>;

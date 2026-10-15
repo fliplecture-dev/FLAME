@@ -17,7 +17,7 @@ const allowed = [
   /^admin\/students(?:\/[0-9a-f-]+)?$/,
   /^admin\/students\/[0-9a-f-]+\/activity$/,
   /^sessions\/(?:recent|pins)\/clear$/,
-  /^sessions(?:\/[0-9a-f-]+(?:\/messages|\/pin|\/recent|\/topic-check(?:\/history)?|\/ask|\/capability-check|\/clarifications\/[0-9a-f-]+)?)?$/,
+  /^sessions(?:\/[0-9a-f-]+(?:\/messages|\/pin|\/recent|\/topic-check(?:\/history)?|\/ask|\/ask-stream|\/simulation|\/capability-check|\/clarifications\/[0-9a-f-]+)?)?$/,
   /^me\/activity$/,
   /^me$/,
 ];
@@ -65,6 +65,8 @@ async function forward(request: Request, context: { params: Promise<{ path: stri
       },
     });
   }
+  if (route.endsWith("/ask-stream") && upstream.ok && upstream.headers.get("content-type")?.includes("application/x-ndjson"))
+    return new Response(upstream.body, { status: 200, headers: { "content-type": "application/x-ndjson", "cache-control": "no-store", "x-accel-buffering": "no" } });
   return NextResponse.json(await apiJson(upstream), { status: upstream.status, headers: { "cache-control": "no-store" } });
 }
 

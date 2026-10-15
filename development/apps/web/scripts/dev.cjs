@@ -84,7 +84,9 @@ async function main(){
   backend.once('exit',()=>recover('backend',startBackend));
  }
  function startFrontend(){
-  frontend=spawn(process.execPath,[path.join(web,'node_modules/next/dist/bin/next'),'dev','--hostname','localhost','--port','3000'],
+  // Bind IPv4 loopback explicitly: Windows can resolve localhost only to ::1,
+  // while embedded browsers connect to 127.0.0.1. Keep the public origin unchanged.
+  frontend=spawn(process.execPath,[path.join(web,'node_modules/next/dist/bin/next'),'dev','--hostname','127.0.0.1','--port','3000'],
    {cwd:web,env:{...process.env,FLAME_API_URL:API_URL,FLAME_WEB_ORIGIN:WEB_URL},stdio:'inherit',windowsHide:true,detached:process.platform!=='win32'});
   frontend.once('error',()=>recover('frontend',startFrontend));
   frontend.once('exit',()=>recover('frontend',startFrontend));

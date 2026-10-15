@@ -1,6 +1,12 @@
 """Authenticated, owned answer transport."""
 from typing import Annotated
 from uuid import UUID
+import json
+from queue import Queue, Empty
+from threading import Thread, Event
+from time import monotonic
+from fastapi.responses import StreamingResponse
+from app.modules.teaching.gateway import GatewayError
 
 from fastapi import APIRouter, Depends, Header, Request
 
@@ -44,4 +50,55 @@ def ask_question(request: Request, session_id: UUID, body: AnswerRequest, princi
                               "The answer could not be completed. Start a new request to try again.",
                               retryable=False)
     return result
+
+
+@router.post("/sessions/{session_id}/ask-stream")
+def ask_stream(request: Request, session_id: UUID, body: AnswerRequest, principal: Member,
+               idempotency_key: Annotated[str, Header(alias="Idempotency-Key")]):
+    # Check ownership before opening the stream; ask still enforces quota/idempotency/context.
+    owner = UUID(principal["id"])
+    with request.app.state.database.session() as db:
+        owned(db, owner, session_id)
+    queue, cancelled = Queue(maxsize=256), Event()
+    def delta(value):
+        if cancelled.is_set():
+            raise GatewayError("provider_unavailable")
+        # Bounded transport queue; a slow/disconnected consumer cannot grow memory forever.
+        try:
+            queue.put({"type": "delta", "text": value}, timeout=1)
+        except Exception:
+            raise GatewayError("provider_unavailable") from None
+    def work():
+        try:
+            result = ask(request.app.state.database, request.app.state.gateway, owner,
+                         session_id, idempotency_key, body,
+                         daily_limit=request.app.state.settings.llm_daily_request_limit, on_delta=delta)
+            event = {"type": "answer", "answer": result}
+        except Exception:
+            event = {"type": "failure", "code": "answer_unavailable"}
+        if not cancelled.is_set():
+            try:
+                queue.put(event, timeout=1)
+            except Exception:
+                pass
+    def events():
+        Thread(target=work, daemon=True).start()
+        started = monotonic()
+        try:
+            while True:
+                if monotonic() - started > 40:
+                    yield '{"type":"failure","code":"answer_timeout"}\n'
+                    break
+                try:
+                    event = queue.get(timeout=1)
+                except Empty:
+                    yield '{"type":"heartbeat"}\n'
+                    continue
+                yield json.dumps(event, ensure_ascii=False) + "\n"
+                if event["type"] in {"answer", "failure"}:
+                    break
+        finally:
+            cancelled.set()
+    return StreamingResponse(events(), media_type="application/x-ndjson",
+                             headers={"Cache-Control": "no-store", "X-Accel-Buffering": "no"})
 

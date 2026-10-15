@@ -20,7 +20,7 @@ For clickable Browse Media thumbnails, provider images, private uploaded-video t
 | --- | --- |
 | PROJECT_CONTEXT.md | Agent entry point, code/design/runtime locations and integration cautions |
 | DEVELOPMENT-HANDOFF.md | Dated orientation: actual stack, folder/module map, setup, evidence, gaps and handoff priorities |
-| STAGES-STEPS.md | 162 numbered steps, statuses, stage prerequisites, decisions, evidence and execution sequence |
+| STAGES-STEPS.md | Numbered steps, current totals/statuses, stage prerequisites, decisions, evidence and execution sequence |
 | backend/stage-1/module-architecture.md | Module boundaries, transactions and relational schema rules |
 | backend/stage-1/api-contracts.md | API contracts, Excel input, mapping, response and lifecycle rules |
 | backend/stage-1/admin-panel-specification.md | Nine admin screen fields/actions/validation |
