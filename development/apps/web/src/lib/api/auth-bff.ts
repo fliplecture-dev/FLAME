@@ -9,7 +9,7 @@ function upstreamTimeoutMs(path: string) {
   if (path.split("?")[0].startsWith("explore")) return 30000;
   if (path.startsWith("admin/transfers/")) return 240000;
   if (path.startsWith("admin/bulk/")) return 240000;
-  if (path.endsWith("/ask")) return 45000;
+  if (path.endsWith("/ask") || path.endsWith("/ask-stream") || path.endsWith("/simulation")) return 45000;
   if (/^admin\/curriculum\/imports\/[0-9a-f-]+\/commit$/.test(path)) return 240000;
   if (/^admin\/curriculum\/imports\/[0-9a-f-]+\/preview$/.test(path)) return 60000;
   if (/^admin\/curriculum\/curriculum\/[0-9a-f-]+\/publish$/.test(path)) return 240000;

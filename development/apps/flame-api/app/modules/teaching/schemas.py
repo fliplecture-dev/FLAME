@@ -1,7 +1,11 @@
 from datetime import datetime
 from typing import Annotated, Literal
 from uuid import UUID
+import math
+import re
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+from app.modules.teaching.math_visuals import MathVisualBlock
+from app.modules.teaching.languages import ResponseLanguage
 
 
 class Contract(BaseModel):
@@ -21,6 +25,7 @@ class Context(Contract):
 class AnswerRequest(Contract):
     # Identity, version and history are loaded server-side from the session.
     question: str = Field(min_length=1, max_length=4000)
+    response_language: ResponseLanguage | None = None
     context: Context | None = None
     mode: Literal["study", "curiosity"]
     action: Literal["explain"] = "explain"
@@ -48,6 +53,68 @@ class TextBlock(Contract):
         if any(ord(char) < 32 and char not in "\n\t" for char in value):
             raise ValueError("Text contains control characters")
         return value
+
+
+class MarkdownBlock(TextBlock):
+    kind: Literal["markdown"]
+
+
+class ChartSeries(Contract):
+    key: str = Field(pattern=r"^[A-Za-z][A-Za-z0-9_]{0,39}$")
+    label: str = Field(min_length=1, max_length=100)
+
+
+class ChartBlock(Contract):
+    id: str = Field(min_length=1, max_length=100)
+    kind: Literal["chart"]
+    chartType: Literal["bar", "line", "pie"]
+    title: str = Field(min_length=1, max_length=200)
+    description: str = Field(min_length=1, max_length=500)
+    xKey: str = Field(pattern=r"^[A-Za-z][A-Za-z0-9_]{0,39}$")
+    xLabel: str = Field(default="", max_length=100)
+    yLabel: str = Field(default="", max_length=100)
+    illustrative: bool = True
+    series: list[ChartSeries] = Field(min_length=1, max_length=4)
+    data: list[dict[str, str | float]] = Field(min_length=1, max_length=50)
+
+    @model_validator(mode="before")
+    @classmethod
+    def raw_cells(cls, value):
+        # Do not coerce booleans, numeric strings or nested objects to numbers.
+        if isinstance(value, dict) and isinstance(value.get("data"), list):
+            for row in value["data"]:
+                if not isinstance(row, dict) or any(
+                    type(cell) not in (str, int, float) for cell in row.values()
+                ):
+                    raise ValueError("Chart cells must be strings or numbers")
+        return value
+
+    @model_validator(mode="after")
+    def valid_data(self):
+        keys = [item.key for item in self.series]
+        forbidden = {"__proto__", "prototype", "constructor"}
+        if len(set(keys)) != len(keys) or self.xKey in keys or forbidden.intersection([self.xKey, *keys]):
+            raise ValueError("Chart keys must be distinct and safe")
+        if self.chartType == "pie" and len(keys) != 1:
+            raise ValueError("Pie charts require one series")
+        for row in self.data:
+            if set(row) != {self.xKey, *keys}:
+                raise ValueError("Chart row keys must match axes and series")
+            category = row[self.xKey]
+            if isinstance(category, str):
+                if not category.strip() or len(category) > 100 or re.search(r"[\x00-\x1f]", category):
+                    raise ValueError("Chart categories must be bounded labels")
+            elif not math.isfinite(category) or abs(category) > 1e12:
+                raise ValueError("Chart categories must be finite")
+            for key in keys:
+                cell = row[key]
+                if not isinstance(cell, float) or not math.isfinite(cell) or abs(cell) > 1e12:
+                    raise ValueError("Chart values must be finite numbers")
+                if self.chartType == "pie" and cell < 0:
+                    raise ValueError("Pie chart values must be nonnegative")
+        if self.chartType == "pie" and sum(row[keys[0]] for row in self.data) <= 0:
+            raise ValueError("Pie chart total must be positive")
+        return self
 
 
 class HeadingBlock(Contract):
@@ -97,7 +164,7 @@ class CalloutBlock(Contract):
 
 
 LearningBlock = Annotated[
-    TextBlock | HeadingBlock | ListBlock | TableBlock | CalloutBlock,
+    TextBlock | MarkdownBlock | ChartBlock | MathVisualBlock | HeadingBlock | ListBlock | TableBlock | CalloutBlock,
     Field(discriminator="kind"),
 ]
 

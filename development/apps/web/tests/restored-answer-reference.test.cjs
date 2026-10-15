@@ -5,9 +5,14 @@ const path = require('node:path');
 const { stripTypeScriptTypes } = require('node:module');
 let restoredTurns;
 test.before(async () => {
-  const source = fs.readFileSync(path.join(__dirname, '../src/features/learning/restore-saved-session.ts'), 'utf8')
-    .replace(/^import type .*;\r?\n/gm, '');
-  ({ restoredTurns } = await import('data:text/javascript;base64,' + Buffer.from(stripTypeScriptTypes(source)).toString('base64')));
+  ({ restoredTurns } = await require('./load-local-typescript.cjs').loadTs(path.join(__dirname, '../src/features/learning/restore-saved-session.ts')));
+});
+
+test('restored rich content survives reload alongside legacy and unknown blocks', () => {
+  const blocks = [{kind:'markdown',id:'m',text:'**Answer**'}, {kind:'chart',id:'c',chartType:'bar',title:'Example',description:'Example data',xKey:'name',illustrative:true,series:[{key:'n',label:'Count'}],data:[{name:'A',n:2}]}, {kind:'future-block'}];
+  const [turn] = restoredTurns([{role:'user',turn_number:1,blocks:[{kind:'text',text:'Why?'}]},{id:'answer',role:'assistant',turn_number:1,blocks}]);
+  assert.deepEqual(turn.blocks.slice(0,2),blocks.slice(0,2));
+  assert.match(turn.blocks[2].text,/could not be displayed/);
 });
 test('restored pairs keep server request references and tolerate older messages', () => {
   const reference = '550e8400-e29b-41d4-a716-446655440000';

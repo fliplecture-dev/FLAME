@@ -62,6 +62,23 @@ def candidates(db, config, path, kind):
     return kit_candidates(db, path["topic_id"], path["subtopic_id"], config)
 
 
+def resource_counts(db, config, paths):
+    """Count the full eligible Explore set, deduplicated across matching paths."""
+    counts, seen = {"videos": 0, "images": 0, "interactives": 0}, set()
+    for path in paths:
+        for candidate in candidates(db, config, path, "resource"):
+            if candidate.id in seen or not suitable(candidate, path["grade"], None):
+                continue
+            seen.add(candidate.id)
+            if candidate.type in {"image", "diagram"} or candidate.mime_type == "image/gif":
+                counts["images"] += 1
+            elif candidate.type in {"video", "external_video", "animation"}:
+                counts["videos"] += 1
+            elif candidate.type == "interactive":
+                counts["interactives"] += 1
+    return counts
+
+
 def item(candidate):
     return {"id": str(candidate.id), "version": candidate.version, "kind": candidate.kind,
             "type": candidate.type, "title": candidate.title, "description": candidate.description,

@@ -3,6 +3,9 @@ from app.modules.teaching.answer_service import ask as teaching_ask
 from app.modules.learning_response.composer import compose_answer
 
 
-def ask(database, gateway, student_id, session_id, key, body, *, daily_limit=100):
-    answer = teaching_ask(database, gateway, student_id, session_id, key, body, daily_limit=daily_limit)
+def ask(database, gateway, student_id, session_id, key, body, *, daily_limit=100, on_delta=None):
+    options = {"daily_limit": daily_limit}
+    if on_delta is not None:
+        options["on_delta"] = on_delta
+    answer = teaching_ask(database, gateway, student_id, session_id, key, body, **options)
     return compose_answer(answer, mode=body.mode)

@@ -2,6 +2,7 @@
 from typing import Annotated, Literal
 from uuid import UUID
 from fastapi import APIRouter, Depends, Query, Request
+from fastapi.responses import JSONResponse
 from app.modules.identity.dependencies import require_member
 from app.modules.conversations.recommendation_context import load_answer
 from app.core.domain_errors import fail
@@ -36,6 +37,25 @@ def browse(request: Request, _: Member, topic_id: UUID, kind: Kind = "resource",
         path = explore.context(db, topic_id, subtopic_id, curriculum_revision)
         return explore.browse(db, request.app.state.settings, path, kind, search=search,
                               media_type=media_type, language=language, offset=offset, limit=limit, focus_id=focus_id)
+
+
+@router.get("/summary")
+def answer_resource_summary(request: Request, member: Member, session_id: UUID, message_id: UUID):
+    with request.app.state.database.session() as db:
+        saved = load_answer(db, UUID(member["id"]), session_id, message_id)
+        if saved.mode == "curiosity":
+            question = " ".join(str(block.get("text", "")) for block in saved.question_blocks if block.get("kind") == "text")
+            resolved = explore.curiosity_context(db, question)
+            matched = [resolved["context"]] if resolved["context"] else resolved["candidates"]
+            paths = [explore.context(db, row["topic_id"], row["subtopic_id"], row["curriculum_revision"]) for row in matched]
+        elif saved.topic_id:
+            path = explore.context(db, saved.topic_id, saved.subtopic_id, saved.revision)
+            if path["curriculum_id"] != saved.curriculum_id or path["subject_id"] != saved.subject_id:
+                fail(409, "explore_path_unavailable")
+            paths = [path]
+        else:
+            paths = []
+        return JSONResponse(explore.resource_counts(db, request.app.state.settings, paths), headers={"Cache-Control": "no-store"})
 
 
 @router.get("/curiosity")

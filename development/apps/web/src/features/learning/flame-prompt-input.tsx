@@ -3,9 +3,12 @@ import { useLayoutEffect, useRef } from "react";
 import { AttachmentList } from "./attachment-list";
 import { FILE_ACCEPT, IMAGE_ACCEPT, type PromptAttachment } from "./prompt-attachments";
 import { useAudioRecorder } from "./use-audio-recorder";
-export function FlamePromptInput({ topicName, value, pending, attachments, attachmentNotice, onValueChange, onFiles, onRemoveAttachment, onSubmit }: {
+import { ResponseLanguagePicker } from "./response-language-picker";
+import type { ResponseLanguage } from "./response-languages";
+export function FlamePromptInput({ topicName, value, pending, attachments, attachmentNotice, onValueChange, onFiles, onRemoveAttachment, onSubmit, responseLanguage = "en", onResponseLanguageChange = () => {} }: {
   topicName?: string; value: string; pending: boolean; attachments: PromptAttachment[]; attachmentNotice: string;
   onValueChange: (value: string) => void; onFiles: (files: File[]) => void; onRemoveAttachment: (id: string) => void; onSubmit: () => void;
+  responseLanguage?: ResponseLanguage; onResponseLanguageChange?: (value: ResponseLanguage) => void;
 }) {
   const input = useRef<HTMLTextAreaElement>(null);
   const files = useRef<HTMLInputElement>(null);
@@ -35,6 +38,7 @@ export function FlamePromptInput({ topicName, value, pending, attachments, attac
         <button className="icon-button" type="button" aria-label="Attach files" title="Attach files (up to 5, 10 MB each)" onClick={() => files.current?.click()}><Paperclip size={19} /></button>
         <button className="icon-button" type="button" aria-label="Attach images" title="Attach images" onClick={() => images.current?.click()}><ImagePlus size={19} /></button>
         <button className="icon-button" type="button" aria-label="Record audio" title="Record audio (up to 2 minutes)" disabled={recordingBusy || pending || attachments.length >= 5} onClick={() => void audio.start()}><Mic size={19} /></button>
+        <ResponseLanguagePicker value={responseLanguage} disabled={pending || recordingBusy} onChange={onResponseLanguageChange} />
       </div><span className="prompt-shortcut">Shift + Enter for a new line</span><button className="send-button" type="submit" disabled={!canSend} aria-label={pending ? "Sending request" : "Send learning request"}>{pending ? <LoaderCircle size={19} aria-hidden="true" /> : <ArrowUp size={20} aria-hidden="true" />}</button></div>
     </form><div className="composer-caption"><span>{recordingBusy ? "Switching topics stops and saves active recording to this topic." : "Files and voice notes stay in this tab until processing is connected."}</span></div>
   </div>;

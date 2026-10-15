@@ -1,0 +1,18 @@
+.learning-content .math-activity { min-width:0; max-width:100%; margin:24px 0; padding:16px; border:1px solid var(--line); border-radius:12px; background:#fff; }
+.learning-content .math-activity figcaption { color:#34445a; font-size:14px; }
+.math-activity figcaption strong { font-size:16px; color:#111827; }
+.math-activity figcaption p { margin:8px 0; }
+.math-activity-toolbar { display:flex; gap:8px; flex-wrap:wrap; margin:12px 0; }
+.math-activity-toolbar button { border:1px solid #b4c3d8; border-radius:6px; background:#f3f6fb; padding:7px 12px; }
+.math-activity-drawing { width:100%; min-width:0; overflow:hidden; border:1px solid #e6e8ed; border-radius:8px; background:#fafcff; }
+.math-activity-controls { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:12px; margin-top:16px; }
+.math-activity-controls label { display:flex; flex-direction:column; gap:5px; font-size:13px; color:#34445a; }
+.math-activity-controls input,.math-activity-controls select { width:100%; min-width:0; border:1px solid #9fadc2; border-radius:5px; background:white; color:#111827; padding:8px; }
+.math-activity-controls input[type=range] { padding:0; margin:10px 0 0; accent-color:#345c9c; }
+.math-activity-state { padding:12px; border-radius:6px; background:#edf3fc; font-size:14px; color:#263e65; }
+.math-activity small { display:block; font-size:12px; color:#4d596c; }
+.math-activity .MafsView { --mafs-bg:#fafcff; --mafs-fg:#263e65; --mafs-line-color:#cbd5e1; --mafs-origin-color:#7b8ca4; --mafs-font-size:14px; touch-action:pan-y; }
+.math-geometry-board { border:0; position:relative; touch-action:pan-y; }
+.math-geometry-board svg text { cursor:default; user-select:none; }
+.math-geometry-board .JXGtext { font-family:Arial,sans-serif; background:transparent; padding:0; margin:0; }
+@media(max-width:767px) { .learning-content .math-activity { padding:12px; } }

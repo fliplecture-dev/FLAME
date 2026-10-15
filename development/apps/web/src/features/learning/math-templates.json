@@ -1,0 +1,509 @@
+{
+  "counting_groups": {
+    "engine": "konva",
+    "label": "Counting and grouping",
+    "minLevel": 0,
+    "parameters": {
+      "count": {
+        "label": "Objects",
+        "default": 12,
+        "min": 0,
+        "max": 40,
+        "step": 1
+      },
+      "groupSize": {
+        "label": "Objects per group",
+        "default": 3,
+        "min": 1,
+        "max": 10,
+        "step": 1
+      }
+    }
+  },
+  "fraction_bar": {
+    "engine": "konva",
+    "label": "Fraction bar",
+    "minLevel": 1,
+    "parameters": {
+      "numerator": {
+        "label": "Shaded parts",
+        "default": 3,
+        "min": 0,
+        "max": 12,
+        "step": 1
+      },
+      "denominator": {
+        "label": "Equal parts",
+        "default": 4,
+        "min": 1,
+        "max": 12,
+        "step": 1
+      }
+    }
+  },
+  "fraction_circle": {
+    "engine": "konva",
+    "label": "Fraction circle",
+    "minLevel": 1,
+    "parameters": {
+      "numerator": {
+        "label": "Shaded parts",
+        "default": 3,
+        "min": 0,
+        "max": 12,
+        "step": 1
+      },
+      "denominator": {
+        "label": "Equal parts",
+        "default": 4,
+        "min": 1,
+        "max": 12,
+        "step": 1
+      }
+    }
+  },
+  "shape_explorer": {
+    "engine": "konva",
+    "label": "Explore a shape",
+    "minLevel": 0,
+    "parameters": {
+      "shape": {
+        "label": "Shape",
+        "default": "rectangle",
+        "options": [
+          "rectangle",
+          "triangle",
+          "circle"
+        ]
+      },
+      "width": {
+        "label": "Width / radius",
+        "default": 4,
+        "min": 1,
+        "max": 8,
+        "step": 1
+      },
+      "height": {
+        "label": "Height",
+        "default": 3,
+        "min": 1,
+        "max": 6,
+        "step": 1
+      }
+    }
+  },
+  "number_line": {
+    "engine": "konva",
+    "label": "Number line",
+    "minLevel": 0,
+    "parameters": {
+      "start": {
+        "label": "Start",
+        "default": 0,
+        "min": -20,
+        "max": 19,
+        "step": 1
+      },
+      "end": {
+        "label": "End",
+        "default": 10,
+        "min": -19,
+        "max": 20,
+        "step": 1
+      },
+      "value": {
+        "label": "Position",
+        "default": 3,
+        "min": -20,
+        "max": 20,
+        "step": 1
+      }
+    }
+  },
+  "ruler_measurement": {
+    "engine": "konva",
+    "label": "Measure a length",
+    "minLevel": 1,
+    "parameters": {
+      "length": {
+        "label": "Length",
+        "default": 5,
+        "min": 0,
+        "max": 10,
+        "step": 0.5
+      }
+    }
+  },
+  "point_geometry": {
+    "engine": "jsxgraph",
+    "label": "Move a point",
+    "minLevel": 2,
+    "parameters": {
+      "ax": {
+        "label": "A x",
+        "default": 1,
+        "min": -8,
+        "max": 8,
+        "step": 0.5
+      },
+      "ay": {
+        "label": "A y",
+        "default": 1,
+        "min": -6,
+        "max": 6,
+        "step": 0.5
+      }
+    }
+  },
+  "segment_geometry": {
+    "engine": "jsxgraph",
+    "label": "Explore a segment",
+    "minLevel": 2,
+    "parameters": {
+      "ax": {
+        "label": "A x",
+        "default": -3,
+        "min": -8,
+        "max": 8,
+        "step": 0.5
+      },
+      "ay": {
+        "label": "A y",
+        "default": 0,
+        "min": -6,
+        "max": 6,
+        "step": 0.5
+      },
+      "bx": {
+        "label": "B x",
+        "default": 3,
+        "min": -8,
+        "max": 8,
+        "step": 0.5
+      },
+      "by": {
+        "label": "B y",
+        "default": 0,
+        "min": -6,
+        "max": 6,
+        "step": 0.5
+      }
+    }
+  },
+  "triangle_angles": {
+    "engine": "jsxgraph",
+    "label": "Triangle angles",
+    "minLevel": 3,
+    "parameters": {
+      "ax": {
+        "label": "A x",
+        "default": -3,
+        "min": -8,
+        "max": 8,
+        "step": 0.5
+      },
+      "ay": {
+        "label": "A y",
+        "default": -2,
+        "min": -6,
+        "max": 6,
+        "step": 0.5
+      },
+      "bx": {
+        "label": "B x",
+        "default": 3,
+        "min": -8,
+        "max": 8,
+        "step": 0.5
+      },
+      "by": {
+        "label": "B y",
+        "default": -2,
+        "min": -6,
+        "max": 6,
+        "step": 0.5
+      },
+      "cx": {
+        "label": "C x",
+        "default": 0,
+        "min": -8,
+        "max": 8,
+        "step": 0.5
+      },
+      "cy": {
+        "label": "C y",
+        "default": 3,
+        "min": -6,
+        "max": 6,
+        "step": 0.5
+      }
+    }
+  },
+  "circle_geometry": {
+    "engine": "jsxgraph",
+    "label": "Explore a circle",
+    "minLevel": 2,
+    "parameters": {
+      "ax": {
+        "label": "A x",
+        "default": 0,
+        "min": -8,
+        "max": 8,
+        "step": 0.5
+      },
+      "ay": {
+        "label": "A y",
+        "default": 0,
+        "min": -6,
+        "max": 6,
+        "step": 0.5
+      },
+      "radius": {
+        "label": "Radius",
+        "default": 2,
+        "min": 0.5,
+        "max": 5,
+        "step": 0.5
+      }
+    }
+  },
+  "parallel_lines": {
+    "engine": "jsxgraph",
+    "label": "Parallel lines",
+    "minLevel": 3,
+    "parameters": {
+      "ax": {
+        "label": "A x",
+        "default": -3,
+        "min": -8,
+        "max": 8,
+        "step": 0.5
+      },
+      "ay": {
+        "label": "A y",
+        "default": 0,
+        "min": -6,
+        "max": 6,
+        "step": 0.5
+      },
+      "bx": {
+        "label": "B x",
+        "default": 3,
+        "min": -8,
+        "max": 8,
+        "step": 0.5
+      },
+      "by": {
+        "label": "B y",
+        "default": 1,
+        "min": -6,
+        "max": 6,
+        "step": 0.5
+      }
+    }
+  },
+  "perpendicular_lines": {
+    "engine": "jsxgraph",
+    "label": "Perpendicular lines",
+    "minLevel": 3,
+    "parameters": {
+      "ax": {
+        "label": "A x",
+        "default": -3,
+        "min": -8,
+        "max": 8,
+        "step": 0.5
+      },
+      "ay": {
+        "label": "A y",
+        "default": 0,
+        "min": -6,
+        "max": 6,
+        "step": 0.5
+      },
+      "bx": {
+        "label": "B x",
+        "default": 3,
+        "min": -8,
+        "max": 8,
+        "step": 0.5
+      },
+      "by": {
+        "label": "B y",
+        "default": 1,
+        "min": -6,
+        "max": 6,
+        "step": 0.5
+      }
+    }
+  },
+  "perpendicular_bisector": {
+    "engine": "jsxgraph",
+    "label": "Perpendicular bisector",
+    "minLevel": 3,
+    "parameters": {
+      "ax": {
+        "label": "A x",
+        "default": -3,
+        "min": -8,
+        "max": 8,
+        "step": 0.5
+      },
+      "ay": {
+        "label": "A y",
+        "default": 0,
+        "min": -6,
+        "max": 6,
+        "step": 0.5
+      },
+      "bx": {
+        "label": "B x",
+        "default": 3,
+        "min": -8,
+        "max": 8,
+        "step": 0.5
+      },
+      "by": {
+        "label": "B y",
+        "default": 1,
+        "min": -6,
+        "max": 6,
+        "step": 0.5
+      }
+    }
+  },
+  "coordinate_points": {
+    "engine": "mafs",
+    "label": "Coordinate points",
+    "minLevel": 3,
+    "parameters": {
+      "x": {
+        "label": "Point x",
+        "default": 2,
+        "min": -8,
+        "max": 8,
+        "step": 0.5
+      },
+      "y": {
+        "label": "Point y",
+        "default": 1,
+        "min": -6,
+        "max": 6,
+        "step": 0.5
+      }
+    }
+  },
+  "linear_function": {
+    "engine": "mafs",
+    "label": "Explore a straight line",
+    "minLevel": 4,
+    "parameters": {
+      "m": {
+        "label": "Slope m",
+        "default": 1,
+        "min": -5,
+        "max": 5,
+        "step": 0.5
+      },
+      "b": {
+        "label": "Intercept b",
+        "default": 0,
+        "min": -5,
+        "max": 5,
+        "step": 0.5
+      },
+      "x": {
+        "label": "Point x",
+        "default": 1,
+        "min": -5,
+        "max": 5,
+        "step": 0.5
+      }
+    }
+  },
+  "quadratic_function": {
+    "engine": "mafs",
+    "label": "Explore a quadratic",
+    "minLevel": 5,
+    "parameters": {
+      "a": {
+        "label": "Quadratic coefficient a",
+        "default": 1,
+        "min": -3,
+        "max": 3,
+        "step": 0.5
+      },
+      "b": {
+        "label": "Linear coefficient b",
+        "default": 0,
+        "min": -5,
+        "max": 5,
+        "step": 0.5
+      },
+      "c": {
+        "label": "Constant c",
+        "default": 0,
+        "min": -5,
+        "max": 5,
+        "step": 0.5
+      },
+      "x": {
+        "label": "Point x",
+        "default": 1,
+        "min": -5,
+        "max": 5,
+        "step": 0.5
+      }
+    }
+  },
+  "trigonometric_function": {
+    "engine": "mafs",
+    "label": "Sine and cosine graphs",
+    "minLevel": 5,
+    "parameters": {
+      "function": {
+        "label": "Function",
+        "default": "sin",
+        "options": [
+          "sin",
+          "cos"
+        ]
+      },
+      "a": {
+        "label": "Amplitude a",
+        "default": 1,
+        "min": -3,
+        "max": 3,
+        "step": 0.5
+      },
+      "k": {
+        "label": "Frequency k",
+        "default": 1,
+        "min": 0.5,
+        "max": 3,
+        "step": 0.5
+      },
+      "h": {
+        "label": "Horizontal shift h",
+        "default": 0,
+        "min": -3,
+        "max": 3,
+        "step": 0.5
+      },
+      "d": {
+        "label": "Vertical shift d",
+        "default": 0,
+        "min": -3,
+        "max": 3,
+        "step": 0.5
+      },
+      "x": {
+        "label": "Point x",
+        "default": 0,
+        "min": -5,
+        "max": 5,
+        "step": 0.5
+      }
+    }
+  }
+}

@@ -1,5 +1,7 @@
 # F10 / B14 — Learner Explore workspace
 
+Answer-footer update — 2026-10-15: `GET /api/v1/explore/summary?session_id=<UUID>&message_id=<UUID>` requires the same member and saved-answer ownership checks as answer context. It returns no-store `{videos,images,interactives}` integer counts over all eligible media in that answer's Explore context, without pagination or recommendation selection. Study validates the saved path/revision; Curiosity combines explicit published path matches and deduplicates resource IDs after suitability filtering. GIF visuals count as images. The frontend replaces “Explore this topic” with positive counts only; loading/error/zero results stay hidden. Click opens the existing answer-context media panel, where current eligibility and delivery checks still apply. The header Explore control and teacher/kit recommendation entry points are unchanged. F12/F13 generated visuals do not inflate catalogue counts. No extra provider calls, persistence, acknowledgements or schema migration were introduced.
+
 Development delivery: 2026-10-08. Progress statuses belong to [STAGES-STEPS.md](../STAGES-STEPS.md).
 
 ## Existing behaviour and implemented boundary

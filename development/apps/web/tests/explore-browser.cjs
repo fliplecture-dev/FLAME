@@ -34,6 +34,10 @@ const mock=http.createServer(async(req,res)=>{
  if(route.endsWith('/messages'))return json(res,{items:route.includes(uid(11))?[{id:uid(40),role:'user',turn_number:1,blocks:[{kind:'text',text:'Explain gravity in curiosity'}]},{id:uid(41),role:'assistant',turn_number:1,blocks:[{kind:'text',text:'A saved Curiosity explanation.'}]}]:[{id:uid(20),role:'user',turn_number:1,blocks:[{kind:'text',text:'Explain gravity'}]},{id:uid(21),role:'assistant',turn_number:1,blocks:[{kind:'text',text:'Gravity pulls objects toward Earth.'}]}],next_cursor:null});
  if(route.endsWith('/recommendations'))return json(res,{status:'no_results',resources:[],teachers:[],recommendation_decision:{primary:null,alternative:null}});
  if(route.endsWith('/displayed')){acknowledgements++;return json(res,{status:'ok'});}
+ if(route==='explore/summary'){
+   const found=url.searchParams.get('session_id')===uid(11)?curiosityContexts.get(url.searchParams.get('message_id')):context;
+   return json(res,found?{videos:2,images:103,interactives:0}:{videos:0,images:0,interactives:0});
+ }
  if(route==='explore/context'){
    if(url.searchParams.get('session_id')===uid(11)){
      const found=curiosityContexts.get(url.searchParams.get('message_id'));
@@ -126,7 +130,9 @@ const mock=http.createServer(async(req,res)=>{
   await panel.getByRole('button',{name:'Explore',exact:true}).click();await trigger.waitFor();
   if(await page.locator('.sidebar-rail').isVisible())await page.locator('.sidebar-rail').getByRole('button',{name:'Expand sidebar',exact:true}).click();
   await page.locator('.desktop-sidebar .shortcut-section').getByRole('button',{name:'Falling objects (study)',exact:true}).click();await page.getByText('Gravity pulls objects toward Earth.',{exact:true}).waitFor();
-  await page.getByRole('button',{name:'Explore this topic',exact:true}).click();await panel.getByText('105 matching resources',{exact:true}).waitFor();assert.equal(await panel.locator('select[aria-label="Explore subtopic"]').inputValue(),ids.st);
+  assert.equal(await page.getByRole('button',{name:'Explore this topic',exact:true}).count(),0);
+  await page.getByRole('button',{name:'Explore resources: 2 videos · 103 images',exact:true}).screenshot({path:path.resolve(cwd,'../../../work/explore-answer-counts.png')});
+  await page.getByRole('button',{name:'Explore resources: 2 videos · 103 images',exact:true}).click();await panel.getByText('105 matching resources',{exact:true}).waitFor();assert.equal(await panel.locator('select[aria-label="Explore subtopic"]').inputValue(),ids.st);
   await panel.getByRole('button',{name:'Learning path filters',exact:true}).click();await panel.getByRole('combobox',{name:'Explore topic',exact:true}).selectOption(ids.other);await panel.getByText('0 matching resources',{exact:true}).waitFor();assert.equal(await page.getByRole('heading',{name:'Falling objects',exact:true}).count(),1);assert.equal(await panel.locator('select[aria-label="Explore subtopic"]').inputValue(),'');
   // An open Explore follows learning navigation without clicking its trigger.
   for (const [tab,count] of [['Media','105 matching resources'],['Teachers','1 matching teachers'],['Activity Kits','1 matching kits']]) {
@@ -161,6 +167,7 @@ const mock=http.createServer(async(req,res)=>{
   await panel.getByRole('tab',{name:'Teachers',exact:true}).click();await panel.getByText('1 matching teachers',{exact:true}).waitFor();
   await page.screenshot({path:path.resolve(cwd,'../../../work/explore-curiosity-gravity.png')});
   await ask('Explain dinosaurs');await panel.getByText('No published learning path matches this question.',{exact:true}).waitFor();assert.equal(await panel.locator('.explore-item').count(),0);
+  assert.equal(await page.locator('.conversation-turn').filter({hasText:'Curiosity answer: Explain dinosaurs'}).getByRole('button',{name:/Explore resources:/}).count(),0,'Empty results must not display an answer Explore link');
   await ask('Explain ambiguous');await panel.getByText('1 matching teachers',{exact:true}).waitFor();assert.equal(await panel.getByRole('list',{name:'Matching learning paths'}).count(),0);
   await panel.getByRole('button',{name:'Open Gravity teacher',exact:true}).click();await page.getByRole('dialog',{name:'Gravity teacher',exact:true}).getByRole('button',{name:'Close resource',exact:true}).click();
   await panel.getByRole('tab',{name:'Activity Kits',exact:true}).click();await panel.getByText('1 matching kits',{exact:true}).waitFor();

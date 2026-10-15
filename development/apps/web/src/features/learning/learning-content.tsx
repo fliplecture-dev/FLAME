@@ -1,10 +1,17 @@
-import { createElement, type ReactNode } from "react";
+"use client";
+import { createElement, memo, type ReactNode } from "react";
+import { MarkdownContent } from "./markdown-content";
+import { ChartBlock } from "./chart-block";
+import type { MarkdownBlock, ChartBlock as ChartData } from "./rich-blocks";
+import type { MathVisualBlock } from "./math-spec";
+import { MathActivity } from "./math-activity";
 export type MathExpression =
   | { kind: "symbol" | "number" | "operator"; value: string }
   | { kind: "row"; children: MathExpression[] }
   | { kind: "fraction"; numerator: MathExpression; denominator: MathExpression }
   | { kind: "power"; base: MathExpression; exponent: MathExpression };
 export type LearningBlock =
+  | MarkdownBlock | ChartData | MathVisualBlock
   | { id: string; kind: "text"; text: string }
   | { id: string; kind: "heading"; text: string; level: 2 | 3 }
   | { id: string; kind: "list"; ordered?: boolean; items: string[] }
@@ -25,8 +32,11 @@ function safeUrl(value: string) {
   if (value.startsWith("/") && !value.startsWith("//")) return value;
   try { const url = new URL(value); return url.protocol === "https:" ? url.href : undefined; } catch { return undefined; }
 }
-export function LearningContent({ blocks, children }: { blocks: LearningBlock[]; children?: ReactNode }) {
-  return <div className="learning-content">{blocks.map(block => {
+export const LearningContent = memo(function LearningContent({ blocks, children }: { blocks: LearningBlock[]; children?: ReactNode }) {
+  return <div className="learning-content" dir="auto">{blocks.map(block => {
+    if (block.kind === "markdown") return <MarkdownContent key={block.id} text={block.text} />;
+    if (block.kind === "chart") return <ChartBlock key={block.id} block={block} />;
+    if (block.kind === "math_visual") return <MathActivity key={block.id} block={block} />;
     if (block.kind === "text") return <p className="content-text" key={block.id}>{block.text}</p>;
     if (block.kind === "heading") { const Heading = block.level === 2 ? "h2" : "h3"; return <Heading key={block.id}>{block.text}</Heading>; }
     if (block.kind === "list") { const List = block.ordered ? "ol" : "ul"; return <List key={block.id}>{block.items.map((item, i) => <li key={i}>{item}</li>)}</List>; }
@@ -38,4 +48,4 @@ export function LearningContent({ blocks, children }: { blocks: LearningBlock[];
     if (block.kind === "video") return <figure key={block.id}><video controls preload="metadata" src={src}><track kind="captions" src={safeUrl(block.captionsSrc)} srcLang="en" label="English" default /></video><figcaption>{block.caption}</figcaption></figure>;
     return <figure key={block.id}><img src={src} alt={block.alt} loading="lazy" /><figcaption>{block.caption}</figcaption></figure>;
   })}{children}</div>;
-}
+});

@@ -12,6 +12,7 @@ export interface ConversationTurn {
   messageId?: string;
   requestId?: string;
   notice?: string;
+  freshSimulation?: boolean;
 }
 export interface ConversationSession { draft: string; attachments: PromptAttachment[]; attachmentNotice: string; turns: ConversationTurn[] }
 export const emptySession: ConversationSession = { draft: "", attachments: [], attachmentNotice: "", turns: [] };

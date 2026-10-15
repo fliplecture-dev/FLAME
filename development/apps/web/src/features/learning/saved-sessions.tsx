@@ -11,7 +11,7 @@ export type SavedSession = {
   created_at: string;
   updated_at: string;
 };
-export type SavedMessage = { id: string; role: "user" | "assistant"; request_id?: string | null; blocks: { kind: string; id?: string; text?: string; title?: string; items?: string[] }[]; turn_number: number };
+export type SavedMessage = { id: string; role: "user" | "assistant"; request_id?: string | null; blocks: { kind: string; id?: string; text?: string; [key: string]: unknown }[]; turn_number: number };
 export type SavedPage<T> = { items: T[]; next_cursor: string | null };
 
 async function get<T>(path: string): Promise<T> {
