@@ -1,5 +1,9 @@
 # F13 implementation report — 2026-10-15
 
+## Production packaging follow-up — 2026-10-15
+
+The owner subsequently authorized merging and deploying this feature. Initial hosted checks passed database readiness, synthetic member sign-in, administrator denial, Canvas/Phaser/Rive compilation and fixture cleanup. Matter/Three/R3F compilation revealed missing dynamically resolved dependencies in the serverless package. The compiler route now explicitly traces these engine packages and their installed dependency sources. A fresh production build passed; copying only its traced files to a separate directory and compiling smoke fixtures passed for all six engines. Hosted verification of this packaging correction follows deployment. The process-local simulation opportunity/cache and remaining hosted affinity/cancellation acceptance described below still apply.
+
 The development implementation runs LLM-generated simulations inside the existing FLAME response box, beside the explanation. No separate simulation page, permanent simulation storage, approval workflow or resource retrieval was added. Thirteen packages are complete in development; F13.11 remains PARTIAL for hosted/serverless affinity and cancellation acceptance. Nothing was deployed.
 
 ## Runtime support
