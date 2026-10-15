@@ -24,7 +24,7 @@ Use Vercel's project environment settings, scoped separately to Preview and Prod
 | API variable | Value / source |
 | --- | --- |
 | `FLAME_ENVIRONMENT` | `production` |
-| `FLAME_DATABASE_URL` | Restricted runtime PostgreSQL role, SQLAlchemy `postgresql+psycopg://` URL; verify connectivity from Vercel |
+| `FLAME_DATABASE_URL` | Restricted runtime PostgreSQL role, SQLAlchemy `postgresql+psycopg://` URL; use the Supabase transaction pooler on port 6543 for Vercel, preserving TLS |
 | `FLAME_SUPABASE_URL` | Supabase HTTPS project URL, without a trailing slash |
 | `FLAME_SUPABASE_ANON_KEY` | Project publishable/anon key used by the existing identity adapter |
 | `FLAME_SUPABASE_JWT_SECRET` | Only if the project's existing token verification uses legacy HS256 |
@@ -41,6 +41,8 @@ Use Vercel's project environment settings, scoped separately to Preview and Prod
 | `FLAME_DELETION_RECEIPT_RETENTION_DAYS` | `30`; this controls local receipts, not provider backup/log expiry |
 
 Configure Supabase Auth's website/callback/recovery URLs for the chosen website domain. Do not use the development schema-owner database connection as the production runtime role. Migrations run separately with the reviewed migration role; neither startup nor a deployment build runs them automatically.
+
+Supabase transaction-pooler connections disable Psycopg prepared statements and use SQLAlchemy `NullPool`, releasing client connections after each transaction. Production Supabase session-pooler URLs also use `NullPool` to avoid retaining scarce idle slots if an older connection setting is restored. Persistent local development retains its bounded application pool. The initial hosted session-pooler configuration exhausted its 15-client cap across warm serverless instances; do not restore that URL with an older application version that retains idle connections. See [Supabase connection guidance](https://supabase.com/docs/guides/database/connecting-to-postgres).
 
 ## Private transfers and persistence
 

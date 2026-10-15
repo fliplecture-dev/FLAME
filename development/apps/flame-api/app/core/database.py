@@ -1,5 +1,7 @@
 from sqlalchemy import MetaData, create_engine, text
+from sqlalchemy.engine import make_url
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
+from sqlalchemy.pool import NullPool
 from app.core.config import Settings
 
 
@@ -25,13 +27,23 @@ class Database:
         self.engine = None
         self.sessions = None
         if settings.database_url:
+            url = make_url(settings.database_url.get_secret_value())
+            supabase_pooler = bool(url.host and url.host.endswith(".pooler.supabase.com"))
+            transaction_pooler = supabase_pooler and url.port == 6543
+            connect_args = {"connect_timeout": settings.database_connect_timeout}
+            if transaction_pooler:
+                # Transaction pooling cannot preserve prepared statements.
+                connect_args["prepare_threshold"] = None
+            # Warm serverless instances must not each reserve their own idle
+            # sessions in Supabase's shared, bounded pool.
+            pool_options = ({"poolclass": NullPool}
+                            if transaction_pooler or (supabase_pooler and settings.environment == "production")
+                            else {"pool_size": 5, "max_overflow": 5, "pool_timeout": 5})
             self.engine = create_engine(
-                settings.database_url.get_secret_value(),
+                url,
                 pool_pre_ping=True,
-                pool_size=5,
-                max_overflow=5,
-                pool_timeout=5,
-                connect_args={"connect_timeout": settings.database_connect_timeout},
+                **pool_options,
+                connect_args=connect_args,
             )
             self.sessions = sessionmaker(bind=self.engine, expire_on_commit=False)
 
