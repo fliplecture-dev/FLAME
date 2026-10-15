@@ -9,6 +9,7 @@ import type { Curriculum, LearningContext } from "@/features/curriculum/types";
 import { catalogueFromTrees } from "./b4-catalogue";
 import type { PublishedCurriculumTree } from "@/features/curriculum/map-published-curriculum";
 import type { ResponseLanguage } from "@/features/learning/response-languages";
+import { answerErrorMessage } from "./answer-errors";
 
 export type LearningRequest = { responseLanguage?: ResponseLanguage; sessionId?: string; attachments?: PromptAttachment[]; history?: { question: string; blocks: LearningBlock[]; attachments?: PromptAttachment[] }[] } & (
   | { message: string; mode: "study"; context: LearningContext | null }
@@ -113,7 +114,12 @@ async function streamedAnswer(path: string, body: unknown, key: string, onText?:
     headers: { "content-type": "application/json", "x-flame-csrf": csrf, "idempotency-key": key }, body: JSON.stringify(body) });
   // Older API deployments/fixtures can keep the existing idempotent complete-answer path.
   if (response.status === 404 || response.status === 405) return b4Mutation(path + "/ask", "POST", body, key);
-  if (!response.ok || !response.body) throw new Error("The answer could not be completed. Retry to check its saved status.");
+  if (!response.ok) {
+    const error = await response.json().catch(() => null);
+    const code = typeof error?.error?.code === "string" ? error.error.code : "answer_unavailable";
+    throw new LearningApiError(answerErrorMessage(code), code);
+  }
+  if (!response.body) throw new Error(answerErrorMessage("answer_unavailable"));
   if (!response.headers.get("content-type")?.includes("application/x-ndjson")) return response.json();
   const reader = response.body.getReader(), decoder = new TextDecoder();
   let pending = "", text = "", received = 0;
@@ -134,8 +140,11 @@ async function streamedAnswer(path: string, body: unknown, key: string, onText?:
           // Structured blocks wait for final validation; intent tags are never visible.
           if (!text.trimStart().startsWith("{") && !text.trimStart().startsWith("```json")) onText(text.split("<")[0]);
         }
-        if (event.type === "answer") { if (event.answer?.status === "error") throw new LearningApiError("The answer could not be completed.", event.answer.code); return event.answer; }
-        if (event.type === "failure") throw new Error("The answer could not be completed. Retry to check its saved status.");
+        if (event.type === "answer") { if (event.answer?.status === "error") throw new LearningApiError(answerErrorMessage(event.answer.code), event.answer.code); return event.answer; }
+        if (event.type === "failure") {
+          const code = typeof event.code === "string" ? event.code : "answer_unavailable";
+          throw new LearningApiError(answerErrorMessage(code), code);
+        }
       }
     }
     throw new Error("The answer stream was interrupted. Retry to check its saved status.");

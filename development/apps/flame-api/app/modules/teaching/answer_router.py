@@ -2,13 +2,14 @@
 from typing import Annotated
 from uuid import UUID
 import json
+import logging
 from queue import Queue, Empty
 from threading import Thread, Event
 from time import monotonic
 from fastapi.responses import StreamingResponse
 from app.modules.teaching.gateway import GatewayError
 
-from fastapi import APIRouter, Depends, Header, Request
+from fastapi import APIRouter, Depends, Header, HTTPException, Request
 
 from app.core.errors import error_response
 from app.modules.identity.dependencies import require_member
@@ -74,6 +75,18 @@ def ask_stream(request: Request, session_id: UUID, body: AnswerRequest, principa
                          session_id, idempotency_key, body,
                          daily_limit=request.app.state.settings.llm_daily_request_limit, on_delta=delta)
             event = {"type": "answer", "answer": result}
+        except HTTPException as exc:
+            # Preserve safe operational rejections after the HTTP stream opens.
+            # Never send arbitrary exception details or private inputs to clients.
+            detail = exc.detail.get("code") if isinstance(exc.detail, dict) else exc.detail
+            allowed = {"daily_limit_reached", "request_in_progress", "session_request_in_progress",
+                       "unavailable_context", "session_context_mismatch", "idempotency_key_conflict",
+                       "provider_unavailable"}
+            code = detail if isinstance(detail, str) and detail in allowed else "answer_unavailable"
+            event = {"type": "failure", "code": code, "status": exc.status_code}
+            logging.getLogger("flame").warning("answer_stream_rejected", extra={"fields": {
+                "code": code, "status": exc.status_code,
+                "request_id": getattr(request.state, "request_id", None)}})
         except Exception:
             event = {"type": "failure", "code": "answer_unavailable"}
         if not cancelled.is_set():
