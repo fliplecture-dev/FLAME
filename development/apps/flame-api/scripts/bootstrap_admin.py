@@ -4,7 +4,7 @@ from uuid import UUID
 from sqlalchemy import select
 from app.core.config import Settings
 from app.core.database import Database
-from app.modules.identity.models import AdminRole, StudentProfile
+from app.modules.functional.identity.models import AdminRole, StudentProfile
 
 
 def main():

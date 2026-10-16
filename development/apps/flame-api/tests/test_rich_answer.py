@@ -5,12 +5,12 @@ from uuid import uuid4
 import pytest
 from pydantic import ValidationError
 
-from app.modules.teaching.answer_service import _answer
-from app.modules.teaching.gateway import Generated, GatewayError
-from app.modules.teaching.prompt import assemble_open_curiosity
-from app.modules.teaching.rich_answer import parse_blocks, readable
-from app.modules.teaching.schemas import ChartBlock, DirectAnswer
-from app.modules.recommendations.learning_need import split_intent
+from app.modules.application.teaching.answer_service import _answer
+from app.modules.application.teaching.gateway import Generated, GatewayError
+from app.modules.application.teaching.prompt import assemble_open_curiosity
+from app.modules.application.teaching.rich_answer import parse_blocks, readable
+from app.modules.application.teaching.schemas import ChartBlock, DirectAnswer
+from app.modules.application.recommendations.learning_need import split_intent
 
 
 def chart():
@@ -83,7 +83,7 @@ def test_word_and_authority_guards_include_chart_labels():
     with pytest.raises(GatewayError):
         _answer(uuid4(), None, Generated(rich(block), "stub", 1, 10), max_words=20)
     block["description"] = "I verified your textbook."
-    from app.modules.teaching.output_guard import has_forbidden_authority_claim
+    from app.modules.application.teaching.output_guard import has_forbidden_authority_claim
     # Exercise exactly the same shared authority policy, including escaped JSON text.
     assert has_forbidden_authority_claim(readable([block]))
     with pytest.raises(GatewayError):

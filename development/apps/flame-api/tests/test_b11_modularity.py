@@ -5,22 +5,20 @@ from uuid import uuid4
 import pytest
 from fastapi import HTTPException
 from app.core.database import Base
-from app.modules.recommendations.models import RecommendationSet
-from app.modules.resources.models import RecommendationSet as LegacyRecommendationSet
-from app.modules.learning_response import composer, service
-from app.modules.recommendations import service as recommendation_service
-from app.modules.recommendations.router import router
-from app.modules.resources.recommendations_router import router as legacy_router
-from app.modules.resources.image_selection import decide_image as legacy_image
-from app.modules.recommendations.image_selection import decide_image
+from app.modules.functional.recommendation_history.models import RecommendationSet
+from app.modules.functional.resources.models import RecommendationSet as LegacyRecommendationSet
+from app.modules.application.learning_response import composer, service
+from app.modules.application.recommendations import service as recommendation_service
+from app.modules.application.recommendations.router import router
+from app.modules.decision_engine.recommendation.image_selection import decide_image as legacy_image
+from app.modules.application.recommendations.image_selection import decide_image
 
 
 def test_table_and_router_aliases_have_one_owner_and_no_schema_change():
     assert LegacyRecommendationSet is RecommendationSet
     assert Base.metadata.tables['flame.recommendation_sets'] is RecommendationSet.__table__
-    assert legacy_router is router
     assert legacy_image is decide_image
-    assert RecommendationSet.__module__ == 'app.modules.recommendations.models'
+    assert RecommendationSet.__module__ == 'app.modules.functional.recommendation_history.models'
     assert {route.path for route in router.routes} == {
         '/api/v1/sessions/{session_id}/recommendations', '/api/v1/sessions/{session_id}/images/displayed',
         '/api/v1/sessions/{session_id}/recommendations/displayed', '/api/v1/sessions/{session_id}/recommendations/{candidate_id}'}
@@ -30,10 +28,10 @@ def test_coordinator_consumes_interfaces_without_foreign_models_or_admin_routers
     source=Path(recommendation_service.__file__).read_text()
     imports=[node.module for node in ast.walk(ast.parse(source)) if isinstance(node,ast.ImportFrom)]
     assert not any(name and (name.endswith('.models') or name.endswith('.router')) for name in imports)
-    assert 'app.modules.resources.candidates' in imports
-    assert 'app.modules.teachers.candidates' in imports
-    assert 'app.modules.activity_kits.candidates' in imports
-    assert 'app.modules.conversations.recommendation_context' in imports
+    assert 'app.modules.functional.resources.candidates' in imports
+    assert 'app.modules.functional.teachers.candidates' in imports
+    assert 'app.modules.functional.activity_kits.candidates' in imports
+    assert 'app.modules.functional.conversations.recommendation_context' in imports
 
 
 def test_composer_returns_answer_without_ever_loading_recommendations(monkeypatch):

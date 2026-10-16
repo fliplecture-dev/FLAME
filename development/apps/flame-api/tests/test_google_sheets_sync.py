@@ -2,8 +2,8 @@
 from copy import deepcopy
 from uuid import UUID, uuid4
 import pytest
-from app.modules.bulk_transfer.google_sheets import collect, spreadsheet_id, recheck, MARKER
-from app.modules.bulk_transfer.errors import BulkFailure
+from app.modules.functional.bulk_transfer.google_sheets import collect, spreadsheet_id, recheck, MARKER
+from app.modules.functional.bulk_transfer.errors import BulkFailure
 from test_curriculum_workspace import isolated_client
 
 
@@ -50,8 +50,8 @@ class FakeSheets:
 
 
 def install(monkeypatch,fake):
-    import app.modules.bulk_transfer.google_sheets as adapter
-    import app.modules.bulk_transfer.google_router as router
+    import app.modules.functional.bulk_transfer.google_sheets as adapter
+    import app.modules.functional.bulk_transfer.google_router as router
     monkeypatch.setattr(adapter,"SheetsClient",lambda config,ident:fake)
     monkeypatch.setattr(router,"SheetsClient",lambda config,ident:fake)
 
@@ -82,7 +82,7 @@ def test_url_columns_formulas_and_duplicate_keys():
 
 
 def test_transport_reads_row_metadata_from_search():
-    from app.modules.bulk_transfer.google_sheets import SheetsClient
+    from app.modules.functional.bulk_transfer.google_sheets import SheetsClient
     client=SheetsClient.__new__(SheetsClient);client.ident='s'*30
     calls=[]
     def call(method,suffix='',**kwargs):
@@ -125,7 +125,7 @@ def test_sync_lifecycle_failure_replay_and_mapping_preservation(monkeypatch):
         assert confirm(client,again).json()['result']['added']==0
         # Existing publication and mappings survive a conflicting sheet edit.
         from test_bulk_transfer import path_fixture
-        from app.modules.resources.models import Resource,ResourceTopic
+        from app.modules.functional.resources.models import Resource,ResourceTopic
         topic,leaf,subject=path_fixture(client)
         rid=fake.grids['Image'][1][1]
         with client.app.state.database.session() as db, db.begin():

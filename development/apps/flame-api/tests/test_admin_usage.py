@@ -11,14 +11,14 @@ from sqlalchemy.orm import sessionmaker
 
 from app.core.config import Settings
 from app.main import create_app
-from app.modules.identity.dependencies import require_member
-from app.modules.identity.models import StudentProfile
-from app.modules.teaching import answer_router
-from app.modules.teaching import simulation_router
-from app.modules.teaching.gateway import Generated
-from app.modules.teaching.schemas import AnswerRequest
-from app.modules.teaching.simulations import TransientSimulations
-from app.modules.teaching.usage import daily_usage_limit
+from app.modules.functional.identity.dependencies import require_member
+from app.modules.functional.identity.models import StudentProfile
+from app.modules.application.teaching import answer_router
+from app.modules.application.teaching import simulation_router
+from app.modules.application.teaching.gateway import Generated
+from app.modules.application.teaching.schemas import AnswerRequest
+from app.modules.application.teaching.simulations import TransientSimulations
+from app.modules.application.teaching.usage import daily_usage_limit
 
 
 @pytest.mark.parametrize("role,expected", [("admin", None), ("member", 100), (None, 100)])
@@ -60,8 +60,9 @@ def test_unlimited_simulation_usage_preserves_member_cap_and_capacity():
 def test_simulation_route_uses_verified_role_quota(monkeypatch, role, expected):
     database = MagicMock()
     database.session.return_value.__enter__.return_value.scalar.side_effect = [
-        SimpleNamespace(turn_number=1), SimpleNamespace(blocks=[{"text": "Interactive falling ball"}])]
-    monkeypatch.setattr(simulation_router, "owned", lambda *args: None)
+        SimpleNamespace(turn_number=1), SimpleNamespace(blocks=[{"text": "Interactive falling ball"}]), None]
+    monkeypatch.setattr(simulation_router, "owned", lambda *args, **kw: SimpleNamespace(mode="curiosity"))
+    monkeypatch.setattr(simulation_router, "library_simulation", lambda *args, **kw: (None, None))
     transient = MagicMock()
     transient.run.return_value = {"status": "pending"}
     monkeypatch.setattr(simulation_router, "transient", transient)

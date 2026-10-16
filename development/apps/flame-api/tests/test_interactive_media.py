@@ -6,12 +6,12 @@ from uuid import uuid4
 import pytest
 import httpx
 from pydantic import SecretStr
-from app.modules.resources.interactive import HTML_LIMIT, InvalidInteractive, isolated_document, validate_document
-from app.modules.resources.validation import MEDIA_TYPES, FORMATS, MediaRejected, declared_format, inspect_media
-from app.modules.resources.storage import ResourceStorage, StorageUnavailable
+from app.modules.functional.resources.interactive import HTML_LIMIT, InvalidInteractive, isolated_document, validate_document
+from app.modules.functional.resources.validation import MEDIA_TYPES, FORMATS, MediaRejected, declared_format, inspect_media
+from app.modules.functional.resources.storage import ResourceStorage, StorageUnavailable
 from app.core.config import Settings
-from app.modules.recommendations.selection import learning_need, select_recommendations
-from app.modules.recommendations.evaluation import evaluate
+from app.modules.application.recommendations.selection import learning_need, select_recommendations
+from app.modules.application.recommendations.evaluation import evaluate
 from test_curriculum_workspace import isolated_client
 
 HTML = b'<!doctype html><html><head><title>Gravity</title><style>body{color:green}</style></head><body><button id="go">Drop</button><script>document.getElementById("go").onclick=()=>{document.body.dataset.dropped="yes"}</script></body></html>'

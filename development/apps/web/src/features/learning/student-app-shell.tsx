@@ -5,6 +5,7 @@ import { BookOpen, Library, Lightbulb, PanelLeftClose, PanelLeftOpen, X } from "
 import { StudentProfile } from "./student-profile";
 import { ModeSwitcher, type LearningMode } from "./mode-switcher";
 import { DesktopPaneResizer } from "./desktop-pane-resizer";
+import { ThemeToggle } from "./theme-toggle";
 
 const layoutPreferenceKey = "flame.sidebar.collapsed";
 export function StudentAppShell({ navigation, breadcrumb, children, mode, onModeChange, headerAction, explorePanel }: {
@@ -79,7 +80,7 @@ export function StudentAppShell({ navigation, breadcrumb, children, mode, onMode
   const switcher = <ModeSwitcher mode={mode} onChange={onModeChange} />;
   const brandSwitcher = <ModeSwitcher mode={mode} onChange={onModeChange} variant="brand" />;
   return <div ref={app} className={`student-app ${collapsed ? "sidebar-hidden" : ""}`}>
-    <header className="flame-topbar"><button ref={trigger} className="icon-button navigation-toggle" aria-label="Open navigation" aria-expanded={open} onClick={() => { dialog.current?.showModal(); setOpen(true); }}><PanelLeftOpen size={20} /></button><div className="workspace-modes">{switcher}</div></header>
+    <header className="flame-topbar"><button ref={trigger} className="icon-button navigation-toggle" aria-label="Open navigation" aria-expanded={open} onClick={() => { dialog.current?.showModal(); setOpen(true); }}><PanelLeftOpen size={20} /></button><div className="workspace-modes">{switcher}</div><ThemeToggle /></header>
     <a className="skip-link" href="#learning-workspace">Skip to learning workspace</a>
     <aside className="desktop-sidebar" aria-label="Learning navigation">
       <div className="sidebar-brand">{brandSwitcher}<button ref={collapseTrigger} className="icon-button" title="Collapse sidebar" aria-label="Collapse sidebar" onClick={() => { rememberCollapse(true); requestAnimationFrame(() => railTrigger.current?.focus()); }}><PanelLeftClose size={18} /></button></div>

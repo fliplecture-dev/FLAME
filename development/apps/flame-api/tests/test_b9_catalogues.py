@@ -11,9 +11,9 @@ from sqlalchemy.orm import sessionmaker
 
 from app.core.config import Settings
 from app.main import create_app
-from app.modules.conversations.models import ConversationSession, Message
-from app.modules.identity.dependencies import require_admin, require_member
-from app.modules.identity.models import StudentProfile
+from app.modules.functional.conversations.models import ConversationSession, Message
+from app.modules.functional.identity.dependencies import require_admin, require_member
+from app.modules.functional.identity.models import StudentProfile
 
 pytestmark = pytest.mark.db_integration
 

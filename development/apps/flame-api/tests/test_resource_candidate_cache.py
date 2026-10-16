@@ -1,9 +1,9 @@
 from uuid import uuid4
 
 from app.core.config import Settings
-from app.modules.resources.candidates import eligible_candidates
-from app.modules.resources.models import Resource
-from app.modules.resources.storage import ResourceStorage
+from app.modules.functional.resources.candidates import eligible_candidates
+from app.modules.functional.resources.models import Resource
+from app.modules.functional.resources.storage import ResourceStorage
 
 
 class BrowseSession:

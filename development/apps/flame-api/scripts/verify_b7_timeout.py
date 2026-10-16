@@ -9,7 +9,7 @@ from unittest.mock import patch
 import httpx
 
 from app.core.config import Settings
-from app.modules.teaching.gateway import GatewayError, OpenAIResponsesGateway
+from app.modules.application.teaching.gateway import GatewayError, OpenAIResponsesGateway
 
 
 def main():
@@ -34,7 +34,7 @@ def main():
                 timeouts.append(type(error).__name__)
                 raise
     try:
-        with patch('app.modules.teaching.gateway.httpx.Client', ObservedClient):
+        with patch('app.modules.application.teaching.gateway.httpx.Client', ObservedClient):
             gateway.generate([{'role': 'user', 'content': 'Say hello.'}])
     except GatewayError as error:
         result = {'date': datetime.now(timezone.utc).isoformat(), 'code': error.code,

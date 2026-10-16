@@ -1,7 +1,7 @@
 from pathlib import Path
 import pytest
 from app.core.config import Settings
-from app.modules.resources.storage import ResourceStorage, StorageUnavailable
+from app.modules.functional.resources.storage import ResourceStorage, StorageUnavailable
 
 
 def test_local_uploads_route_by_type_and_preserve_existing_file(tmp_path):

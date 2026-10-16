@@ -5,7 +5,7 @@ import pytest
 from pydantic import SecretStr
 
 from app.core.config import Settings
-from app.modules.bulk_transfer import google_sheets
+from app.modules.functional.bulk_transfer import google_sheets
 
 
 def test_hosted_secret_credentials_override_local_path_without_file_access(monkeypatch):

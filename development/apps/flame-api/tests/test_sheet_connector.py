@@ -1,13 +1,13 @@
 """Persistent connector, confirmed deletes and FLAME exports use rollback-only fixtures."""
 from uuid import UUID
 from sqlalchemy import select
-from app.modules.resources.models import Resource
+from app.modules.functional.resources.models import Resource
 from test_curriculum_workspace import isolated_client
 from test_google_sheets_sync import FakeSheets,install
 
 
 def test_sheet_output_uses_native_numbers_and_booleans_without_prefixes():
-    from app.modules.bulk_transfer.sheet_connector import sheet_values,sheet_cell,sheet_text
+    from app.modules.functional.bulk_transfer.sheet_connector import sheet_values,sheet_cell,sheet_text
     headers=['record_key','existing_id','title','grade_min','grade_max','version','published','status']
     record=dict(record_key='00123',existing_id='uuid',title="=Text, not a formula",grade_min=0,grade_max='3',version=4,published='FALSE',status='draft')
     values=sheet_values(record,headers)
@@ -20,7 +20,7 @@ def test_sheet_output_uses_native_numbers_and_booleans_without_prefixes():
 
 
 def test_existing_video_sync_retains_source_during_provider_outage(monkeypatch):
-    from app.modules.bulk_transfer import service
+    from app.modules.functional.bulk_transfer import service
     from fastapi import HTTPException
     from uuid import uuid4
     calls=[]
@@ -41,7 +41,7 @@ def test_existing_video_sync_retains_source_during_provider_outage(monkeypatch):
 
 
 def test_connector_initial_export_repeat_new_rows_and_confirmed_deletion(monkeypatch):
-    import app.modules.bulk_transfer.sheet_connector as connector
+    import app.modules.functional.bulk_transfer.sheet_connector as connector
     original=connector.catalogue
     fake=FakeSheets();install(monkeypatch,fake)
     for grid in fake.grids.values():
@@ -106,7 +106,7 @@ def test_connector_cancel_and_missing_tabs_never_delete(monkeypatch):
 
 
 def test_connector_rejects_out_of_range_rows_and_ambiguous_tracking(monkeypatch):
-    from app.modules.bulk_transfer.google_sheets import collect
+    from app.modules.functional.bulk_transfer.google_sheets import collect
     fake=FakeSheets()
     fake.grids['Interactive'] += [[]]*2000
     assert any(i['severity']=='error' and i['tab']=='Interactive' for i in collect(*fake.read(),reserve=True)[2])

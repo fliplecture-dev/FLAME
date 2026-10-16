@@ -1,7 +1,7 @@
-import { isSimulationSpec } from "./spec";
-import type { SimulationSpec } from "./spec";
+import { isSimulationSpec, catalogueSimulation } from "./spec";
+import type { CatalogueSimulation, SimulationSpec } from "./spec";
 
-type Outcome = { status: "ready"; spec: SimulationSpec } | { status: "expired" | "ineligible" | "limited" | "error" };
+type Outcome = { status: "ready"; spec: SimulationSpec } | { status: "resource"; resource: CatalogueSimulation } | { status: "expired" | "ineligible" | "limited" | "error" };
 type Request = (start: boolean, signal: AbortSignal) => Promise<unknown>;
 
 /** Poll only the existing job after the first request; never request regeneration. */
@@ -19,6 +19,8 @@ export async function requestSimulation(request: Request, fresh: boolean, timeou
     while (true) {
       const value = await Promise.race([request(start, controller.signal), deadline]);
       start = false;
+      const resource = catalogueSimulation(value);
+      if (resource) return { status: "resource", resource };
       if (isSimulationSpec(value)) {
         // Strip transport fields before sending source to the strict compiler contract.
         return { status: "ready", spec: { version: 1, engine: value.engine, title: value.title, description: value.description, source: value.source } };

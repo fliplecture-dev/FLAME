@@ -9,12 +9,12 @@ from sqlalchemy.orm import sessionmaker
 
 from app.core.config import Settings
 from app.main import create_app
-from app.modules.conversations.models import AnswerRequest, Message
-from app.modules.identity.dependencies import require_member
-from app.modules.identity.models import StudentProfile
-from app.modules.teaching.answer_service import ask
-from app.modules.teaching.gateway import Generated, GatewayError
-from app.modules.teaching.schemas import AnswerRequest as AskBody
+from app.modules.functional.conversations.models import AnswerRequest, Message
+from app.modules.functional.identity.dependencies import require_member
+from app.modules.functional.identity.models import StudentProfile
+from app.modules.application.teaching.answer_service import ask
+from app.modules.application.teaching.gateway import Generated, GatewayError
+from app.modules.application.teaching.schemas import AnswerRequest as AskBody
 
 pytestmark = pytest.mark.db_integration
 

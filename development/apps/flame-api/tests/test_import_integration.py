@@ -12,11 +12,11 @@ from sqlalchemy.orm import sessionmaker
 
 from app.core.config import Settings
 from app.core.database import Database
-from app.modules.activity_kits.models import ActivityKit, KitTopic
-from app.modules.curriculum.import_models import CurriculumImport, CurriculumImportSource
-from app.modules.curriculum.import_service import CurriculumImportService, ImportFailure
-from app.modules.curriculum.models import Category, Curriculum, Domain, Level, Subject, Subtopic, Topic
-from app.modules.identity.models import AdminRole
+from app.modules.functional.activity_kits.models import ActivityKit, KitTopic
+from app.modules.functional.curriculum.import_models import CurriculumImport, CurriculumImportSource
+from app.modules.functional.curriculum.import_service import CurriculumImportService, ImportFailure
+from app.modules.functional.curriculum.models import Category, Curriculum, Domain, Level, Subject, Subtopic, Topic
+from app.modules.functional.identity.models import AdminRole
 
 pytestmark = pytest.mark.db_integration
 

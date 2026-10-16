@@ -6,7 +6,7 @@ from zipfile import ZipFile
 
 import pytest
 
-from app.modules.curriculum.workbook_parser import (
+from app.modules.functional.curriculum.workbook_parser import (
     WorkbookRejected, match_key, normalize_text, parse_workbook,
 )
 

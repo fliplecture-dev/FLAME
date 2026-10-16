@@ -7,11 +7,11 @@ from uuid import UUID, uuid4
 import pytest
 from PIL import Image
 from pydantic import SecretStr
-from app.modules.resources.models import Resource
-from app.modules.resources.storage import ResourceStorage
-from app.modules.resources.validation import declared_format, inspect_media, MediaRejected
-from app.modules.conversations.models import ConversationSession, Message
-from app.modules.identity.dependencies import require_admin
+from app.modules.functional.resources.models import Resource
+from app.modules.functional.resources.storage import ResourceStorage
+from app.modules.functional.resources.validation import declared_format, inspect_media, MediaRejected
+from app.modules.functional.conversations.models import ConversationSession, Message
+from app.modules.functional.identity.dependencies import require_admin
 from test_curriculum_workspace import isolated_client
 
 

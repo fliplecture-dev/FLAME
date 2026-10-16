@@ -7,10 +7,10 @@ from fastapi.testclient import TestClient
 from sqlalchemy.orm import sessionmaker
 from app.core.config import Settings
 from app.main import create_app
-from app.modules.identity.dependencies import require_admin, require_member
-from app.modules.identity.models import StudentProfile
-from app.modules.conversations.models import AnswerRequest, Message
-from app.modules.teaching.gateway import Generated, UnconfiguredGateway
+from app.modules.functional.identity.dependencies import require_admin, require_member
+from app.modules.functional.identity.models import StudentProfile
+from app.modules.functional.conversations.models import AnswerRequest, Message
+from app.modules.application.teaching.gateway import Generated, UnconfiguredGateway
 
 pytestmark = pytest.mark.db_integration
 
@@ -124,7 +124,7 @@ def test_ask_replay_and_open_curiosity():
                     assert db.query(Message).filter_by(session_id=UUID(sid)).count() == 2
                     answer = db.get(AnswerRequest, UUID(first.json()["request_id"]))
                     assert (answer.prompt_version, answer.profile_version, answer.model) == (
-                        "direct-school-3-math1-intent1", "kg5-1", "stub-v1")
+                        "direct-school-3-math1-visual1-intent1", "kg5-1", "stub-v1")
                     assert (answer.input_tokens, answer.output_tokens) == (30, 8)
                     assistant = db.query(Message).filter_by(session_id=UUID(sid), role="assistant").one()
                     assert assistant.resolved_subject_id == UUID(subject)
@@ -153,7 +153,7 @@ def test_ask_replay_and_open_curiosity():
                     assert assistant.resolved_subject_id is None
                     assert assistant.resolved_topic_id is None
                     request = db.get(AnswerRequest, UUID(ready.json()["request_id"]))
-                    assert request.prompt_version == "direct-curiosity-open-3-math1"
+                    assert request.prompt_version == "direct-curiosity-open-3-math1-visual1"
                 old_gate = client.post(curiosity_route,
                     json={"mode": "curiosity", "question": open_question,
                           "topic_check_id": str(uuid4())},
@@ -215,7 +215,7 @@ def test_ask_replay_and_open_curiosity():
                 with app.state.database.session() as db:
                     assert db.query(Message).count() == before
                 # F12: trusted activities and server-owned routing survive storage and replay.
-                from app.modules.teaching.math_visuals import TEMPLATES
+                from app.modules.application.teaching.math_visuals import TEMPLATES
                 for math_route, math_body in [(topic_route,{**topic_body,"question":"Explain 3/4 with a fraction bar"}),
                                               (curiosity_route,{"mode":"curiosity","question":"Explain 3/4 with a fraction bar"})]:
                     visual={"kind":"math_visual","version":1,"template":"fraction_bar","title":"Three quarters",
@@ -266,7 +266,7 @@ def test_ask_replay_and_open_curiosity():
                 app.dependency_overrides[require_member] = lambda: {"id": str(uuid4()), "role": "member"}
                 assert client.post(simulation_route, json={**payload, "start": True}).status_code == 404
                 app.dependency_overrides[require_member] = original_member
-                from app.modules.teaching.simulations import transient
+                from app.modules.application.teaching.simulations import transient
                 transient.entries[(str(member), message_id)].expires = 0
                 assert client.post(simulation_route, json={**payload, "start": True}).json()["status"] == "expired"
                 assert gateway.calls == calls

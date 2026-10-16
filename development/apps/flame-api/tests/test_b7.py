@@ -3,11 +3,11 @@ import pytest
 from fastapi.testclient import TestClient
 from app.core.config import Settings
 from app.main import create_app
-from app.modules.identity.dependencies import require_member
-from app.modules.teaching.answer_service import _answer
-from app.modules.teaching.context import TeachingContext
-from app.modules.teaching.gateway import Generated, GatewayError
-from app.modules.teaching.schemas import DirectAnswer
+from app.modules.functional.identity.dependencies import require_member
+from app.modules.application.teaching.answer_service import _answer
+from app.modules.functional.curriculum.teaching_context import TeachingContext
+from app.modules.application.teaching.gateway import Generated, GatewayError
+from app.modules.application.teaching.schemas import DirectAnswer
 
 
 def test_provider_text_cannot_assign_provenance():

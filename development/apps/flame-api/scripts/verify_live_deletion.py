@@ -5,10 +5,10 @@ import httpx
 from fastapi.testclient import TestClient
 from app.core.config import Settings
 from app.core.database import Database
-from app.modules.data_lifecycle.service import delete_provider_user
+from app.modules.functional.data_lifecycle.service import delete_provider_user
 from app.main import create_app
-from app.modules.identity.dependencies import require_member
-from app.modules.identity.models import StudentProfile
+from app.modules.functional.identity.dependencies import require_member
+from app.modules.functional.identity.models import StudentProfile
 
 
 def admin_headers(settings: Settings) -> dict[str, str]:

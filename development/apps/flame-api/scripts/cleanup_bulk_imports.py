@@ -7,8 +7,8 @@ from sqlalchemy import select
 from app.main import create_app  # register all models
 from app.core.config import Settings
 from app.core.database import Database
-from app.modules.bulk_transfer.models import BulkImport
-from app.modules.bulk_transfer.router import cleanup
+from app.modules.functional.bulk_transfer.models import BulkImport
+from app.modules.functional.bulk_transfer.router import cleanup
 
 
 def main():

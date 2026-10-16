@@ -8,8 +8,8 @@ from openpyxl import Workbook
 from sqlalchemy.orm import sessionmaker
 from app.core.config import Settings
 from app.main import create_app
-from app.modules.identity.dependencies import require_admin, require_member
-from app.modules.identity.models import AdminRole, StudentProfile
+from app.modules.functional.identity.dependencies import require_admin, require_member
+from app.modules.functional.identity.models import AdminRole, StudentProfile
 pytestmark = pytest.mark.db_integration
 
 def test_replacement_revision_recovery():

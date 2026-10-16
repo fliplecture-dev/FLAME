@@ -10,8 +10,8 @@ from sqlalchemy.orm import sessionmaker
 
 from app.core.config import Settings
 from app.main import create_app
-from app.modules.identity.dependencies import require_admin, require_member
-from app.modules.identity.models import AdminRole, StudentProfile
+from app.modules.functional.identity.dependencies import require_admin, require_member
+from app.modules.functional.identity.models import AdminRole, StudentProfile
 
 pytestmark = pytest.mark.db_integration
 
@@ -308,7 +308,7 @@ def test_signed_in_member_learning_survives_new_requests_and_is_isolated():
     from datetime import datetime, timedelta, timezone
     from unittest.mock import patch
     import jwt
-    from app.modules.curriculum.models import Curriculum, Level, Subject
+    from app.modules.functional.curriculum.models import Curriculum, Level, Subject
 
     current = Settings()
     secret = "b4-session-test-key"
@@ -342,7 +342,7 @@ def test_signed_in_member_learning_survives_new_requests_and_is_isolated():
                     session.add(Subject(id=sid, level_id=lid, name="Science", normalized_name="science"))
                 first, second = uuid4(), uuid4()
                 def login(subject):
-                    with patch("app.modules.identity.router._provider", side_effect=[
+                    with patch("app.modules.functional.identity.router._provider", side_effect=[
                         {"access_token": signed(subject), "refresh_token": "refresh"},
                         {"email_confirmed_at": "2026-09-26T00:00:00Z"},
                     ]):
@@ -374,9 +374,9 @@ def test_concurrent_same_path_additions_are_serialized_and_deduplicated():
     from types import SimpleNamespace
     from sqlalchemy import delete, select
     from app.core.database import Database
-    from app.modules.curriculum.models import Curriculum
-    from app.modules.curriculum.router import LearningAdd, add_learning
-    from app.modules.learning.models import LearningMembership
+    from app.modules.functional.curriculum.models import Curriculum
+    from app.modules.functional.curriculum.router import LearningAdd, add_learning
+    from app.modules.functional.learning.models import LearningMembership
 
     database = Database(Settings())
     cid, student_id = uuid4(), uuid4()

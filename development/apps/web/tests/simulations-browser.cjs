@@ -93,7 +93,7 @@ const mock = http.createServer(async(req,res)=>{
     await new Promise(resolve=>setTimeout(resolve,2000));
   }
   await new Promise(resolve=>mock.listen(0,'127.0.0.1',resolve));
-  const server=spawn(process.execPath,[path.join(cwd,'node_modules/next/dist/bin/next'),process.env.FLAME_TEST_DEV?'dev':'start','-p',String(port)],{cwd,windowsHide:true,env:{...process.env,FLAME_NEXT_DIST_DIR:process.env.FLAME_TEST_DEV?'.next-f13-dev':'.next-f13',FLAME_API_URL:`http://127.0.0.1:${mock.address().port}`,FLAME_BFF_SHARED_KEY:'rich-test-secret',FLAME_WEB_ORIGIN:base}});
+  const server=spawn(process.execPath,[path.join(cwd,'node_modules/next/dist/bin/next'),process.env.FLAME_TEST_DEV?'dev':'start','-p',String(port)],{cwd,windowsHide:true,env:{...process.env,FLAME_NEXT_DIST_DIR:process.env.FLAME_TEST_NEXT_DIST_DIR||(process.env.FLAME_TEST_DEV?'.next-f13-dev':'.next-f13'),FLAME_API_URL:`http://127.0.0.1:${mock.address().port}`,FLAME_BFF_SHARED_KEY:'rich-test-secret',FLAME_WEB_ORIGIN:base}});
   let log='',browser;
   server.stdout.on('data',d=>log+=d);server.stderr.on('data',d=>log+=d);
   try{
@@ -102,6 +102,7 @@ const mock = http.createServer(async(req,res)=>{
     const context=await browser.newContext({viewport:{width:1200,height:1000}});
     await context.addCookies([{name:'flame_session',value:'rich-test-session',url:base,httpOnly:true}]);
     const page=await context.newPage(),errors=[],external=[];
+    if(process.env.FLAME_TEST_DEV)page.setDefaultNavigationTimeout(120000);
     page.on('pageerror',e=>{errors.push(e.message);console.log('PAGE ERROR',e.message);});
     page.on('response',async r=>{if(r.url().endsWith('/compile')&&!r.ok())console.log('COMPILE FAILURE',await r.text().catch(()=>''));});
     page.on('request',r=>{if(!r.url().startsWith(base)&&/^https?:/.test(r.url()))external.push(r.url());});
@@ -126,6 +127,21 @@ const mock = http.createServer(async(req,res)=>{
     assert.equal(await page.getByRole('progressbar',{name:'Interactive simulation preparation'}).count(),0,'Non-simulation answers never display simulation progress');
     eligibilityDelay=0;
     console.log('Non-simulation eligibility checks have no progress indicator: passed');
+    // Authored catalogue HTML shares the answer area, using its existing isolated player.
+    let catalogueCompiles=0;
+    const trackCatalogueCompile=request=>{if(request.url().includes('/api/simulations/compile'))catalogueCompiles++;};
+    page.on('request',trackCatalogueCompile);
+    currentSpec={status:'resource',resource_id:uid(67),version:2,title:'Published gravity lab',html_document:'<!doctype html><html><head><title>Gravity</title></head><body><p>Catalogue gravity experiment</p></body></html>'};
+    await page.goto(base,{waitUntil:'networkidle'});
+    await page.locator('.desktop-sidebar').getByRole('button',{name:'Falling objects (study)',exact:true}).click();
+    const catalogue=page.locator('.flame-message .catalogue-simulation');
+    await catalogue.frameLocator('iframe').getByText('Catalogue gravity experiment',{exact:true}).waitFor();
+    assert.equal(await catalogue.locator('iframe').getAttribute('sandbox'),'allow-scripts');
+    assert.equal(catalogueCompiles,0,'An authored simulation must not invoke source compilation');
+    assert.equal(await catalogue.getByRole('button',{name:/full screen|restore compact/i}).count(),0,'Authored answer simulations stay inline');
+    assert.equal(await page.locator('.flame-message .simulation-player').count(),0);
+    page.off('request',trackCatalogueCompile);
+    console.log('Catalogue simulation inline sandbox without generation/compilation: passed');
     for(const spec of specs.filter(s=>!process.env.FLAME_ENGINE||s.engine===process.env.FLAME_ENGINE)){
       pendingReplies=2;simulationStarts=[];
       currentSpec={status:'ready',version:1,title:spec.name,description:'Explore this illustrative simulation.',...spec};
@@ -199,7 +215,7 @@ const mock = http.createServer(async(req,res)=>{
         await page.waitForTimeout(80);const before=await frame.locator('output').innerText();await page.waitForTimeout(400);assert.equal(await frame.locator('output').innerText(),before);
         await frame.getByRole('button',{name:'Resume',exact:true}).click();
       }
-      await player.getByRole('button',{name:'Expand',exact:true}).click();await page.keyboard.press('Escape');
+      assert.equal(await player.getByRole('button',{name:/^(Expand|Open|Close|Compact view)$/}).count(),0,'Simulation is always inline without display toggles');
       await player.getByRole('button',{name:'Reset simulation',exact:true}).click();
       await page.waitForFunction(()=>document.querySelector('.simulation-player')?.dataset.simulationState==='ready');
       const audit=await new AxeBuilder({page}).include('.simulation-player').analyze();assert.deepEqual(audit.violations.map(v=>v.id),[]);
@@ -209,7 +225,7 @@ const mock = http.createServer(async(req,res)=>{
       const dir=path.resolve(cwd,'../../../work/f13');fs.mkdirSync(dir,{recursive:true});
       await player.evaluate(el=>el.scrollIntoView({block:'center'}));
       await player.screenshot({path:path.join(dir,spec.name+'.png')});
-      await player.getByRole('button',{name:'Close',exact:true}).click();assert.equal(await player.locator('iframe').count(),0);for(let i=0;i<20&&page.workers().length;i++)await page.waitForTimeout(100);assert.equal(page.workers().length,0,'Closing must terminate physics/render workers');
+      await page.goto(base,{waitUntil:'networkidle'});for(let i=0;i<20&&page.workers().length;i++)await page.waitForTimeout(100);assert.equal(page.workers().length,0,'Leaving the answer must terminate physics/render workers');
       results.push({name:spec.name,engine:spec.engine,status:'passed'});console.log('INLINE RUNTIME PASSED',spec.name,spec.engine);
     }
     // A failed source request exits loading; explicit retry only retrieves the existing job.
@@ -265,7 +281,7 @@ const mock = http.createServer(async(req,res)=>{
       await page.goto(base,{waitUntil:'networkidle'});await page.locator('.desktop-sidebar').getByRole('button',{name:'Falling objects (study)',exact:true}).click();
       await page.waitForFunction(()=>document.querySelector('.simulation-player')?.dataset.simulationState==='error',{},{timeout:22000});
       assert(await page.locator('.flame-message').getByText('Interactive science',{exact:false}).isVisible());
-      await page.locator('.simulation-player').getByRole('button',{name:'Close',exact:true}).click();
+      await page.goto(base,{waitUntil:'networkidle'});
     }
     if(process.argv.includes('--live'))assert.equal(results.length,4,'All four requested live demos must generate and execute');
     assert.equal(networkLeaks,0,'The sandbox must not reach the network sentinel');

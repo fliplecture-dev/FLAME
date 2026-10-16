@@ -7,7 +7,7 @@ import httpx
 from fastapi import HTTPException
 
 from app.core.config import Settings
-from app.modules.resources.direct_uploads import cloud
+from app.modules.functional.resources.direct_uploads import cloud
 
 
 def purge(settings, client, *, execute=False, now=None, limit=100):

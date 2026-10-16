@@ -10,7 +10,7 @@ import httpx
 from PIL import Image
 
 from app.core.config import Settings
-from app.modules.resources.storage import ResourceStorage
+from app.modules.functional.resources.storage import ResourceStorage
 
 
 def main():

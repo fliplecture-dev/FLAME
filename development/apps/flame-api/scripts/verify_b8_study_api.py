@@ -14,10 +14,10 @@ from sqlalchemy.orm import sessionmaker
 
 from app.core.config import Settings
 from app.main import create_app
-from app.modules.conversations.models import AnswerRequest, Message
-from app.modules.curriculum.models import Curriculum
-from app.modules.identity.dependencies import require_admin, require_member
-from app.modules.identity.models import StudentProfile
+from app.modules.functional.conversations.models import AnswerRequest, Message
+from app.modules.functional.curriculum.models import Curriculum
+from app.modules.functional.identity.dependencies import require_admin, require_member
+from app.modules.functional.identity.models import StudentProfile
 
 ROOT = Path(__file__).resolve().parents[4]
 OUTPUT = ROOT / "work" / "b8-study-api-check.json"

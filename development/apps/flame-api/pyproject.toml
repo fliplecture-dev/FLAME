@@ -31,7 +31,7 @@ test = ["pytest==9.1.1", "httpx==0.28.1"]
 include = ["app*"]
 
 [tool.setuptools.package-data]
-"app.modules.teaching" = ["math_templates.json"]
+"app.contracts" = ["math_templates.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

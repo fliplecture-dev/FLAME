@@ -1,0 +1,664 @@
+{
+  "recommendations": [
+    {
+      "case": "force",
+      "question": "Explain force",
+      "answer": "Force is a push or pull.",
+      "expected": "force",
+      "actual": "force",
+      "mode": "inline",
+      "passed": true,
+      "reason": "This illustration helps explain force.",
+      "educator_review": "pending",
+      "educator_notes": ""
+    },
+    {
+      "case": "gravity-not-force",
+      "question": "Explain gravity",
+      "answer": "Gravity pulls a falling ball down.",
+      "expected": "gravity",
+      "actual": "gravity",
+      "mode": "inline",
+      "passed": true,
+      "reason": "This illustration helps explain gravity.",
+      "educator_review": "pending",
+      "educator_notes": ""
+    },
+    {
+      "case": "synonym",
+      "question": "Why do things fall?",
+      "answer": "Gravity pulls objects down.",
+      "expected": "gravity",
+      "actual": "gravity",
+      "mode": "inline",
+      "passed": true,
+      "reason": "This illustration helps explain fall things.",
+      "educator_review": "pending",
+      "educator_notes": ""
+    },
+    {
+      "case": "demonstration",
+      "question": "Show a gravity video",
+      "answer": "Gravity makes objects fall.",
+      "expected": "motion",
+      "actual": "motion",
+      "mode": "optional card",
+      "passed": true,
+      "reason": "This video demonstrates gravity.",
+      "educator_review": "pending",
+      "educator_notes": ""
+    },
+    {
+      "case": "practice",
+      "question": "Test my understanding",
+      "answer": "Practise gravity.",
+      "expected": "kit",
+      "actual": "kit",
+      "mode": "optional card",
+      "passed": true,
+      "reason": "This kit helps you practise gravity.",
+      "educator_review": "pending",
+      "educator_notes": ""
+    },
+    {
+      "case": "human",
+      "question": "I need a tutor",
+      "answer": "A tutor can help.",
+      "expected": "tutor",
+      "actual": "tutor",
+      "mode": "optional card",
+      "passed": true,
+      "reason": "This tutor lists expertise for your selected topic or subject.",
+      "educator_review": "pending",
+      "educator_notes": ""
+    },
+    {
+      "case": "unrelated",
+      "question": "Explain evaporation",
+      "answer": "Water becomes gas.",
+      "expected": null,
+      "actual": null,
+      "mode": "none",
+      "passed": true,
+      "reason": "No eligible sufficiently matching candidate.",
+      "educator_review": "pending",
+      "educator_notes": ""
+    },
+    {
+      "case": "reference",
+      "question": "Explain force",
+      "answer": "Force pushes a door.",
+      "expected": "force",
+      "actual": "force",
+      "mode": "reference earlier",
+      "passed": true,
+      "reason": "This illustration helps explain force.",
+      "educator_review": "pending",
+      "educator_notes": ""
+    },
+    {
+      "case": "explicit-repeat",
+      "question": "Show the force image again",
+      "answer": "Force pushes a door.",
+      "expected": "force",
+      "actual": "force",
+      "mode": "inline",
+      "passed": true,
+      "reason": "This illustration helps explain force.",
+      "educator_review": "pending",
+      "educator_notes": ""
+    },
+    {
+      "case": "grade",
+      "question": "Explain gravity",
+      "answer": "Gravity pulls objects down.",
+      "expected": null,
+      "actual": null,
+      "mode": "none",
+      "passed": true,
+      "reason": "No eligible sufficiently matching candidate.",
+      "educator_review": "pending",
+      "educator_notes": ""
+    },
+    {
+      "case": "language",
+      "question": "Explain gravity",
+      "answer": "Gravity pulls objects down.",
+      "expected": null,
+      "actual": null,
+      "mode": "none",
+      "passed": true,
+      "reason": "No eligible sufficiently matching candidate.",
+      "educator_review": "pending",
+      "educator_notes": ""
+    },
+    {
+      "case": "unavailable",
+      "question": "Explain gravity",
+      "answer": "Gravity pulls objects down.",
+      "expected": null,
+      "actual": null,
+      "mode": "none",
+      "passed": true,
+      "reason": "No eligible sufficiently matching candidate.",
+      "educator_review": "pending",
+      "educator_notes": ""
+    }
+  ],
+  "profiles": [
+    {
+      "version": "kg5-1",
+      "level": 0,
+      "max_words": 60,
+      "instruction": "Use short familiar words and concrete everyday examples. Explain one idea at a time. Define any necessary new word. For mathematics, show small steps and check units; avoid unexplained symbols. Do not assume prior knowledge above this level. Use counting or observation before equations."
+    },
+    {
+      "version": "kg5-1",
+      "level": 1,
+      "max_words": 75,
+      "instruction": "Use short familiar words and concrete everyday examples. Explain one idea at a time. Define any necessary new word. For mathematics, show small steps and check units; avoid unexplained symbols. Do not assume prior knowledge above this level."
+    },
+    {
+      "version": "kg5-1",
+      "level": 5,
+      "max_words": 150,
+      "instruction": "Use short familiar words and concrete everyday examples. Explain one idea at a time. Define any necessary new word. For mathematics, show small steps and check units; avoid unexplained symbols. Do not assume prior knowledge above this level."
+    },
+    {
+      "version": "kg5-1",
+      "level": null,
+      "max_words": 100,
+      "instruction": "Use plain language suitable for learners under 15. Ask one clarifying question if the learner's level matters. Avoid expert depth."
+    },
+    {
+      "version": "kg5-1",
+      "level": null,
+      "max_words": 100,
+      "instruction": "Use plain language suitable for learners under 15. Ask one clarifying question if the learner's level matters. Avoid expert depth."
+    }
+  ],
+  "resolutions": [
+    {
+      "status": "resolved",
+      "context": "00000000-0000-0000-0000-000000000001",
+      "candidates": []
+    },
+    {
+      "status": "clarification",
+      "context": null,
+      "candidates": [
+        "00000000-0000-0000-0000-000000000002",
+        "00000000-0000-0000-0000-000000000001"
+      ]
+    },
+    {
+      "status": "out_of_scope",
+      "context": null,
+      "candidates": []
+    }
+  ],
+  "intents": [
+    {
+      "intent": "explain",
+      "concept": "gravity",
+      "language": "en",
+      "source": "fallback"
+    },
+    {
+      "intent": "demonstrate",
+      "concept": "gravity",
+      "language": "en",
+      "source": "fallback"
+    },
+    {
+      "intent": "practise",
+      "concept": "gravity",
+      "language": "en",
+      "source": "fallback"
+    },
+    {
+      "intent": "human_help",
+      "concept": "gravity",
+      "language": "en",
+      "source": "fallback"
+    },
+    {
+      "intent": "human_help",
+      "concept": "gravity not want",
+      "language": "en",
+      "source": "fallback"
+    },
+    {
+      "intent": "follow_up",
+      "concept": "gravity",
+      "language": "en",
+      "source": "fallback"
+    }
+  ],
+  "images": [
+    {
+      "schema_version": 1,
+      "resource_id": "image",
+      "resource_version": 2,
+      "display_mode": "inline",
+      "reason": "Matches gravity in the question and explanation; authorized curriculum path and grade suitability checked.",
+      "reference_message_id": null,
+      "displayed": false
+    },
+    {
+      "schema_version": 1,
+      "resource_id": null,
+      "resource_version": null,
+      "display_mode": "none",
+      "reason": "No eligible image sufficiently matches the current concept and teaching objective.",
+      "displayed": false,
+      "reference_message_id": null
+    },
+    {
+      "schema_version": 1,
+      "resource_id": "image",
+      "resource_version": 2,
+      "display_mode": "reference earlier",
+      "reason": "Matches gravity in the question and explanation; authorized curriculum path and grade suitability checked.",
+      "reference_message_id": "previous",
+      "displayed": false
+    },
+    {
+      "schema_version": 1,
+      "resource_id": "image",
+      "resource_version": 2,
+      "display_mode": "inline",
+      "reason": "Explicit image request. Matches gravity in the question and explanation; authorized curriculum path and grade suitability checked.",
+      "reference_message_id": null,
+      "displayed": false
+    }
+  ],
+  "visuals": [
+    {
+      "question": "text only",
+      "level": null,
+      "decision": {
+        "mode": "text",
+        "preferred_template": null,
+        "allowed_templates": [],
+        "reason": "The learner requested text only."
+      }
+    },
+    {
+      "question": "text only",
+      "level": 1,
+      "decision": {
+        "mode": "text",
+        "preferred_template": null,
+        "allowed_templates": [],
+        "reason": "The learner requested text only."
+      }
+    },
+    {
+      "question": "text only",
+      "level": 5,
+      "decision": {
+        "mode": "text",
+        "preferred_template": null,
+        "allowed_templates": [],
+        "reason": "The learner requested text only."
+      }
+    },
+    {
+      "question": "Compare monthly rainfall",
+      "level": null,
+      "decision": {
+        "mode": "chart",
+        "preferred_template": null,
+        "allowed_templates": [],
+        "reason": "Compare observed or illustrative data with the existing chart renderer."
+      }
+    },
+    {
+      "question": "Compare monthly rainfall",
+      "level": 1,
+      "decision": {
+        "mode": "chart",
+        "preferred_template": null,
+        "allowed_templates": [],
+        "reason": "Compare observed or illustrative data with the existing chart renderer."
+      }
+    },
+    {
+      "question": "Compare monthly rainfall",
+      "level": 5,
+      "decision": {
+        "mode": "chart",
+        "preferred_template": null,
+        "allowed_templates": [],
+        "reason": "Compare observed or illustrative data with the existing chart renderer."
+      }
+    },
+    {
+      "question": "Explain fractions using pizza",
+      "level": null,
+      "decision": {
+        "mode": "math",
+        "preferred_template": "fraction_circle",
+        "allowed_templates": [
+          "fraction_circle"
+        ],
+        "reason": "Match the learning goal to a reviewed activity template."
+      }
+    },
+    {
+      "question": "Explain fractions using pizza",
+      "level": 1,
+      "decision": {
+        "mode": "math",
+        "preferred_template": "fraction_circle",
+        "allowed_templates": [
+          "fraction_circle"
+        ],
+        "reason": "Match the learning goal to a reviewed activity template."
+      }
+    },
+    {
+      "question": "Explain fractions using pizza",
+      "level": 5,
+      "decision": {
+        "mode": "math",
+        "preferred_template": "fraction_circle",
+        "allowed_templates": [
+          "fraction_circle"
+        ],
+        "reason": "Match the learning goal to a reviewed activity template."
+      }
+    },
+    {
+      "question": "Graph a quadratic",
+      "level": null,
+      "decision": {
+        "mode": "math",
+        "preferred_template": "quadratic_function",
+        "allowed_templates": [
+          "quadratic_function"
+        ],
+        "reason": "Match the learning goal to a reviewed activity template."
+      }
+    },
+    {
+      "question": "Graph a quadratic",
+      "level": 1,
+      "decision": {
+        "mode": "text",
+        "preferred_template": null,
+        "allowed_templates": [],
+        "reason": "The requested activity exceeds the known teaching level; give an age-suitable explanation."
+      }
+    },
+    {
+      "question": "Graph a quadratic",
+      "level": 5,
+      "decision": {
+        "mode": "math",
+        "preferred_template": "quadratic_function",
+        "allowed_templates": [
+          "quadratic_function"
+        ],
+        "reason": "Match the learning goal to a reviewed activity template."
+      }
+    },
+    {
+      "question": "Show a perpendicular bisector",
+      "level": null,
+      "decision": {
+        "mode": "math",
+        "preferred_template": "perpendicular_bisector",
+        "allowed_templates": [
+          "perpendicular_bisector"
+        ],
+        "reason": "Match the learning goal to a reviewed activity template."
+      }
+    },
+    {
+      "question": "Show a perpendicular bisector",
+      "level": 1,
+      "decision": {
+        "mode": "text",
+        "preferred_template": null,
+        "allowed_templates": [],
+        "reason": "The requested activity exceeds the known teaching level; give an age-suitable explanation."
+      }
+    },
+    {
+      "question": "Show a perpendicular bisector",
+      "level": 5,
+      "decision": {
+        "mode": "math",
+        "preferred_template": "perpendicular_bisector",
+        "allowed_templates": [
+          "perpendicular_bisector"
+        ],
+        "reason": "Match the learning goal to a reviewed activity template."
+      }
+    },
+    {
+      "question": "Plot sine function",
+      "level": null,
+      "decision": {
+        "mode": "math",
+        "preferred_template": "trigonometric_function",
+        "allowed_templates": [
+          "trigonometric_function"
+        ],
+        "reason": "Match the learning goal to a reviewed activity template."
+      }
+    },
+    {
+      "question": "Plot sine function",
+      "level": 1,
+      "decision": {
+        "mode": "text",
+        "preferred_template": null,
+        "allowed_templates": [],
+        "reason": "The requested activity exceeds the known teaching level; give an age-suitable explanation."
+      }
+    },
+    {
+      "question": "Plot sine function",
+      "level": 5,
+      "decision": {
+        "mode": "math",
+        "preferred_template": "trigonometric_function",
+        "allowed_templates": [
+          "trigonometric_function"
+        ],
+        "reason": "Match the learning goal to a reviewed activity template."
+      }
+    },
+    {
+      "question": "Explain evaporation",
+      "level": null,
+      "decision": {
+        "mode": "auto",
+        "preferred_template": null,
+        "allowed_templates": [
+          "counting_groups",
+          "fraction_bar",
+          "fraction_circle",
+          "shape_explorer",
+          "number_line",
+          "ruler_measurement",
+          "point_geometry",
+          "segment_geometry",
+          "triangle_angles",
+          "circle_geometry",
+          "parallel_lines",
+          "perpendicular_lines",
+          "perpendicular_bisector",
+          "coordinate_points",
+          "linear_function",
+          "quadratic_function",
+          "trigonometric_function"
+        ],
+        "reason": "Use an activity only when it helps this learning question."
+      }
+    },
+    {
+      "question": "Explain evaporation",
+      "level": 1,
+      "decision": {
+        "mode": "auto",
+        "preferred_template": null,
+        "allowed_templates": [
+          "counting_groups",
+          "fraction_bar",
+          "fraction_circle",
+          "shape_explorer",
+          "number_line",
+          "ruler_measurement"
+        ],
+        "reason": "Use an activity only when it helps this learning question."
+      }
+    },
+    {
+      "question": "Explain evaporation",
+      "level": 5,
+      "decision": {
+        "mode": "auto",
+        "preferred_template": null,
+        "allowed_templates": [
+          "counting_groups",
+          "fraction_bar",
+          "fraction_circle",
+          "shape_explorer",
+          "number_line",
+          "ruler_measurement",
+          "point_geometry",
+          "segment_geometry",
+          "triangle_angles",
+          "circle_geometry",
+          "parallel_lines",
+          "perpendicular_lines",
+          "perpendicular_bisector",
+          "coordinate_points",
+          "linear_function",
+          "quadratic_function",
+          "trigonometric_function"
+        ],
+        "reason": "Use an activity only when it helps this learning question."
+      }
+    },
+    {
+      "question": "Count 5 objects",
+      "level": null,
+      "decision": {
+        "mode": "math",
+        "preferred_template": "counting_groups",
+        "allowed_templates": [
+          "counting_groups"
+        ],
+        "reason": "Match the learning goal to a reviewed activity template."
+      }
+    },
+    {
+      "question": "Count 5 objects",
+      "level": 1,
+      "decision": {
+        "mode": "math",
+        "preferred_template": "counting_groups",
+        "allowed_templates": [
+          "counting_groups"
+        ],
+        "reason": "Match the learning goal to a reviewed activity template."
+      }
+    },
+    {
+      "question": "Count 5 objects",
+      "level": 5,
+      "decision": {
+        "mode": "math",
+        "preferred_template": "counting_groups",
+        "allowed_templates": [
+          "counting_groups"
+        ],
+        "reason": "Match the learning goal to a reviewed activity template."
+      }
+    }
+  ],
+  "simulations": [
+    {
+      "question": "Explain gravity",
+      "engine": null
+    },
+    {
+      "question": "Simulate a falling ball",
+      "engine": "matter"
+    },
+    {
+      "question": "Create a 3d solar system simulation",
+      "engine": "r3f"
+    },
+    {
+      "question": "Build a quiz game",
+      "engine": "phaser"
+    },
+    {
+      "question": "Using matter.js create a force explainer",
+      "engine": "matter"
+    },
+    {
+      "question": "Using three.js show me the world",
+      "engine": "three"
+    },
+    {
+      "question": "Create a rive animation",
+      "engine": "rive"
+    },
+    {
+      "question": "Create a canvas animation",
+      "engine": "html5"
+    },
+    {
+      "question": "Create a phaser game",
+      "engine": "phaser"
+    },
+    {
+      "question": "Create an interactive fraction graph",
+      "engine": null
+    },
+    {
+      "question": "Explain gravity with no animation",
+      "engine": null
+    },
+    {
+      "question": "Explain gravity with no animations",
+      "engine": "matter"
+    }
+  ],
+  "capabilities": [
+    null,
+    {
+      "code": "textbook_evidence_unavailable",
+      "message": "I cannot verify textbook pages or citations. I can explain a selected school topic instead."
+    },
+    {
+      "code": "official_grading_unavailable",
+      "message": "I cannot provide official answers or grades. I can help explain the selected topic."
+    },
+    {
+      "code": "student_file_understanding_unavailable",
+      "message": "I cannot read or understand uploaded files or images. Ask a text question about a school topic instead."
+    },
+    {
+      "code": "media_understanding_unavailable",
+      "message": "I cannot watch videos, listen to audio, or transcribe recordings. Ask a text question about a school topic instead."
+    },
+    {
+      "code": "progress_update_unavailable",
+      "message": "I cannot change grades or learning progress. I can help explain a school topic."
+    }
+  ],
+  "authority": [
+    false,
+    true,
+    true,
+    true
+  ]
+}

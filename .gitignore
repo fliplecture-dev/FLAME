@@ -8,6 +8,8 @@
 **/.next-verify/
 **/.next-f11/
 **/.next-f13*/
+**/.next-b15/
+**/.next-inline-check/
 **/out/
 **/dist/
 **/build/

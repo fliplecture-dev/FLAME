@@ -9,10 +9,10 @@ from openpyxl import Workbook
 from sqlalchemy.orm import sessionmaker
 from app.core.config import Settings
 from app.main import create_app
-from app.modules.identity.dependencies import require_admin, require_member
-from app.modules.identity.models import AdminRole, StudentProfile
-from app.modules.curriculum.import_service import CurriculumImportService
-from app.modules.curriculum.workbook_parser import WorkbookRejected
+from app.modules.functional.identity.dependencies import require_admin, require_member
+from app.modules.functional.identity.models import AdminRole, StudentProfile
+from app.modules.functional.curriculum.import_service import CurriculumImportService
+from app.modules.functional.curriculum.workbook_parser import WorkbookRejected
 
 pytestmark = pytest.mark.db_integration
 
@@ -124,10 +124,10 @@ def test_workspace_review_atomicity_ids_and_history(monkeypatch):
 
 def test_replacement_publication_restores_archived_path_and_learning_links():
     from uuid import UUID
-    from app.modules.curriculum.models import Subtopic, Topic
-    from app.modules.curriculum.path_batch import apply_path_batch
-    from app.modules.curriculum.models import Curriculum
-    from app.modules.learning.models import LearningMembership
+    from app.modules.functional.curriculum.models import Subtopic, Topic
+    from app.modules.functional.curriculum.path_batch import apply_path_batch
+    from app.modules.functional.curriculum.models import Curriculum
+    from app.modules.functional.learning.models import LearningMembership
     from fastapi import HTTPException
 
     with isolated_client() as client:

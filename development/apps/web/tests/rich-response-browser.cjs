@@ -200,6 +200,29 @@ const mock = http.createServer(async(req,res)=>{
     assert.deepEqual(languageAudit.violations.map(v=>v.id),[]);
     await page.getByRole('group',{name:'Choose answer language',exact:true}).getByRole('button',{name:'English',exact:true}).click();
     console.log('Response languages: English plus 15 Indian choices, responsive menu, keyboard, persistence and unchanged multilingual question payloads passed');
+    await page.emulateMedia({colorScheme:'light'});
+    await page.getByRole('button',{name:'Switch to dark mode',exact:true}).click();
+    assert.equal(await page.locator('html').getAttribute('data-theme'),'dark');
+    assert.equal(await page.evaluate(()=>localStorage.getItem('flame.theme')),'dark');
+    const themeArtifacts=path.resolve(cwd,'../../../work/theme');fs.mkdirSync(themeArtifacts,{recursive:true});
+    for(const width of [1440,390,320]){
+      await page.setViewportSize({width,height:900});
+      const toggle=page.getByRole('button',{name:'Switch to light mode',exact:true});
+      const box=await toggle.boundingBox();assert(box&&box.width>=40&&box.x+box.width<=width&&box.y<30,'Theme toggle must remain at the top right');
+      const modes=await page.locator('.flame-topbar .workspace-modes').boundingBox();assert(modes&&modes.x+modes.width<=box.x,'Theme control must not overlap the mode selector');
+      assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'Dark layout must not scroll horizontally');
+      await page.screenshot({path:path.join(themeArtifacts,'dark-'+width+'.png')});
+    }
+    const darkAudit=await new AxeBuilder({page}).include('.student-app').withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();
+    assert.deepEqual(darkAudit.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>({target:n.target,summary:n.failureSummary}))})),[]);
+    await page.reload({waitUntil:'networkidle'});
+    await page.getByRole('button',{name:'Switch to light mode',exact:true}).waitFor();
+    await page.getByRole('button',{name:'Switch to light mode',exact:true}).focus();
+    await page.keyboard.press('Enter');
+    assert.equal(await page.locator('html').getAttribute('data-theme'),'light');
+    await page.reload({waitUntil:'networkidle'});
+    await page.getByRole('button',{name:'Switch to dark mode',exact:true}).waitFor();
+    console.log('Theme toggle: dark/light, saved preference, keyboard, accessibility, top-right placement and 1440/390/320px layouts passed');
     console.log('F11 browser measurements',JSON.stringify({longAnswerCharacters:longText.length,longRenderMs,loadedScriptResources:scripts}));
     assert.deepEqual(errors,[]);
     console.log('F11 browser passed: Markdown/GFM/math/code/copy, 3 charts/data tables, safety/axe, Study/Curiosity ask, failure/retry, history reload, 1440/900/390px.');

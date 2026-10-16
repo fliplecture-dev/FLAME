@@ -67,11 +67,13 @@ Default tests cover foundation contracts and workbook parsing. Set `FLAME_RUN_DB
 
 - app/main.py: application factory, lifespan, request middleware, router registration.
 - app/core: settings, database engine/session lifecycle, logging, errors.
-- app/modules/health: implemented operational API.
-- app/modules/teaching/schemas.py: initial typed answer contracts, no model call.
-- tests: foundation and contract checks.
+- app/modules/functional: feature records, eligibility, delivery and lifecycle services.
+- app/modules/decision_engine: pure recommendation, teaching and visual policy.
+- app/modules/application: teaching, recommendation and learning-response coordination.
+- app/contracts: shared typed data and the trusted mathematics registry.
+- tests: policy, functional, integration and architecture/compatibility checks.
 
-Add feature modules as their stages are implemented; see the module ownership document. Internal modules such as AI Gateway do not need public endpoints. No fake CRUD routes or authentication bypasses are exposed.
+See the [module structure and dependency rules](app/modules/README.md) before adding a feature. Add new ORM declarations to `functional/model_registry.py`, used by both app startup and Alembic. Internal components such as the provider gateway do not need public endpoints. Package grouping does not change endpoint URLs or database tables.
 
 Implementation references: [FastAPI lifespan](https://fastapi.tiangolo.com/advanced/events/), [FastAPI tests](https://fastapi.tiangolo.com/tutorial/testing/), [SQLAlchemy PostgreSQL adapter](https://docs.sqlalchemy.org/en/20/dialects/postgresql.html).
 
@@ -157,6 +159,10 @@ No migration is required. Tests and remaining metadata gaps are documented in `w
 ## B11 modular migration (2026-10-07)
 
 Recommendation coordination, selection/history contracts, repository and the existing table mapping now belong to `app/modules/recommendations/`. Media/Teachers/Kits own typed candidate services. Legacy resource-module imports remain transitional aliases. `learning_response/` adds a schema-versioned envelope to existing ask/recommendation responses without removing root fields or running selection before the answer completes. New Study asks return pending selection; a separate GET returns completed/none/unavailable. Authorization failures retain their HTTP status; selection failure does not erase the answer. No extra model request or database migration. Conversation/account deletion clears recommendation-owned rows before their foreign keys. See [B11 technical handoff](../../../project-stages/backend/stage-11-modular-migration.md).
+
+## Functional modules and decision engine (2026-10-16)
+
+`app/modules/decision_engine/{recommendation,teaching,visual}` owns pure policy functions; `app/contracts/decisions.py` supplies their typed inputs/results. The shared trusted template registry is packaged under `app/contracts/math_templates.json`. `modules/functional` retains records, permissions, publication, candidate eligibility and delivery. `modules/application` coordinates providers, quotas, transactions and response composition; saved recommendation choices belong to `functional/recommendation_history`. Canonical Python imports now include the layer; old flat feature paths are retired internal imports, and all repository callers are migrated. Existing policy helper names within the application packages still re-export the engine implementation. Public HTTP/OpenAPI contracts, persisted decisions and all 34 table declarations are unchanged. The full pytest suite includes infrastructure-free policy and layer-boundary checks. Configured-database verification/final cutover acceptance is still pending; see [B15 handoff](../../../project-stages/backend/stage-15-decision-separation.md).
 
 ## Manual Google Sheets resource sync
 

@@ -3,8 +3,8 @@ from time import sleep
 from types import SimpleNamespace
 import json
 import pytest
-from app.modules.teaching.simulations import select_engine, generate, TransientSimulations
-from app.modules.teaching.gateway import GatewayError, OpenAIResponsesGateway
+from app.modules.application.teaching.simulations import select_engine, generate, TransientSimulations
+from app.modules.application.teaching.gateway import GatewayError, OpenAIResponsesGateway
 import httpx
 
 
@@ -12,7 +12,7 @@ import httpx
     ("Explain gravity", None), ("Explain fractions using a chart", None),
     ("Interactive falling ball with gravity", "matter"),
     ("Two draggable balls colliding using Matter.js", "matter"),
-    ("Rotatable 3D solar system", "r3f"), ("Interactive Three.js molecule", "three"),
+    ("Rotatable 3D solar system", "three"), ("Interactive Three.js molecule", "three"),
     ("Phaser interactive game", "phaser"), ("Rive animation", "rive"),
     ("HTML5 animation", "html5"), ("Text only, no simulation of gravity", None),
     ("Interactive fraction bar", None), ("Show an interactive coordinate graph", None),
@@ -36,7 +36,7 @@ def test_engine_selection(question, engine):
     "using three.js show me the world",
 ])
 def test_explicit_visual_requests_receive_sandbox_prompt_including_after_old_refusal(question):
-    from app.modules.teaching.prompt import assemble_open_curiosity
+    from app.modules.application.teaching.prompt import assemble_open_curiosity
     prompt = assemble_open_curiosity(question, [{
         "user": [{"kind": "text", "text": question}],
         "assistant": [{"kind": "text", "text": "I cannot run an interactive simulation here."}],

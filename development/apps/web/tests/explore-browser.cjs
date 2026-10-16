@@ -3,6 +3,7 @@ const http = require('node:http');
 const path = require('node:path');
 const {spawn} = require('node:child_process');
 const {chromium} = require(path.resolve(__dirname,'../../../../.kilo/ui-check/node_modules/playwright'));
+const AxeBuilder = require(path.resolve(__dirname,'../../../../.kilo/ui-check/node_modules/@axe-core/playwright')).default;
 const cwd=path.resolve(__dirname,'..'), base='http://localhost:3123';
 const uid=n=>`${String(n).padStart(8,'0')}-1111-4111-8111-111111111111`;
 const ids={c:uid(1),l:uid(2),s:uid(3),d:uid(4),t:uid(5),st:uid(6),other:uid(7)};
@@ -19,7 +20,7 @@ const json=(res,data,status=200)=>{res.writeHead(status,{'content-type':'applica
 const mock=http.createServer(async(req,res)=>{
  const url=new URL(req.url,'http://fixture'), route=url.pathname.replace('/api/v1/','');
  if(req.headers['x-bff-key']!=='explore-test-secret'||req.headers['x-flame-session']!=='explore-test-session')return json(res,{},401);
- if(route==='me')return json(res,{id:uid(99),role:'member',email:'explore@example.test'});
+ if(route==='me')return json(res,{id:uid(99),role:'admin',email:'explore@example.test'});
  if(route==='curricula')return json(res,{items:[{id:ids.c}]});
  if(route===`curricula/${ids.c}/tree`)return json(res,tree);
  if(route==='me/learning')return json(res,{items:[{id:uid(98),curriculum_id:ids.c,visible:true,version:1}]});
@@ -176,6 +177,44 @@ const mock=http.createServer(async(req,res)=>{
   assert.equal(openScopes.at(-1),ids.other);
   await panel.getByRole('searchbox',{name:'Search Explore resources',exact:true}).fill('another matching path');await panel.getByText('1 matching resources',{exact:true}).waitFor();
   await page.screenshot({path:path.resolve(cwd,'../../../work/explore-curiosity.png')});await page.emulateMedia({reducedMotion:'reduce'});assert.equal(await panel.evaluate(d=>getComputedStyle(d).animationName),'none');await panel.getByRole('button',{name:'Explore',exact:true}).click();await panel.waitFor({state:'hidden'});assert.deepEqual(errors,[]);
+  // Frontend-only dark palette: expanded account, Browse Media and compact rail.
+  require('node:fs').mkdirSync(path.resolve(cwd,'../../../work/theme'),{recursive:true});
+  await page.setViewportSize({width:1536,height:920});
+  const expand=page.getByRole('button',{name:'Expand sidebar',exact:true});if(await expand.isVisible())await expand.click();
+  await page.emulateMedia({colorScheme:'light'});
+  await page.getByRole('button',{name:'Switch to dark mode',exact:true}).click();
+  const admin=page.locator('.desktop-sidebar .profile-admin-link');await admin.waitFor({state:'visible'});
+  async function contrast(locator,minimum=4.5){
+    const ratio=await locator.evaluate(el=>{
+      const css=getComputedStyle(el);
+      function luminance(color){const rgb=color.match(/[\d.]+/g).slice(0,3).map(Number).map(v=>{v/=255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4});return .2126*rgb[0]+.7152*rgb[1]+.0722*rgb[2];}
+      const a=luminance(css.color),b=luminance(css.backgroundColor);return (Math.max(a,b)+.05)/(Math.min(a,b)+.05);
+    });assert(ratio>=minimum,'Dark contrast '+ratio+' below '+minimum);
+  }
+  await contrast(admin);await admin.hover();await contrast(admin);
+  await trigger.click();await panel.waitFor({state:'visible'});await panel.getByRole('heading',{name:'Browse Media',exact:true}).waitFor();
+  const pathFilters=panel.getByRole('button',{name:'Learning path filters',exact:true});if(await pathFilters.getAttribute('aria-expanded')!=='true')await pathFilters.click();
+  for(const tab of await panel.getByRole('tab').all())await contrast(tab);
+  const openMedia=panel.getByRole('button',{name:/^Open (?!thumbnail)/}).first();await openMedia.waitFor();await contrast(openMedia);await openMedia.hover();await contrast(openMedia);
+  const mediaAudit=await new AxeBuilder({page}).include('.explore-panel').include('.desktop-sidebar .sidebar-account').withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();
+  assert.deepEqual(mediaAudit.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>({target:n.target,summary:n.failureSummary}))})),[]);
+  await page.screenshot({path:path.resolve(cwd,'../../../work/theme/dark-browse-media.png')});
+  await panel.getByRole('button',{name:'Explore',exact:true}).click();await panel.waitFor({state:'hidden'});
+  await page.getByRole('button',{name:'Collapse sidebar',exact:true}).click();
+  const rail=page.locator('.sidebar-rail');await rail.waitFor({state:'visible'});
+  await contrast(rail.locator('.profile-admin-link'));
+  for(const button of await rail.locator('.rail-button').all()){
+    // Transparent idle controls inherit the rail surface; selected/hover states are opaque.
+    await button.hover();await contrast(button);await button.focus();
+    assert.equal(await button.evaluate(el=>getComputedStyle(el,'::after').opacity),'1');
+  }
+  const railAudit=await new AxeBuilder({page}).include('.sidebar-rail').withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();assert.deepEqual(railAudit.violations.map(v=>v.id),[]);
+  await page.screenshot({path:path.resolve(cwd,'../../../work/theme/dark-compact-sidebar.png')});
+  await page.setViewportSize({width:390,height:844});await trigger.click();await panel.waitFor({state:'visible'});assert(await panel.evaluate(el=>el.scrollWidth<=el.clientWidth+1));
+  await page.screenshot({path:path.resolve(cwd,'../../../work/theme/dark-browse-media-mobile.png')});
+  const mobileAudit=await new AxeBuilder({page}).include('.explore-panel').withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();assert.deepEqual(mobileAudit.violations.map(v=>v.id),[]);
+  assert.deepEqual(errors,[]);
+  console.log('PASS: dark admin link, Browse Media controls/cards/filters and compact rail icons/tooltips: contrast, accessibility, desktop/mobile.');
   console.log('PASS: Explore Study and Curiosity following, multi-path automatic results across all catalogues, per-item scoped open/delivery, combined search, saved Curiosity restore, unmatched clearing, independent path, stale async suppression, viewers, desktop/mobile/focus.');
  }finally{await browser?.close();server.kill();mock.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});

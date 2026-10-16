@@ -2,8 +2,8 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from app.core.config import Settings
-from app.modules.teaching.gateway import OpenAIResponsesGateway
-from app.modules.teaching.simulations import generate
+from app.modules.application.teaching.gateway import OpenAIResponsesGateway
+from app.modules.application.teaching.simulations import generate
 
 questions = [
     ("falling", "matter", "Falling ball with adjustable gravity. Start at x=400,y=60, zero velocity, radius 22, floor at y=430. Use api.matterWorld(); runtime supplies gravity/friction and dragging. Report {x:ball.position.x,y:ball.position.y} every update via api.report. Dragging is supplied by the runtime."),

@@ -1,4 +1,3 @@
-from app.modules.bulk_transfer import models as bulk_transfer_models
 from contextlib import asynccontextmanager
 import logging
 from time import perf_counter
@@ -9,24 +8,28 @@ from app.core.config import Settings
 from app.core.database import Database
 from app.core.errors import error_response, install_error_handlers
 from app.core.logging import configure_logging
-from app.modules.bulk_transfer.router import router as bulk_router
-from app.modules.bulk_transfer.google_router import router as google_sheets_router
-from app.modules.health.router import router as health_router
-from app.modules.identity.router import router as identity_router
-from app.modules.curriculum.router import router as curriculum_router
-from app.modules.conversations.router import router as conversations_router
-from app.modules.teaching.router import router as teaching_router
-from app.modules.teaching.answer_router import router as answer_router
-from app.modules.teaching.simulation_router import router as simulation_router
-from app.modules.teaching.gateway import OpenAIResponsesGateway, UnconfiguredGateway
-from app.modules.resources.router import router as resources_router
-from app.modules.resources.direct_uploads import router as direct_uploads_router
-from app.modules.resources.member_router import router as member_resources_router
-from app.modules.recommendations.router import router as recommendations_router
-from app.modules.learning_response.explore_router import router as explore_router
-from app.modules.activity_kits import models as activity_kit_models  # register resource-upload FK target
-from app.modules.activity_kits.router import router as kits_router
-from app.modules.teachers.router import router as teachers_router
+from app.core.openapi import install_schema_compatibility
+from app.modules.functional.model_registry import register_models
+
+from app.modules.functional.bulk_transfer.router import router as bulk_router
+from app.modules.functional.bulk_transfer.google_router import router as google_sheets_router
+from app.modules.functional.health.router import router as health_router
+from app.modules.functional.identity.router import router as identity_router
+from app.modules.functional.curriculum.router import router as curriculum_router
+from app.modules.functional.conversations.router import router as conversations_router
+from app.modules.application.teaching.router import router as teaching_router
+from app.modules.application.teaching.answer_router import router as answer_router
+from app.modules.application.teaching.simulation_router import router as simulation_router
+from app.modules.application.teaching.gateway import OpenAIResponsesGateway, UnconfiguredGateway
+from app.modules.functional.resources.router import router as resources_router
+from app.modules.functional.resources.direct_uploads import router as direct_uploads_router
+from app.modules.functional.resources.member_router import router as member_resources_router
+from app.modules.application.recommendations.router import router as recommendations_router
+from app.modules.application.learning_response.explore_router import router as explore_router
+from app.modules.functional.activity_kits.router import router as kits_router
+from app.modules.functional.teachers.router import router as teachers_router
+
+register_models()
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -97,6 +100,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     application.include_router(explore_router)
     application.include_router(teachers_router)
     application.include_router(kits_router)
+    install_schema_compatibility(application)
     return application
 
 

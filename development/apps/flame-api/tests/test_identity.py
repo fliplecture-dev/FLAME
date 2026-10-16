@@ -7,8 +7,8 @@ from pydantic import ValidationError
 
 from app.core.config import Settings
 from app.main import create_app
-from app.modules.identity.dependencies import require_admin, require_owner
-from app.modules.identity.router import RegisterBody, verify_access_token
+from app.modules.functional.identity.dependencies import require_admin, require_owner
+from app.modules.functional.identity.router import RegisterBody, verify_access_token
 
 
 def settings():
@@ -54,7 +54,7 @@ def test_identity_routes_require_bff_secret():
 def test_registration_is_generic_for_duplicate_provider_error():
     with TestClient(create_app(settings())) as client:
         from fastapi import HTTPException
-        with patch("app.modules.identity.router._provider", side_effect=HTTPException(401)):
+        with patch("app.modules.functional.identity.router._provider", side_effect=HTTPException(401)):
             response = client.post("/api/v1/auth/register", headers={"x-bff-key": "test-bff-secret"},
                                    json={"email": "member@example.com", "password": "long-test-password", "display_name": "Member"})
             assert response.status_code == 200
@@ -83,7 +83,7 @@ def test_no_admin_self_selection_and_owner_denial():
 def test_unverified_login_and_invalid_callback_are_denied():
     payload = {"access_token": "private-access", "refresh_token": "private-refresh"}
     with TestClient(create_app(settings())) as client:
-        with patch("app.modules.identity.router._provider", side_effect=[payload, {"email_confirmed_at": None}]):
+        with patch("app.modules.functional.identity.router._provider", side_effect=[payload, {"email_confirmed_at": None}]):
             response = client.post("/api/v1/auth/login", headers={"x-bff-key": "test-bff-secret"},
                                    json={"email": "member@example.com", "password": "secret"})
             assert response.status_code == 401
@@ -96,7 +96,7 @@ def test_unverified_login_and_invalid_callback_are_denied():
 def test_recovery_does_not_enumerate_unknown_email():
     from fastapi import HTTPException
     with TestClient(create_app(settings())) as client:
-        with patch("app.modules.identity.router._provider", side_effect=HTTPException(401)):
+        with patch("app.modules.functional.identity.router._provider", side_effect=HTTPException(401)):
             response = client.post("/api/v1/auth/recover", headers={"x-bff-key": "test-bff-secret"},
                                    json={"email": "unknown@example.com"})
             assert response.status_code == 200
@@ -106,7 +106,7 @@ def test_recovery_does_not_enumerate_unknown_email():
 def test_revoked_browser_session_is_denied_before_token_decryption():
     from types import SimpleNamespace
     from unittest.mock import MagicMock
-    from app.modules.identity.router import _session
+    from app.modules.functional.identity.router import _session
     from fastapi import HTTPException
     row = SimpleNamespace(revoked_at=datetime.now(timezone.utc))
     session = MagicMock()

@@ -14,8 +14,8 @@ from sqlalchemy.orm import sessionmaker
 
 from app.core.config import Settings
 from app.main import create_app
-from app.modules.identity.dependencies import require_admin, require_member, require_owner
-from app.modules.identity.models import AdminRole, BrowserSession
+from app.modules.functional.identity.dependencies import require_admin, require_member, require_owner
+from app.modules.functional.identity.models import AdminRole, BrowserSession
 
 pytestmark = pytest.mark.db_integration
 ISSUER = "https://b3-test.supabase.co/auth/v1"
@@ -64,7 +64,7 @@ def test_session_profile_admin_owner_refresh_and_logout_rollback_only():
                 bind=connection, expire_on_commit=False, join_transaction_mode="create_savepoint")
             try:
                 first, second = uuid4(), uuid4()
-                with patch("app.modules.identity.router._provider", side_effect=[
+                with patch("app.modules.functional.identity.router._provider", side_effect=[
                     {"access_token": signed(first), "refresh_token": "refresh-one"},
                     {"email_confirmed_at": "2026-09-26T00:00:00Z"},
                 ]):
@@ -83,7 +83,7 @@ def test_session_profile_admin_owner_refresh_and_logout_rollback_only():
                     session.add(AdminRole(auth_subject=str(first)))
                 assert client.get("/api/v1/me", headers=own_headers).json()["role"] == "admin"
 
-                with patch("app.modules.identity.router._provider", side_effect=[
+                with patch("app.modules.functional.identity.router._provider", side_effect=[
                     {"access_token": signed(second), "refresh_token": "refresh-two"},
                     {"email_confirmed_at": "2026-09-26T00:00:00Z"},
                 ]):
@@ -101,11 +101,11 @@ def test_session_profile_admin_owner_refresh_and_logout_rollback_only():
                 with app.state.database.session() as session, session.begin():
                     row = session.scalar(select(BrowserSession).where(BrowserSession.auth_subject == str(first)))
                     row.expires_at = datetime.now(timezone.utc) - timedelta(seconds=1)
-                with patch("app.modules.identity.router._provider", return_value={
+                with patch("app.modules.functional.identity.router._provider", return_value={
                     "access_token": signed(first), "refresh_token": "rotated-refresh",
                 }):
                     assert client.get("/api/v1/me", headers=own_headers).status_code == 200
-                with patch("app.modules.identity.router._provider", return_value={}):
+                with patch("app.modules.functional.identity.router._provider", return_value={}):
                     assert client.post("/api/v1/auth/logout", headers=own_headers).status_code == 200
                 assert client.get("/api/v1/me", headers=own_headers).status_code == 401
             finally:

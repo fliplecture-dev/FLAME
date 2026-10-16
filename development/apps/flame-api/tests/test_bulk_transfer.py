@@ -7,7 +7,7 @@ from types import SimpleNamespace
 import pytest
 from PIL import Image
 from openpyxl import load_workbook
-from app.modules.bulk_transfer.workbooks import workbook, decode
+from app.modules.functional.bulk_transfer.workbooks import workbook, decode
 from test_curriculum_workspace import isolated_client
 
 
@@ -87,7 +87,7 @@ def test_four_catalogues_add_merge_export_and_retry(monkeypatch):
             assert any(dict(zip(headers,r))['existing_id']==ident for r in rows[1:]);book.close()
             template=client.get('/api/v1/admin/bulk/'+kind+'/template');assert template.status_code==200
         # Isolate package export from existing real catalogue assets.
-        import app.modules.bulk_transfer.router as router
+        import app.modules.functional.bulk_transfer.router as router
         original=router.export_data
         def only_fixture(db,kind):
             records,maps,assets=original(db,kind)
@@ -134,7 +134,7 @@ def test_imported_student_requires_verified_provider_identity(monkeypatch):
     with isolated_client() as client:
         key=uuid4().hex; email=key+'@example.test'; sub=str(uuid4())
         result=commit(client,post_preview(client,'students',[{'record_key':key,'email':email,'display_name':'Imported name'}]));sid=result.json()['result']['ids'][key]
-        import app.modules.identity.router as auth
+        import app.modules.functional.identity.router as auth
         monkeypatch.setattr(auth,'_session',lambda request,raw:({'sub':sub,'email':email},'opaque-token'))
         request=SimpleNamespace(app=client.app)
         monkeypatch.setattr(auth,'_provider',lambda *args,**kwargs:{'id':sub,'email':email,'email_confirmed_at':None})
@@ -162,7 +162,7 @@ def test_published_resource_merge_keeps_media_and_publication():
 
 
 def test_package_cancel_removes_only_staged_files_and_owner_isolation():
-    from app.modules.identity.dependencies import require_admin
+    from app.modules.functional.identity.dependencies import require_admin
     with isolated_client() as client, TemporaryDirectory() as directory:
         client.app.state.settings.resource_local_dir=directory
         key=uuid4().hex;png=BytesIO();Image.new('RGB',(4,4),'blue').save(png,format='PNG')
@@ -174,7 +174,7 @@ def test_package_cancel_removes_only_staged_files_and_owner_isolation():
         assert client.post('/api/v1/admin/bulk/imports/'+job['id']+'/cancel',json={}).status_code==200
         assert list(Path(directory).rglob('*.png'))==[]
         owner_job=post_preview(client,'students',[{'record_key':key,'email':key+'@example.test'}])
-        from app.modules.identity.models import StudentProfile, AdminRole
+        from app.modules.functional.identity.models import StudentProfile, AdminRole
         other=uuid4()
         with client.app.state.database.session() as db, db.begin():
             db.add_all([StudentProfile(id=other,auth_subject=str(other)),AdminRole(auth_subject=str(other))])
@@ -197,7 +197,7 @@ def test_generated_samples_decode_and_formulas_are_rejected():
 
 @pytest.mark.parametrize('kind,field,limit', [('resources','learning_metadata',20),('teachers','languages',20),('activity-kits','materials',100)])
 def test_additive_merges_keep_existing_values_and_respect_limits(kind,field,limit):
-    from app.modules.bulk_transfer.service import changes
+    from app.modules.functional.bulk_transfer.service import changes
     existing=[str(i) for i in range(limit)]
     before={field:{'concepts':existing} if field=='learning_metadata' else existing}
     body={field:{'concepts':['new']} if field=='learning_metadata' else ['new']}
@@ -206,8 +206,8 @@ def test_additive_merges_keep_existing_values_and_respect_limits(kind,field,limi
 
 
 def test_external_video_fresh_inspection_timestamp_is_not_a_conflict(monkeypatch):
-    import app.modules.bulk_transfer.service as service
-    from app.modules.resources.external_video import parse_video
+    import app.modules.functional.bulk_transfer.service as service
+    from app.modules.functional.resources.external_video import parse_video
     calls=[]
     def inspected(url, config):
         calls.append(url)
@@ -351,7 +351,7 @@ def test_mixed_export_twenty_keyless_interactives_partial_reimport_and_errors():
 
 
 def test_resource_authoring_errors_are_reported_together():
-    from app.modules.bulk_transfer.service import raw_body
+    from app.modules.functional.bulk_transfer.service import raw_body
     from fastapi import HTTPException
     with pytest.raises(HTTPException) as caught:
         raw_body("resources", {"record_key":"new","title":"Video fixture","type":"video","purposes":"explore|discuss","rights_basis":"unknown"}, [], {})

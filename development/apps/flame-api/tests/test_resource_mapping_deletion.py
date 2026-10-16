@@ -5,10 +5,10 @@ from pathlib import Path
 from fastapi import HTTPException
 from pydantic import SecretStr
 from sqlalchemy import select
-from app.modules.resources.models import Resource, ResourceTopic, ResourceUpload
-from app.modules.activity_kits.models import ActivityKit
-from app.modules.conversations.models import ConversationSession, Message
-from app.modules.identity.dependencies import require_admin
+from app.modules.functional.resources.models import Resource, ResourceTopic, ResourceUpload
+from app.modules.functional.activity_kits.models import ActivityKit
+from app.modules.functional.conversations.models import ConversationSession, Message
+from app.modules.functional.identity.dependencies import require_admin
 from test_curriculum_workspace import isolated_client
 from test_resource_library import gif_bytes
 
