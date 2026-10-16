@@ -7,8 +7,8 @@ from uuid import uuid4
 import pytest
 from fastapi import HTTPException
 
-from app.modules.teaching import answer_router
-from app.modules.teaching.schemas import AnswerRequest
+from app.modules.application.teaching import answer_router
+from app.modules.application.teaching.schemas import AnswerRequest
 
 
 @pytest.mark.parametrize("detail,status,expected", [

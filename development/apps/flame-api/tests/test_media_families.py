@@ -1,11 +1,11 @@
 """Three media families retain source and GIF semantics."""
 import pytest
 from pydantic import ValidationError
-from app.modules.resources.validation import RESOURCE_TYPES, declared_format, MediaRejected
-from app.modules.resources.router import DraftCreate
-from app.modules.resources.models import Resource
-from app.modules.resources.external_video import video_data
-from app.modules.resources.service import publication_check
+from app.modules.functional.resources.validation import RESOURCE_TYPES, declared_format, MediaRejected
+from app.modules.functional.resources.router import DraftCreate
+from app.modules.functional.resources.models import Resource
+from app.modules.functional.resources.external_video import video_data
+from app.modules.functional.resources.service import publication_check
 from app.core.config import Settings
 
 

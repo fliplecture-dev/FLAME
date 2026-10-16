@@ -6,10 +6,8 @@ import { SimulationProgress } from "./simulation-progress";
 
 export function SimulationPlayer({ spec }: { spec: SimulationSpec }) {
   const [attempt, setAttempt] = useState(0), [html, setHtml] = useState(""), [state, setState] = useState("compiling");
-  const [expanded, setExpanded] = useState(false), [closed, setClosed] = useState(false);
-  const frame = useRef<HTMLIFrameElement>(null), root = useRef<HTMLElement>(null);
+  const frame = useRef<HTMLIFrameElement>(null);
   useEffect(() => {
-    if (closed) return;
     const abort = new AbortController(), nonce = crypto.randomUUID();
     let active = true, timer: ReturnType<typeof setTimeout>;
     setHtml(""); setState("compiling");
@@ -34,19 +32,12 @@ export function SimulationPlayer({ spec }: { spec: SimulationSpec }) {
       } catch { if (active) setState("error"); }
     })();
     return () => { active = false; abort.abort(); clearTimeout(timer); dispose(); window.removeEventListener("message", message); document.removeEventListener("visibilitychange", visibility); };
-  }, [spec, attempt, closed]);
-  useEffect(() => {
-    if (!expanded) return;
-    const overflow = document.body.style.overflow; document.body.style.overflow = "hidden";
-    const onKey = (event: KeyboardEvent) => { if (event.key === "Escape") setExpanded(false); };
-    document.addEventListener("keydown", onKey);
-    return () => { document.body.style.overflow = overflow; document.removeEventListener("keydown", onKey); };
-  }, [expanded]);
-  return <section ref={root} className={`simulation-player${expanded ? " simulation-expanded" : ""}`} aria-label={spec.title} data-simulation-engine={spec.engine} data-simulation-state={closed ? "closed" : state}>
-    <header><strong>{spec.title}</strong><span><button onClick={() => setExpanded(v => !v)} aria-expanded={expanded}>{expanded ? "Compact view" : "Expand"}</button><button onClick={() => { setClosed(v => !v); setExpanded(false); }}>{closed ? "Open" : "Close"}</button></span></header>
+  }, [spec, attempt]);
+  return <section className="simulation-player" aria-label={spec.title} data-simulation-engine={spec.engine} data-simulation-state={state}>
+    <header><strong>{spec.title}</strong></header>
     <p>{spec.description}</p>
-    {!closed && <>{(state === "compiling" || state === "starting" || state === "ready") && <SimulationProgress key={attempt} stage={state} />}
-      {state === "error" ? <p role="alert">This simulation could not run. Your explanation is still available.</p> : html && <iframe ref={frame} title={spec.title} srcDoc={html} sandbox="allow-scripts" allow="camera 'none'; microphone 'none'; geolocation 'none'; payment 'none'; clipboard-read 'none'; clipboard-write 'none'" referrerPolicy="no-referrer" />}
-      <button onClick={() => setAttempt(v => v + 1)}>Reset simulation</button></>}
+    {(state === "compiling" || state === "starting" || state === "ready") && <SimulationProgress key={attempt} stage={state} />}
+    {state === "error" ? <p role="alert">This simulation could not run. Your explanation is still available.</p> : html && <iframe ref={frame} title={spec.title} srcDoc={html} sandbox="allow-scripts" allow="camera 'none'; microphone 'none'; geolocation 'none'; payment 'none'; clipboard-read 'none'; clipboard-write 'none'" referrerPolicy="no-referrer" />}
+    <button onClick={() => setAttempt(v => v + 1)}>Reset simulation</button>
   </section>;
 }

@@ -6,8 +6,8 @@ from fastapi import HTTPException
 from pydantic import SecretStr
 from sqlalchemy import select
 from app.core.config import Settings
-from app.modules.resources import external_video as adapters
-from app.modules.resources.models import Resource
+from app.modules.functional.resources import external_video as adapters
+from app.modules.functional.resources.models import Resource
 from test_curriculum_workspace import isolated_client
 
 @pytest.mark.parametrize('url,provider,identity',[

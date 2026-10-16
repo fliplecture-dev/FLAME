@@ -14,11 +14,11 @@ from time import perf_counter
 from uuid import uuid4
 
 from app.core.config import Settings
-from app.modules.teaching.answer_service import _answer
-from app.modules.teaching.context import TeachingContext
-from app.modules.teaching.gateway import GatewayError, OpenAIResponsesGateway
-from app.modules.teaching.profiles import profile
-from app.modules.teaching.prompt import assemble
+from app.modules.application.teaching.answer_service import _answer
+from app.modules.functional.curriculum.teaching_context import TeachingContext
+from app.modules.application.teaching.gateway import GatewayError, OpenAIResponsesGateway
+from app.modules.application.teaching.profiles import profile
+from app.modules.application.teaching.prompt import assemble
 
 ROOT = Path(__file__).resolve().parents[4]
 FIXTURES = Path(__file__).resolve().parents[1] / "tests" / "fixtures"

@@ -1,5 +1,4 @@
 """Alembic environment for FLAME-owned objects only."""
-from app.modules.bulk_transfer import models as bulk_transfer_models
 
 from logging.config import fileConfig
 
@@ -8,18 +7,9 @@ from sqlalchemy import text
 
 from app.core.config import Settings
 from app.core.database import Base, Database
-from app.modules.curriculum import models as curriculum_models  # noqa: F401
-from app.modules.curriculum import import_models as curriculum_import_models  # noqa: F401
-from app.modules.identity import models as identity_models  # noqa: F401
-from app.modules.learning import models as learning_models  # noqa: F401
-from app.modules.conversations import models as conversations_models  # noqa: F401
-from app.modules.teaching import models as teaching_models  # noqa: F401
-from app.modules.student_activity import models as activity_models  # noqa: F401
-from app.modules.data_lifecycle import models as lifecycle_models  # noqa: F401
-from app.modules.recommendations import models as recommendation_models  # noqa: F401
-from app.modules.resources import models as resource_models  # noqa: F401
-from app.modules.teachers import models as teacher_models  # noqa: F401
-from app.modules.activity_kits import models as kit_models  # noqa: F401
+from app.modules.functional.model_registry import register_models
+
+register_models()
 
 config = context.config
 if config.config_file_name is not None:

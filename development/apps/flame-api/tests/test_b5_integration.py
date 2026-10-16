@@ -6,10 +6,10 @@ from fastapi.testclient import TestClient
 from sqlalchemy.orm import sessionmaker
 from app.core.config import Settings
 from app.main import create_app
-from app.modules.identity.dependencies import require_admin, require_member
-from app.modules.identity.models import StudentProfile, BrowserSession
-from app.modules.conversations.models import Message, AnswerRequest
-from app.modules.conversations.requests import claim, finalize
+from app.modules.functional.identity.dependencies import require_admin, require_member
+from app.modules.functional.identity.models import StudentProfile, BrowserSession
+from app.modules.functional.conversations.models import Message, AnswerRequest
+from app.modules.functional.conversations.requests import claim, finalize
 
 pytestmark = pytest.mark.db_integration
 
@@ -137,7 +137,7 @@ def test_sessions_activity_and_deletion():
                 assert unpinned["pinned"] is False and unpinned["recent_at"] is not None
                 assert len(client.get("/api/v1/sessions/" + study.json()["id"] + "/messages").json()["items"]) == 2
 
-                from app.modules.conversations.router import bounded_history
+                from app.modules.functional.conversations.router import bounded_history
                 with app.state.database.session() as db:
                     history = bounded_history(db, first, __import__("uuid").UUID(sid), max_turns=1)
                     assert len(history) == 1 and history[0]["user"][0]["text"] == "why"
@@ -190,7 +190,7 @@ def test_sessions_activity_and_deletion():
                                  {"status": "ok", "blocks": [{"kind": "text", "text": "Stale"}]})
                     assert stale_worker.value.detail == "request_claim_lost"
                 with app.state.database.session() as db, db.begin():
-                    from app.modules.conversations.requests import fail
+                    from app.modules.functional.conversations.requests import fail
                     fail(db, recovered_claim.request_id, recovered_claim.token, "provider_unavailable")
                 with app.state.database.session() as db, db.begin():
                     failure_replay = claim(db, first, recovery_id, "recovery-key", payload)
@@ -216,7 +216,7 @@ def test_sessions_activity_and_deletion():
                 finally:
                     app.state.settings.supabase_service_role_key = deletion_key
                 from unittest.mock import patch
-                with patch("app.modules.data_lifecycle.service.delete_provider_user", return_value=True) as provider_delete:
+                with patch("app.modules.functional.data_lifecycle.service.delete_provider_user", return_value=True) as provider_delete:
                     removed = client.request("DELETE", "/api/v1/me", json={"confirm": True})
                 provider_delete.assert_called_once()
                 assert removed.status_code == 200, removed.text
@@ -228,20 +228,20 @@ def test_sessions_activity_and_deletion():
                 assert client.get(f"/api/v1/admin/students/{first}").status_code == 404
                 assert client.get(f"/api/v1/admin/students/{first}/activity").status_code == 404
                 principal["id"] = str(second)
-                with patch("app.modules.data_lifecycle.service.delete_provider_user", return_value=False):
+                with patch("app.modules.functional.data_lifecycle.service.delete_provider_user", return_value=False):
                     pending_delete = client.request("DELETE", "/api/v1/me", json={"confirm": True})
                 assert pending_delete.status_code == 202, pending_delete.text
                 assert pending_delete.json()["status"] == "pending_provider"
                 with app.state.database.session() as db:
                     assert db.get(StudentProfile, second).status == "deleting"
-                from app.modules.data_lifecycle.service import complete_provider_deletion
-                with patch("app.modules.data_lifecycle.service.delete_provider_user", return_value=True):
+                from app.modules.functional.data_lifecycle.service import complete_provider_deletion
+                with patch("app.modules.functional.data_lifecycle.service.delete_provider_user", return_value=True):
                     assert complete_provider_deletion(app.state.database, app.state.settings,
                         __import__("uuid").UUID(pending_delete.json()["deletion_request_id"]))
                 with app.state.database.session() as db:
                     assert db.get(StudentProfile, second).status == "deleted"
-                from app.modules.data_lifecycle.models import DeletionRequest
-                from app.modules.data_lifecycle.service import purge_completed_tombstones
+                from app.modules.functional.data_lifecycle.models import DeletionRequest
+                from app.modules.functional.data_lifecycle.service import purge_completed_tombstones
                 with app.state.database.session() as db, db.begin():
                     old_receipt = db.get(DeletionRequest,
                         __import__("uuid").UUID(removed.json()["deletion_request_id"]))
@@ -270,8 +270,8 @@ def test_two_workers_claim_one_question():
     from fastapi import HTTPException
     from sqlalchemy import delete, func, select
     from app.core.database import Database
-    from app.modules.conversations.models import AnswerRequest, ConversationSession
-    from app.modules.student_activity.models import ActivityEvent
+    from app.modules.functional.conversations.models import AnswerRequest, ConversationSession
+    from app.modules.functional.student_activity.models import ActivityEvent
 
     database = Database(Settings())
     student_id, session_id = uuid4(), uuid4()

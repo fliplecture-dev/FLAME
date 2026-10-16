@@ -5,7 +5,7 @@ from pydantic import ValidationError
 from app.core.config import Settings
 from app.core.database import Database
 from app.main import create_app
-from app.modules.teaching.schemas import AnswerRequest, DirectAnswer, TableBlock
+from app.modules.application.teaching.schemas import AnswerRequest, DirectAnswer, TableBlock
 
 
 def app_for_test():

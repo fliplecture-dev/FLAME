@@ -1,5 +1,5 @@
 from types import SimpleNamespace
-from app.modules.resources.image_selection import decide_image, description
+from app.modules.decision_engine.recommendation.image_selection import decide_image, description
 
 
 def image(id, title, **kwargs):

@@ -3,8 +3,8 @@ import argparse
 from sqlalchemy import select
 from app.core.config import Settings
 from app.core.database import Database
-from app.modules.data_lifecycle.models import DeletionRequest
-from app.modules.data_lifecycle.service import complete_provider_deletion
+from app.modules.functional.data_lifecycle.models import DeletionRequest
+from app.modules.functional.data_lifecycle.service import complete_provider_deletion
 
 def main():
     parser = argparse.ArgumentParser()

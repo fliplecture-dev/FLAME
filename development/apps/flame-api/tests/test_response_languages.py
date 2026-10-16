@@ -4,11 +4,11 @@ from types import SimpleNamespace
 
 import pytest
 from pydantic import ValidationError
-from app.modules.teaching.languages import LANGUAGES, language_instruction
-from app.modules.teaching.schemas import AnswerRequest
-from app.modules.teaching.prompt import assemble_open_curiosity, assemble
-from app.modules.teaching.profiles import profile
-from app.modules.teaching.simulations import TransientSimulations, generate
+from app.modules.application.teaching.languages import LANGUAGES, language_instruction
+from app.modules.application.teaching.schemas import AnswerRequest
+from app.modules.application.teaching.prompt import assemble_open_curiosity, assemble
+from app.modules.application.teaching.profiles import profile
+from app.modules.application.teaching.simulations import TransientSimulations, generate
 from tests.test_b6_teaching import fixture
 
 

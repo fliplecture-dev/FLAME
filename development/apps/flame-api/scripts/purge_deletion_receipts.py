@@ -2,7 +2,7 @@
 import argparse
 from app.core.config import Settings
 from app.core.database import Database
-from app.modules.data_lifecycle.service import purge_completed_tombstones
+from app.modules.functional.data_lifecycle.service import purge_completed_tombstones
 
 
 def main():

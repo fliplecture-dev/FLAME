@@ -7,7 +7,7 @@ import styles from "./interactive-experience.module.css";
 // Always isolate uploaded code; it receives no FLAME session or parent DOM access.
 // Match the API policy: embedded Rive WASM can compile; JS eval and network remain blocked.
 const policy = "default-src 'none'; script-src 'unsafe-inline' 'wasm-unsafe-eval'; style-src 'unsafe-inline'; img-src data:; media-src data:; font-src data:; connect-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'";
-export function InteractiveExperience({ document: htmlDocument, title }: { document: string; title: string }) {
+export function InteractiveExperience({ document: htmlDocument, title, inline = false }: { document: string; title: string; inline?: boolean }) {
   const [attempt, setAttempt] = useState(0);
   const [ready, setReady] = useState(false);
   const [error, setError] = useState(false);
@@ -92,9 +92,9 @@ export function InteractiveExperience({ document: htmlDocument, title }: { docum
     <div className={styles.stage}>
     <header className={styles.toolbar}>
       <span className={styles.title}>{title}</span>
-      <button ref={toggle} type="button" className={styles.toggle} aria-label={expanded ? "Restore compact interactive" : "Full screen interactive"} title={expanded ? "Restore compact view" : "Full screen (landscape)"} aria-pressed={expanded} onClick={() => expanded ? restore() : void enterFullscreen()}>
+      {!inline && <button ref={toggle} type="button" className={styles.toggle} aria-label={expanded ? "Restore compact interactive" : "Full screen interactive"} title={expanded ? "Restore compact view" : "Full screen (landscape)"} aria-pressed={expanded} onClick={() => expanded ? restore() : void enterFullscreen()}>
         {expanded ? <Minimize2 size={20} aria-hidden="true" /> : <Maximize2 size={20} aria-hidden="true" />}
-      </button>
+      </button>}
     </header>
     {!ready && !error && <p role="status">Loading interactive…</p>}
     <div className={styles.viewport}>

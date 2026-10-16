@@ -7,7 +7,7 @@ from fastapi.testclient import TestClient
 from app.contracts.catalogue import CatalogueCandidate
 from app.core.config import Settings
 from app.main import create_app
-from app.modules.learning_response import explore
+from app.modules.application.learning_response import explore
 
 
 def candidate(index=0, **changes):
@@ -79,8 +79,8 @@ def test_answer_counts_cover_full_eligible_catalogue_and_deduplicate_paths(monke
 
 def test_answer_counts_require_owned_saved_answer(monkeypatch):
     from contextlib import nullcontext
-    from app.modules.identity.dependencies import require_member
-    from app.modules.learning_response import explore_router
+    from app.modules.functional.identity.dependencies import require_member
+    from app.modules.application.learning_response import explore_router
     owner, session, message = uuid4(), uuid4(), uuid4()
     def denied(db, member, sid, mid):
         assert (member, sid, mid) == (owner, session, message)
@@ -159,14 +159,14 @@ def test_explore_database_mapping_and_open_rechecks():
     import os
     from tempfile import TemporaryDirectory
     from sqlalchemy.orm import sessionmaker
-    from app.modules.identity.dependencies import require_admin, require_member
-    from app.modules.identity.models import StudentProfile
-    from app.modules.resources.models import Resource, ResourceTopic
-    from app.modules.teachers.models import Teacher, TeacherExpertise
-    from app.modules.conversations.models import ConversationSession, Message
+    from app.modules.functional.identity.dependencies import require_admin, require_member
+    from app.modules.functional.identity.models import StudentProfile
+    from app.modules.functional.resources.models import Resource, ResourceTopic
+    from app.modules.functional.teachers.models import Teacher, TeacherExpertise
+    from app.modules.functional.conversations.models import ConversationSession, Message
     from time import perf_counter
     from sqlalchemy import event
-    from app.modules.activity_kits.models import ActivityKit, KitTopic
+    from app.modules.functional.activity_kits.models import ActivityKit, KitTopic
     from pathlib import Path
     if os.environ.get("FLAME_RUN_DB_TESTS") != "1":
         pytest.skip("Set FLAME_RUN_DB_TESTS=1 for rollback-only checks")

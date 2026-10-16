@@ -6,7 +6,7 @@ from fastapi.testclient import TestClient
 
 from app.core.config import Settings
 from app.main import create_app
-from app.modules.identity.dependencies import require_member
+from app.modules.functional.identity.dependencies import require_member
 
 
 def test_all_admin_endpoints_reject_member_before_validation_or_storage():

@@ -1,7 +1,7 @@
 from uuid import UUID, uuid4
-from app.modules.conversations.models import ConversationSession, Message
-from app.modules.resources.models import Resource
-from app.modules.identity.dependencies import require_admin
+from app.modules.functional.conversations.models import ConversationSession, Message
+from app.modules.functional.resources.models import Resource
+from app.modules.functional.identity.dependencies import require_admin
 from test_curriculum_workspace import isolated_client
 
 

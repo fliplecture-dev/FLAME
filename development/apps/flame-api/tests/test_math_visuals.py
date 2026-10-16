@@ -5,11 +5,11 @@ from uuid import uuid4
 import pytest
 from pydantic import ValidationError
 
-from app.modules.teaching.math_visuals import TEMPLATES, MathVisualBlock, decide_visual, apply_decision
-from app.modules.teaching.answer_service import _answer
-from app.modules.teaching.gateway import Generated, GatewayError
-from app.modules.teaching.rich_answer import parse_blocks, readable
-from app.modules.teaching.prompt import assemble_open_curiosity
+from app.modules.application.teaching.math_visuals import TEMPLATES, MathVisualBlock, decide_visual, apply_decision
+from app.modules.application.teaching.answer_service import _answer
+from app.modules.application.teaching.gateway import Generated, GatewayError
+from app.modules.application.teaching.rich_answer import parse_blocks, readable
+from app.modules.application.teaching.prompt import assemble_open_curiosity
 
 
 def block(template="fraction_bar"):
@@ -86,7 +86,10 @@ def test_invalid_specs_fail_atomically(change):
 
 def test_registry_parity_with_frontend():
     frontend=Path(__file__).resolve().parents[2]/"web/src/features/learning/math-templates.json"
-    if frontend.exists(): assert json.loads(frontend.read_text(encoding="utf-8")) == TEMPLATES
+    if frontend.exists():
+        from importlib.resources import files
+        assert json.loads(frontend.read_text(encoding="utf-8")) == json.loads(
+            files("app.contracts").joinpath("math_templates.json").read_text(encoding="utf-8"))
 
 
 def test_initial_geometry_constraints_and_saved_followup():

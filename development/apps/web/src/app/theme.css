@@ -1,0 +1,67 @@
+.student-app .theme-toggle { position:absolute; right:20px; top:50%; transform:translateY(-50%); width:44px; height:44px; border-radius:50%; color:var(--ink); }
+.student-app .theme-toggle:hover { background:var(--selected); }
+.student-app .flame-topbar .workspace-modes { width:auto; max-width:100%; }
+@media(max-width:767px) { .student-app .theme-toggle { right:6px; } }
+
+:root[data-theme="dark"] { color-scheme:dark; --ink:#e5eaf3; --muted:#abb6c8; --line:#343f51; --paper:#10141c; --sidebar:#171d28; --selected:#28364e; }
+[data-theme="dark"] .student-app { --ink:#e5eaf3; --muted:#abb6c8; --line:#343f51; --sidebar:#171d28; --selected:#28364e; background:var(--paper); }
+[data-theme="dark"] .student-app :is(.flame-topbar,.workspace,.composer-area) { background:var(--paper); }
+[data-theme="dark"] :is(.flame-message,.student-app .prompt-form,.curriculum-drawer,.library-dialog,.resource-dialog,.removal-dialog,.profile-popover,.mode-dropdown-menu,.response-language-options,.response-language-trigger,.response-language-list>button,.explore-panel,.explore-item,.curriculum-search,.response-code,.response-chart,.learning-content .math-activity,.simulation-player,.auth-card) { background:#1a2230; color:var(--ink); border-color:var(--line); box-shadow:none; }
+[data-theme="dark"] :is(.learning-content,.learning-content .response-chart figcaption,.learning-content .response-chart figcaption strong,.math-activity figcaption,.math-activity figcaption strong,.math-activity-controls label,.math-activity small,.topic-button,.shortcut-link,.proficiency,.profile-admin-link,.explore-item h3,.explore-item p) { color:var(--ink); }
+[data-theme="dark"] :is(input:not([type=range]):not([type=checkbox]),textarea,select) { background:#171e2a; color:var(--ink); border-color:var(--line); }
+[data-theme="dark"] .student-app .prompt-form textarea { background:transparent; }
+[data-theme="dark"] :is(textarea,input)::placeholder { color:#a0aec3; }
+[data-theme="dark"] .student-message { background:#243958; border-color:#405575; color:#e7efff; box-shadow:none; }
+[data-theme="dark"] .student-message .message-author { color:#b8cdf1; }
+[data-theme="dark"] :is(.welcome p,.topic-description,.profile-popover small,.composer-caption) { color:var(--muted); }
+[data-theme="dark"] .student-app .mode-switcher { background:#222c3b; }
+[data-theme="dark"] .student-app .mode-switcher>button { color:var(--muted); }
+[data-theme="dark"] .student-app .mode-switcher>button[aria-pressed=true] { background:#35435b; color:var(--ink); border-color:#4b5d7a; }
+[data-theme="dark"] .student-app .mode-switcher>button:hover { background:#35435b; color:var(--ink); }
+[data-theme="dark"] .latest-message { background:#28364e; color:#e5eaf3; border-color:#4b5d7a; }
+[data-theme="dark"] :is(.icon-button:hover,.rail-button:hover,.topic-button:hover,.subject-group>summary:hover,.chapter-group>summary:hover,.shortcut-link:hover,.mode-dropdown-menu button:hover,.student-app .flame-mode-brand .mode-dropdown-menu button:hover) { background:var(--selected); color:var(--ink); }
+[data-theme="dark"] :is(.topic-button.selected,.response-language-list>button[aria-pressed=true],.student-app .flame-mode-brand .mode-dropdown-menu button[aria-checked=true]) { background:#283f62; color:#d5e5ff; }
+[data-theme="dark"] :is(.explore-search input,.explore-media-chips button,.explore-filter-toggle,.explore-refresh,.math-activity-toolbar button,.simulation-player button,.response-code-toolbar button,.response-notice button) { background:#26344a; color:var(--ink); border-color:#4b5e7d; }
+[data-theme="dark"] :is(.explore-media-chips button[aria-pressed=true],.explore-tabs button[aria-selected=true]) { background:#315fbb; color:white; }
+[data-theme="dark"] :is(.learning-content blockquote,.response-markdown :not(pre)>code,.content-table th,.response-markdown th,.math-activity-state) { background:#26344a; color:var(--ink); }
+[data-theme="dark"] :is(.content-table td,.content-table th,.response-markdown td,.response-markdown th) { border-color:var(--line); }
+[data-theme="dark"] :is(.response-markdown a,.explore-answer-link,.auth-card nav a,.auth-card>a) { color:#a6c8ff; }
+[data-theme="dark"] :is(.response-language-list small,.math-activity-state,.explore-context,.explore-summary) { color:var(--muted); }
+[data-theme="dark"] .math-activity-drawing { background:#182131; border-color:var(--line); }
+[data-theme="dark"] .math-activity .MafsView { --mafs-bg:#182131; --mafs-fg:#d7e5fa; --mafs-line-color:#455672; --mafs-origin-color:#839bbd; }
+[data-theme="dark"] .response-chart .recharts-cartesian-axis-tick text { fill:#c1cde0; }
+[data-theme="dark"] .response-chart { --chart-1:#9bbcff; --chart-2:#ffb58f; --chart-3:#82d5b4; --chart-4:#d0adff; }
+[data-theme="dark"] .response-chart .recharts-text { fill:#c1cde0; }
+[data-theme="dark"] .response-chart .recharts-cartesian-grid line { stroke:#3e4b62; }
+[data-theme="dark"] .response-chart .recharts-default-tooltip { background:#1a2230!important; border-color:#536581!important; color:#e5eaf3; }
+[data-theme="dark"] .response-code pre code span { color:#d6e4ff!important; }
+[data-theme="dark"] :focus-visible { outline-color:#a6c8ff; }
+[data-theme="dark"] .auth-page { background:var(--paper); color:var(--ink); }
+[data-theme="dark"] .auth-message { background:#28364e; }
+
+/* Account and compact navigation need complete foreground/background pairs. */
+[data-theme="dark"] .student-app .profile-admin-link { background:#243752; border-color:#4c678c; color:#d6e6ff; }
+[data-theme="dark"] .student-app .profile-admin-link:hover { background:#304b70; border-color:#7695bf; color:#fff; }
+[data-theme="dark"] .student-app .rail-button { color:#c6d3e7; }
+[data-theme="dark"] .student-app .rail-button:hover { background:#28364e; color:#fff; }
+[data-theme="dark"] .student-app .rail-button[aria-pressed="true"] { background:#2b466e; border-color:#6382ad; color:#f0f5ff; }
+[data-theme="dark"] .student-app .rail-button::after { background:#26344a; border-color:#536581; color:#edf3ff; }
+
+/* Browse Media uses the same dark surfaces for tabs, filters and card actions. */
+[data-theme="dark"] .explore-header { background:#171e2b; border-color:var(--line); }
+[data-theme="dark"] .explore-tabs { background:#171e2b; border-color:var(--line); }
+[data-theme="dark"] .explore-tabs button { background:#26344a; color:#d9e4f6; }
+[data-theme="dark"] .explore-tabs button:hover { background:#344862; color:#fff; }
+[data-theme="dark"] .explore-tabs button[aria-selected="true"] { background:#315fbb; color:#fff; }
+[data-theme="dark"] .explore-filters { background:#171e2b; border-color:#3e4e67; }
+[data-theme="dark"] .explore-path-matches button { background:#26344a; color:#dce9ff; }
+[data-theme="dark"] .explore-path-matches button:hover { background:#344862; color:#fff; }
+[data-theme="dark"] :is(.explore-item button,.explore-pagination button) { background:#263b58; border-color:#526e95; color:#dce9ff; }
+[data-theme="dark"] :is(.explore-item button,.explore-pagination button):hover:not(:disabled) { background:#345176; border-color:#89a6cf; color:#fff; }
+[data-theme="dark"] .explore-item .explore-thumbnail-button { background:#202e43; border-color:var(--line); }
+[data-theme="dark"] :is(.explore-item-icon,.explore-thumbnail) { background:linear-gradient(135deg,#253e60,#353653); color:#c4daff; }
+[data-theme="dark"] .explore-video-icon { background:linear-gradient(135deg,#493144,#34334d); color:#ffb4c5; }
+[data-theme="dark"] .explore-highlight { border-color:#94b9ff; background:#243752; }
+[data-theme="dark"] .explore-error { color:#ffc2a7; }
+[data-theme="dark"] .explore-refresh-error { border-color:#d9a58d; color:#ffc2a7; }
+[data-theme="dark"] .explore-panel :is(button,input,select):focus-visible { outline-color:#a6c8ff; }

@@ -3,11 +3,11 @@ from io import BytesIO
 from tempfile import TemporaryDirectory
 from uuid import UUID, uuid4
 from PIL import Image
-from app.modules.identity.dependencies import require_admin, require_member
-from app.modules.conversations.models import ConversationSession, Message
-from app.modules.resources.learning_need import split_intent
-from app.modules.resources.recommendation_selection import learning_need, select_recommendations
-from app.modules.teaching.gateway import Generated
+from app.modules.functional.identity.dependencies import require_admin, require_member
+from app.modules.functional.conversations.models import ConversationSession, Message
+from app.modules.decision_engine.recommendation.learning_need import split_intent
+from app.modules.decision_engine.recommendation.selection import learning_need, select_recommendations
+from app.modules.application.teaching.gateway import Generated
 from test_curriculum_workspace import isolated_client
 
 
@@ -121,7 +121,7 @@ def test_mvp_owned_selection_history_kits_tutors_and_rechecks(monkeypatch):
         assert selected['recommendation_decision']['intent_source']=='fallback'
         # Legacy image JSON is decoded without replacing or rewriting its saved choice.
         from copy import deepcopy
-        from app.modules.recommendations.models import RecommendationSet
+        from app.modules.functional.recommendation_history.models import RecommendationSet
         from sqlalchemy import select
         legacy_id,_=turn('Explain force','Force is a push or pull.')
         legacy={'schema_version':1,'resource_id':force['id'],'resource_version':force['version'],'display_mode':'inline',
@@ -134,7 +134,7 @@ def test_mvp_owned_selection_history_kits_tutors_and_rechecks(monkeypatch):
         with client.app.state.database.session() as db:
             assert db.scalar(select(RecommendationSet).where(RecommendationSet.message_id==UUID(legacy_id))).image_decision==legacy
         # Composer failure does not rewrite completed answers or emit a fake none decision.
-        from app.modules.recommendations import router as recommendation_router
+        from app.modules.application.recommendations import router as recommendation_router
         with monkeypatch.context() as patch:
             def fail_selection(*args,**kwargs):raise TimeoutError('private diagnostic')
             patch.setattr(recommendation_router.service,'recommend',fail_selection)

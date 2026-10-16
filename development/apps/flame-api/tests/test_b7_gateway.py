@@ -1,6 +1,6 @@
 import httpx
 import pytest
-from app.modules.teaching.gateway import OpenAIResponsesGateway, GatewayError
+from app.modules.application.teaching.gateway import OpenAIResponsesGateway, GatewayError
 
 
 def test_responses_adapter_bounds_request_and_retries_429(monkeypatch):

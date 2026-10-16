@@ -9,10 +9,10 @@ from uuid import uuid4
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from app.core.config import Settings
-from app.modules.teaching.answer_service import _answer
-from app.modules.teaching.gateway import GatewayError, OpenAIResponsesGateway
-from app.modules.teaching.prompt import assemble_open_curiosity
-from app.modules.teaching.math_visuals import TEMPLATES
+from app.modules.application.teaching.answer_service import _answer
+from app.modules.application.teaching.gateway import GatewayError, OpenAIResponsesGateway
+from app.modules.application.teaching.prompt import assemble_open_curiosity
+from app.modules.application.teaching.math_visuals import TEMPLATES
 
 
 def main():

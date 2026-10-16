@@ -1,15 +1,15 @@
 from copy import deepcopy
 from uuid import UUID
 import pytest
-from app.modules.bulk_transfer.google_sheets import SheetsClient,MARKER
-from app.modules.bulk_transfer.errors import BulkFailure
-from app.modules.resources.models import Resource,ResourceTopic
+from app.modules.functional.bulk_transfer.google_sheets import SheetsClient,MARKER
+from app.modules.functional.bulk_transfer.errors import BulkFailure
+from app.modules.functional.resources.models import Resource,ResourceTopic
 from test_curriculum_workspace import isolated_client
 from test_google_sheets_sync import FakeSheets,install
 
 
 def test_explicit_and_flame_deletion_tombstones_and_retries(monkeypatch):
-    import app.modules.bulk_transfer.sheet_connector as connector
+    import app.modules.functional.bulk_transfer.sheet_connector as connector
     original=connector.catalogue
     fake=FakeSheets();install(monkeypatch,fake)
     with isolated_client() as client:
@@ -97,8 +97,8 @@ def test_duplicate_marker_repair_requires_unambiguous_identity():
 def test_automatic_action_column_is_idempotent_after_partial_write_failure():
     from types import SimpleNamespace
     from uuid import uuid4
-    from app.modules.bulk_transfer.google_sheets import collect
-    from app.modules.bulk_transfer.sheet_connector import export_writeback
+    from app.modules.functional.bulk_transfer.google_sheets import collect
+    from app.modules.functional.bulk_transfer.sheet_connector import export_writeback
     fake=FakeSheets()
     rows,refs,issues,requests=collect(*fake.read(),reserve=True)
     fake.mark(requests)

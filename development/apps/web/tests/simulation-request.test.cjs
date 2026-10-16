@@ -60,3 +60,15 @@ test('transport failures terminate instead of leaving a pending cached result', 
   const { requestSimulation } = await loadTs(modulePath);
   await assert.rejects(requestSimulation(async () => { throw new Error('offline'); }, true), /offline/);
 });
+
+test('catalogue simulations use isolated HTML without passing through source compilation or regeneration', async () => {
+  const { requestSimulation } = await loadTs(modulePath);
+  const value = {status:'resource',resource_id:'11111111-1111-4111-8111-111111111111',version:2,title:'Gravity lab',html_document:'<html><head></head><body>Gravity</body></html>'};
+  let calls=0;
+  const result=await requestSimulation(async start=>{calls++;assert.equal(start,false);return value;},false);
+  assert.equal(calls,1);assert.equal(result.status,'resource');assert.equal(result.resource.document,value.html_document);
+  assert.equal('source' in result.resource,false);
+  for(const invalid of [{version:0},{resource_id:'https://example.test'},{html_document:''},{html_document:'x'.repeat(2*1024*1024+2049)}]){
+    assert.equal((await requestSimulation(async()=>({...value,...invalid}),false)).status,'error');
+  }
+});

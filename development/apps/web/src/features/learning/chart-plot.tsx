@@ -1,7 +1,7 @@
 "use client";
 import { Bar, BarChart, CartesianGrid, Cell, Legend, Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import type { ChartBlock } from "./rich-blocks";
-const colors = ["#345c9c", "#a0461b", "#2f7960", "#8155a2"];
+const colors = ["var(--chart-1, #345c9c)", "var(--chart-2, #a0461b)", "var(--chart-3, #2f7960)", "var(--chart-4, #8155a2)"];
 export default function ChartPlot({ block }: { block: ChartBlock }) {
   const axes = <><CartesianGrid strokeDasharray="3 3" /><XAxis dataKey={block.xKey} label={block.xLabel ? { value: block.xLabel, position: "insideBottom", offset: -10 } : undefined} /><YAxis width={60} label={block.yLabel ? { value: block.yLabel, angle: -90, position: "insideLeft" } : undefined} /><Tooltip /><Legend /></>;
   return <ResponsiveContainer width="100%" height={300} minWidth={0}>

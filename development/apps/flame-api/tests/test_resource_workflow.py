@@ -5,8 +5,8 @@ from PIL import Image
 from openpyxl import load_workbook
 from sqlalchemy import select, func
 from pydantic import SecretStr
-from app.modules.curriculum.models import Subtopic
-from app.modules.resources.models import Resource, ResourceTopic, ResourceUpload
+from app.modules.functional.curriculum.models import Subtopic
+from app.modules.functional.resources.models import Resource, ResourceTopic, ResourceUpload
 from test_curriculum_workspace import isolated_client
 
 

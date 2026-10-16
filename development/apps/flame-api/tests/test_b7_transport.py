@@ -6,7 +6,7 @@ from time import perf_counter
 
 import pytest
 
-from app.modules.teaching import gateway
+from app.modules.application.teaching import gateway
 
 
 @contextmanager

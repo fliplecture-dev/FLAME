@@ -6,8 +6,8 @@ import sys
 from pathlib import Path
 from time import perf_counter
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from app.modules.recommendations.evaluation import candidates, evaluate
-from app.modules.recommendations.selection import learning_need, select_recommendations
+from app.modules.application.recommendations.evaluation import candidates, evaluate
+from app.modules.application.recommendations.selection import learning_need, select_recommendations
 
 
 def main():

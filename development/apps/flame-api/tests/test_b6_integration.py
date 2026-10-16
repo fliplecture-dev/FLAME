@@ -10,12 +10,12 @@ from sqlalchemy.orm import sessionmaker
 
 from app.core.config import Settings
 from app.main import create_app
-from app.modules.conversations.models import PendingClarification
-from app.modules.teaching.models import TopicCheckEvent
-from app.modules.identity.dependencies import require_admin, require_member
-from app.modules.identity.models import StudentProfile
-from app.modules.teaching.clarification import create_pending, continue_pending
-from app.modules.teaching.service import prepare
+from app.modules.functional.conversations.models import PendingClarification
+from app.modules.functional.conversations.topic_checks import TopicCheckEvent
+from app.modules.functional.identity.dependencies import require_admin, require_member
+from app.modules.functional.identity.models import StudentProfile
+from app.modules.application.teaching.clarification import create_pending, continue_pending
+from app.modules.application.teaching.service import prepare
 
 pytestmark = pytest.mark.db_integration
 
@@ -149,7 +149,7 @@ def test_owned_resolution_clarification_and_revision():
                     assert ambiguous.status == "clarification"
                     assert {item.ids["subtopic_id"] for item in ambiguous.candidates} == {UUID(falling), UUID(orbit)}
                     pending = create_pending(db, student, curiosity_id, "Explain gravity",
-                                             __import__("app.modules.teaching.resolution", fromlist=["Resolution"]).Resolution(
+                                             __import__("app.modules.application.teaching.resolution", fromlist=["Resolution"]).Resolution(
                                                  "clarification", None, ambiguous.candidates))
                     pending_id = pending.id
                 with app.state.database.session() as db, db.begin():

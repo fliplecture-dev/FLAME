@@ -18,7 +18,7 @@ test('all 17 trusted templates select the registered engine and survive live/his
   }
 });
 test('frontend registry matches independently deployed backend registry',()=>{
-  const backend=JSON.parse(fs.readFileSync(path.join(__dirname,'../../flame-api/app/modules/teaching/math_templates.json'),'utf8'));
+  const backend=JSON.parse(fs.readFileSync(path.join(__dirname,'../../flame-api/app/contracts/math_templates.json'),'utf8'));
   assert.deepEqual(definitions,backend);
 });
 test('malformed, executable and out-of-bounds specifications fall back locally',()=>{

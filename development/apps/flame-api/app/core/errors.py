@@ -115,7 +115,7 @@ def error_response(request: Request, status: int, code: str, message: str,
 def install_error_handlers(app: FastAPI):
     @app.exception_handler(HTTPException)
     async def http_error(request: Request, exc: HTTPException):
-        from app.modules.bulk_transfer.errors import BulkFailure
+        from app.modules.functional.bulk_transfer.errors import BulkFailure
         if isinstance(exc, BulkFailure):
             return error_response(request, exc.status_code, "bulk_import_conflict" if exc.status_code == 409 else "bulk_transfer_failed", str(exc.detail), retryable=exc.status_code in (409, 503))
         codes = {404: "not_found", 405: "method_not_allowed",

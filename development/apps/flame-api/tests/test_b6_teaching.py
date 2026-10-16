@@ -3,10 +3,10 @@ from uuid import uuid4
 
 import pytest
 
-from app.modules.teaching.context import TeachingContext
-from app.modules.teaching.profiles import level_number, profile
-from app.modules.teaching.prompt import assemble, MAX_HISTORY_CHARS
-from app.modules.teaching.resolution import resolve
+from app.modules.functional.curriculum.teaching_context import TeachingContext
+from app.modules.application.teaching.profiles import level_number, profile
+from app.modules.application.teaching.prompt import assemble, MAX_HISTORY_CHARS
+from app.modules.application.teaching.resolution import resolve
 
 
 def fixture(topic="Gravity", subtopic="Falling", level="Level 2", curriculum="STEM"):
@@ -67,7 +67,7 @@ def test_prompt_budget_and_untrusted_history():
 
 def test_clarification_contract_rejects_unbounded_or_conflicting_choices():
     from pydantic import ValidationError
-    from app.modules.teaching.schemas import ClarificationContinuation, ClarificationOutcome
+    from app.modules.application.teaching.schemas import ClarificationContinuation, ClarificationOutcome
     identifier = uuid4()
     assert ClarificationContinuation(clarification_id=identifier, reply="the second one").reply == "the second one"
     with pytest.raises(ValidationError):
@@ -114,9 +114,9 @@ def test_candidate_teaching_cases_match_workbook_and_prompt_levels():
 
 
 def test_open_curiosity_prompt_accepts_any_topic_without_catalogue_context():
-    from app.modules.teaching.prompt import assemble_open_curiosity
+    from app.modules.application.teaching.prompt import assemble_open_curiosity
     prompt = assemble_open_curiosity('Explain black holes in Hindi.', [])
-    assert prompt.version == 'direct-curiosity-open-3-math1'
+    assert prompt.version == 'direct-curiosity-open-3-math1-visual1'
     assert prompt.messages[-1] == {'role': 'user', 'content': 'Explain black holes in Hindi.'}
     policy = prompt.messages[0]['content']
     assert 'any subject or language' in policy

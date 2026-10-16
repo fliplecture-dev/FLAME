@@ -2,7 +2,7 @@ from uuid import uuid4
 import pytest
 from pydantic import ValidationError
 from app.contracts.learning_metadata import LearningMetadata
-from app.modules.recommendations.evaluation import evaluate
+from app.modules.application.recommendations.evaluation import evaluate
 from test_curriculum_workspace import isolated_client
 
 
@@ -48,8 +48,8 @@ def test_resource_metadata_versions_and_legacy_compatibility():
 
 def test_teacher_metadata_and_batched_expertise_queries():
     from sqlalchemy import event
-    from app.modules.teachers.candidates import eligible_candidates, public_teacher
-    from app.modules.teachers.models import Teacher, TeacherExpertise
+    from app.modules.functional.teachers.candidates import eligible_candidates, public_teacher
+    from app.modules.functional.teachers.models import Teacher, TeacherExpertise
     from uuid import UUID
     with isolated_client() as client:
         c = client.post('/api/v1/admin/curricula', json={'code': 'meta-'+uuid4().hex[:8], 'name': 'Metadata fixture'}).json()

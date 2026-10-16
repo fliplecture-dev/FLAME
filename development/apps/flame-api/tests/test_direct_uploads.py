@@ -14,12 +14,12 @@ from pydantic import ValidationError
 
 from app.core.config import Settings
 from app.main import create_app
-from app.modules.identity.dependencies import require_admin
-from app.modules.identity.models import StudentProfile
-from app.modules.resources.direct_uploads import Admission, Ticket, cipher
-from app.modules.resources.models import ResourceUpload
-from app.modules.curriculum.import_models import CurriculumImport
-from app.modules.bulk_transfer.models import BulkImport
+from app.modules.functional.identity.dependencies import require_admin
+from app.modules.functional.identity.models import StudentProfile
+from app.modules.functional.resources.direct_uploads import Admission, Ticket, cipher
+from app.modules.functional.resources.models import ResourceUpload
+from app.modules.functional.curriculum.import_models import CurriculumImport
+from app.modules.functional.bulk_transfer.models import BulkImport
 from test_curriculum_workspace import isolated_client
 
 
@@ -176,7 +176,7 @@ def test_direct_upload_rejects_missing_oversized_and_invalid_media(monkeypatch):
 @pytest.mark.db_integration
 def test_completed_receipt_survives_concurrent_insert_error(monkeypatch):
     from sqlalchemy.exc import IntegrityError
-    from app.modules.resources import router as resources
+    from app.modules.functional.resources import router as resources
     with isolated_client() as client, storage_fixture(monkeypatch, client) as objects:
         out = BytesIO(); Image.new('RGB', (4, 4), 'blue').save(out, 'PNG')
         capsule, identity = admit(client, objects, out.getvalue(), purpose='resource', filename='tiny.png', mime_type='image/png')
@@ -198,7 +198,7 @@ def test_live_large_direct_private_upload_and_export():
     import os
     from random import Random
     from urllib.parse import urlsplit
-    from app.modules.resources.storage import ResourceStorage
+    from app.modules.functional.resources.storage import ResourceStorage
     if os.environ.get('FLAME_RUN_STORAGE_TESTS') != '1':
         pytest.skip('Set FLAME_RUN_STORAGE_TESTS=1 for synthetic live private storage checks')
     settings = Settings().model_copy(update={'environment': 'test', 'resource_storage_backend': 'supabase',

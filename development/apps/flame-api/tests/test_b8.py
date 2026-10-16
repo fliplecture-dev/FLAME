@@ -2,11 +2,11 @@
 from uuid import uuid4
 import pytest
 from pydantic import ValidationError
-from app.modules.teaching.capabilities import unsupported_capability
-from app.modules.teaching.schemas import DirectAnswer, UnsupportedOutcome
-from app.modules.teaching.answer_service import _answer
-from app.modules.teaching.context import TeachingContext
-from app.modules.teaching.gateway import Generated, GatewayError
+from app.modules.application.teaching.capabilities import unsupported_capability
+from app.modules.application.teaching.schemas import DirectAnswer, UnsupportedOutcome
+from app.modules.application.teaching.answer_service import _answer
+from app.modules.functional.curriculum.teaching_context import TeachingContext
+from app.modules.application.teaching.gateway import Generated, GatewayError
 
 @pytest.mark.parametrize('question,code', [
     ('Please cite the textbook page for this answer.', 'textbook_evidence_unavailable'),

@@ -5,7 +5,7 @@ from uuid import uuid4
 import pytest
 from PIL import Image
 from pydantic import SecretStr
-from app.modules.resources.external_video import video_data
+from app.modules.functional.resources.external_video import video_data
 from test_curriculum_workspace import isolated_client
 
 
