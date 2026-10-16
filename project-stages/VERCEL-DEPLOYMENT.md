@@ -37,7 +37,7 @@ Use Vercel's project environment settings, scoped separately to Preview and Prod
 | `FLAME_LLM_OPENAI_API_KEY` / `FLAME_LLM_MODEL` | Configure together; retain the owner's permitted model and spend controls |
 | `FLAME_LLM_TIMEOUT_SECONDS` | `12` |
 | `FLAME_LLM_MAX_OUTPUT_TOKENS` | `1500` |
-| `FLAME_LLM_DAILY_REQUEST_LIMIT` | `100` |
+| `FLAME_LLM_DAILY_REQUEST_LIMIT` | `100` per member over a rolling 24 hours; server-verified administrators are exempt |
 | `FLAME_DELETION_RECEIPT_RETENTION_DAYS` | `30`; this controls local receipts, not provider backup/log expiry |
 
 Configure Supabase Auth's website/callback/recovery URLs for the chosen website domain. Do not use the development schema-owner database connection as the production runtime role. Migrations run separately with the reviewed migration role; neither startup nor a deployment build runs them automatically.

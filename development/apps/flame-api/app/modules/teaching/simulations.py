@@ -155,7 +155,7 @@ class TransientSimulations:
                     return {"status": "expired"}
                 self.usage = {owner: data for owner, data in self.usage.items() if data[0] > now}
                 expires, count = self.usage.get(key[0], (now + 86400, 0))
-                if len(self.entries) >= self.maximum or count >= limit or len(self.usage) >= 1024 and key[0] not in self.usage:
+                if len(self.entries) >= self.maximum or (limit is not None and count >= limit) or len(self.usage) >= 1024 and key[0] not in self.usage:
                     return {"status": "limited"}
                 self.usage[key[0]] = (expires, count + 1)
                 entry = Entry(now + self.ttl, Future())

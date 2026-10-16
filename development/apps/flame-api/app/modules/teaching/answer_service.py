@@ -59,7 +59,7 @@ def _answer(request_id, context, generated, *, max_words: int | None = None, ren
         blocks=blocks).model_dump(mode="json")
 
 
-def ask(database, gateway, student_id: UUID, session_id: UUID, key: str, body, *, daily_limit: int = 100, on_delta=None):
+def ask(database, gateway, student_id: UUID, session_id: UUID, key: str, body, *, daily_limit: int | None = 100, on_delta=None):
     canonical = body.model_dump(mode="json")
     # Preserve hashes for pre-language-selector requests when Auto is selected.
     if canonical.get("response_language") is None:
@@ -71,7 +71,7 @@ def ask(database, gateway, student_id: UUID, session_id: UUID, key: str, body, *
         existing = db.scalar(select(StoredRequest.id).where(
             StoredRequest.student_id == student_id, StoredRequest.session_id == session_id,
             StoredRequest.idempotency_key == key))
-        if existing is None:
+        if existing is None and daily_limit is not None:
             count = db.scalar(select(func.count()).select_from(StoredRequest).where(
                 StoredRequest.student_id == student_id,
                 StoredRequest.created_at >= datetime.now(timezone.utc) - timedelta(days=1))) or 0

@@ -18,6 +18,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from app.modules.learning_response.service import ask
 from app.modules.teaching.capabilities import unsupported_capability
 from app.modules.teaching.schemas import AnswerRequest
+from app.modules.teaching.usage import daily_usage_limit
 
 router = APIRouter(prefix="/api/v1")
 Member = Annotated[dict, Depends(require_member)]
@@ -42,7 +43,7 @@ def ask_question(request: Request, session_id: UUID, body: AnswerRequest, princi
                               "Learning answers are unavailable right now.", retryable=True)
     result = ask(request.app.state.database, request.app.state.gateway,
                  UUID(principal["id"]), session_id, idempotency_key, body,
-                 daily_limit=request.app.state.settings.llm_daily_request_limit)
+                 daily_limit=daily_usage_limit(principal, request.app.state.settings.llm_daily_request_limit))
     if result["status"] == "error":
         code = result["code"]
         status = (429 if code in ("daily_limit_reached", "provider_rate_limited", "provider_budget_exceeded")
@@ -73,7 +74,7 @@ def ask_stream(request: Request, session_id: UUID, body: AnswerRequest, principa
         try:
             result = ask(request.app.state.database, request.app.state.gateway, owner,
                          session_id, idempotency_key, body,
-                         daily_limit=request.app.state.settings.llm_daily_request_limit, on_delta=delta)
+                         daily_limit=daily_usage_limit(principal, request.app.state.settings.llm_daily_request_limit), on_delta=delta)
             event = {"type": "answer", "answer": result}
         except HTTPException as exc:
             # Preserve safe operational rejections after the HTTP stream opens.
