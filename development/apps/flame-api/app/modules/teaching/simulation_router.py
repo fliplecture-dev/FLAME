@@ -11,6 +11,7 @@ from app.modules.conversations.models import Message
 from app.modules.conversations.router import owned
 from app.modules.identity.dependencies import require_member
 from app.modules.teaching.simulations import generate, select_engine, transient
+from app.modules.teaching.usage import daily_usage_limit
 
 router = APIRouter(prefix="/api/v1")
 
@@ -42,5 +43,5 @@ def simulation(request: Request, session_id: UUID, body: SimulationRequest,
         raise HTTPException(503, "provider_unavailable")
     language = transient.response_language(owner, body.message_id)
     result = transient.run(owner, body.message_id, lambda: generate(gateway, engine, text, response_language=language),
-                           start=body.start, limit=min(20, request.app.state.settings.llm_daily_request_limit), background=True)
+                           start=body.start, limit=daily_usage_limit(principal, min(20, request.app.state.settings.llm_daily_request_limit)), background=True)
     return JSONResponse({**result, "engine": engine}, headers={"Cache-Control": "no-store"})
