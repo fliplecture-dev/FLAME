@@ -1,5 +1,7 @@
 # FLAME MVP on Vercel
 
+Current production origin (2026-10-17): https://www.fliplecture.com, served by `flame-web`. `fliplecture.com` redirects to `www` (308); the legacy `flame.fliplecture.com` root redirects to `/flame` on `www` and other paths are preserved. Both main-domain assignments were moved from `v0-next-js-community-starter-pv`; that project retains its default Vercel hostname. The API remains https://flame-api.vercel.app. Supabase Auth Site URL and exact hosted callback/recovery URLs now use `www`; localhost URLs remain allowed.
+
 Owner-selected target, 2026-10-14: two Vercel projects from this repository. Runtime acceptance is tracked only in [STAGES-STEPS.md](STAGES-STEPS.md), especially B5/B9.11/B10/F8. No deployment is recorded by this guide.
 
 Deployment performed on 2026-10-14 at the owner's request: `flame-web` and `flame-api` are connected to `fliplecture-dev/FLAME` with the roots below. Website: https://flame.fliplecture.com. API: https://flame-api.vercel.app. Both initial production builds from `93b2e8f33a424cd4229b4d8dd40e0e581a44b601` reached READY in Mumbai (`bom1`). Exact runtime evidence and remaining acceptance are recorded in STAGES-STEPS.md. Work locally, run affected checks, then commit/push reviewed changes to main. Git integration triggers applicable builds; verify deployment results and hosted journeys after each release. Full production pilot acceptance remains open.
@@ -18,7 +20,8 @@ Use Vercel's project environment settings, scoped separately to Preview and Prod
 | Website variable | Value / source |
 | --- | --- |
 | `FLAME_API_URL` | HTTPS origin of the API project, without a trailing slash |
-| `FLAME_WEB_ORIGIN` | Exact HTTPS origin of the website project |
+| `FLAME_WEB_ORIGIN` | `https://www.fliplecture.com` in Production |
+| `FLIPLECTURE_CANONICAL_ORIGIN` | `https://www.fliplecture.com` in Production; enables the legacy-host redirects at build time |
 | `FLAME_BFF_SHARED_KEY` | Same private random value as the API project; server-only |
 
 | API variable | Value / source |
@@ -37,10 +40,12 @@ Use Vercel's project environment settings, scoped separately to Preview and Prod
 | `FLAME_LLM_OPENAI_API_KEY` / `FLAME_LLM_MODEL` | Configure together; retain the owner's permitted model and spend controls |
 | `FLAME_LLM_TIMEOUT_SECONDS` | `12` |
 | `FLAME_LLM_MAX_OUTPUT_TOKENS` | `1500` |
-| `FLAME_LLM_DAILY_REQUEST_LIMIT` | `100` per member over a rolling 24 hours; server-verified administrators are exempt |
+| `FLAME_LLM_DAILY_REQUEST_LIMIT` | `25` in Production; members share 25 questions/day across Study and Curiosity, guests receive 10/day, resetting at midnight Asia/Kolkata; verified administrators are exempt |
 | `FLAME_DELETION_RECEIPT_RETENTION_DAYS` | `30`; this controls local receipts, not provider backup/log expiry |
 
 Configure Supabase Auth's website/callback/recovery URLs for the chosen website domain. Do not use the development schema-owner database connection as the production runtime role. Migrations run separately with the reviewed migration role; neither startup nor a deployment build runs them automatically.
+
+The shared database is at `20261017_32` (catalogues and guest/profile schema). The restricted runtime role has CRUD and role-specific RLS policies on the new `catalogue_entries` and `guest_access` tables; `anon`/`authenticated` protections remain. Verify equivalent grants/policies when deploying future migrations to a restricted role.
 
 Supabase transaction-pooler connections disable Psycopg prepared statements and use SQLAlchemy `NullPool`, releasing client connections after each transaction. Production Supabase session-pooler URLs also use `NullPool` to avoid retaining scarce idle slots if an older connection setting is restored. Persistent local development retains its bounded application pool. The initial hosted session-pooler configuration exhausted its 15-client cap across warm serverless instances; do not restore that URL with an older application version that retains idle connections. See [Supabase connection guidance](https://supabase.com/docs/guides/database/connecting-to-postgres).
 
