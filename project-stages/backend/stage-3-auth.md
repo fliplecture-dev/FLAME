@@ -2,6 +2,8 @@
 
 Decision (2026-09-26): members self-register using email and password. Email verification is required before password sign-in. Member registration has no role field; the admin_roles table alone grants admin access.
 
+Current extension (2026-10-17): sign-up/sign-in accept an optional contact phone; `/profile` provides authenticated, owned contact/address editing. Public guest Curiosity uses a separate opaque capability with 10 questions per India calendar day; Study still requires sign-in. Signed-in students share 25 questions per day. See [user access/profile contract and migration activation](../USER-ACCESS-PROFILES.md), which supersedes older sign-in-only AI assumptions.
+
 ## Flow
 
 Browser requests stay on the same-origin Next.js BFF. Every mutation checks the exact Origin and a random double-submit CSRF value. The browser receives an opaque, HttpOnly, SameSite cookie; Supabase access and refresh tokens are encrypted in flame.browser_sessions with a Fernet key. FastAPI checks the BFF shared key, the hashed session ID, a signed Supabase JWT (issuer, audience, expiry, subject, role), and the server-side profile/admin tables. Expired access tokens refresh under a row lock. Browser sessions have a seven-day absolute lifetime enforced by both the cookie and FastAPI. Logout revokes the local session and calls Supabase logout when the access token is still valid. No client-provided member ID or role is used as authority.

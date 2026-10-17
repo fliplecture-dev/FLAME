@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BulkTransfer } from "./bulk-transfer";
 import { B9Admin } from "./b9-admin";
+import { CatalogueAdmin } from "@/features/discovery/catalogue-admin";
 import { HierarchyGrid, type PathChange } from "./hierarchy-grid";
 import { ImportReviewGrid, type ReviewChange } from "./import-review-grid";
 import { UploadedWorkbookGrid } from "./uploaded-workbook-grid";
@@ -96,7 +97,7 @@ function positionOverflowMenu(menu: HTMLDetailsElement) {
 }
 
 export function AdminPanel() {
-  const [tab, setTab] = useState<"curriculum" | "students" | "resources" | "teachers" | "kits">("curriculum");
+  const [tab, setTab] = useState<"curriculum" | "students" | "resources" | "teachers" | "kits" | "books" | "classes">("curriculum");
   const [catalogueView, setCatalogueView] = useState<"list" | "create" | "workspace">("list");
   useEffect(() => {
     const closeOutside = (event: PointerEvent) => {
@@ -538,6 +539,8 @@ export function AdminPanel() {
     { id: "students", label: "Students", hint: "Profiles and measured activity" },
     { id: "teachers", label: "Teachers", hint: "Expertise and publication" },
     { id: "kits", label: "Activity Kits", hint: "Reusable topic-linked kits" },
+    { id: "books", label: "Books", hint: "Reading and learning collections" },
+    { id: "classes", label: "Classes", hint: "Learning opportunities and schedules" },
   ] as const;
   const activeSection = sections.find(section => section.id === tab)!;
   return <div className={"b4-admin " + (tab === "resources" ? "admin-resource-mode" : tab === "curriculum" && catalogueView === "workspace" ? "admin-workspace-mode" : "")}>
@@ -883,6 +886,7 @@ export function AdminPanel() {
       </div>
     </div></div>}
     {(tab === "resources" || tab === "teachers" || tab === "kits") && <B9Admin section={tab} tree={tree} />}
+    {(tab === "books" || tab === "classes") && <CatalogueAdmin key={tab} kind={tab} />}
     {tab === "students" && <section className="admin-card"><div className="admin-card-heading"><div>
       <h3>Student directory</h3><p>Search individual profiles and measured activity. Learning activity is not a mastery score.</p></div></div>
       <BulkTransfer kind="students" onImported={()=>setBulkStudentReload(n=>n+1)} />

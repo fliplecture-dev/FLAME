@@ -34,7 +34,7 @@ class Settings(BaseSettings):
     resource_recommendation_count: int = Field(default=3, ge=0, le=10)
     teacher_recommendation_count: int = Field(default=2, ge=0, le=5)
     teacher_recommendation_every_n_turns: int = Field(default=1, ge=1, le=20)
-    llm_daily_request_limit: int = Field(default=100, ge=1, le=1000)
+    llm_daily_request_limit: int = Field(default=25, ge=1, le=1000)
     llm_openai_api_key: SecretStr | None = None
     llm_model: str | None = None
     llm_timeout_seconds: int = Field(default=12, ge=1, le=20)

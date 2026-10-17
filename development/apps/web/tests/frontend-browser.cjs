@@ -17,7 +17,7 @@ fs.mkdirSync(artifactDir, { recursive: true });
     const page = await context.newPage();
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
-    await page.goto(baseURL, { waitUntil: 'networkidle' });
+    await page.goto(baseURL+'/flame', { waitUntil: 'networkidle' });
     const side = page.locator('.desktop-sidebar');
     const rail = page.locator('.sidebar-rail');
     const drawer = page.locator('.curriculum-drawer');

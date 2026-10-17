@@ -3,6 +3,7 @@ import type { PromptAttachment } from "./prompt-attachments";
 import type { LearningBlock } from "./learning-content";
 export interface ConversationTurn {
   id: string;
+  guest?: boolean;
   question: string;
   attachments: PromptAttachment[];
   status: "pending" | "complete" | "unavailable" | "unsupported" | "error";

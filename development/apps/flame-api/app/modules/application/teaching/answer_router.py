@@ -82,7 +82,7 @@ def ask_stream(request: Request, session_id: UUID, body: AnswerRequest, principa
             detail = exc.detail.get("code") if isinstance(exc.detail, dict) else exc.detail
             allowed = {"daily_limit_reached", "request_in_progress", "session_request_in_progress",
                        "unavailable_context", "session_context_mismatch", "idempotency_key_conflict",
-                       "provider_unavailable"}
+                       "provider_unavailable", "catalogue_item_unavailable", "catalogue_context_too_large"}
             code = detail if isinstance(detail, str) and detail in allowed else "answer_unavailable"
             event = {"type": "failure", "code": code, "status": exc.status_code}
             logging.getLogger("flame").warning("answer_stream_rejected", extra={"fields": {

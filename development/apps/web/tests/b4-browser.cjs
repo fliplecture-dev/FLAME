@@ -430,7 +430,7 @@ const mock = http.createServer(async (request, response) => {
     const context = await browser.newContext();
     await context.addCookies([{ name: "flame_session", value: "b4-browser-session", url: base, httpOnly: true }]);
     const page = await context.newPage();
-    await page.goto(base, { waitUntil: "domcontentloaded" });
+    await page.goto(base+'/flame', { waitUntil: "domcontentloaded" });
     assert(await page.getByText("Your learning space is empty.").first().isVisible());
     await page.getByRole("button", { name: "Add from Library" }).first().click();
     const library = page.locator(".library-dialog");
@@ -738,7 +738,7 @@ const mock = http.createServer(async (request, response) => {
     await adminPage.getByRole("heading", { name: "Teacher Management" }).waitFor();
     await adminPage.getByRole("button", { name: "Activity Kits" }).click();
     await adminPage.getByRole("heading", { name: "Activity Kit Management" }).waitFor();
-    await adminPage.goto(base, { waitUntil: "domcontentloaded" });
+    await adminPage.goto(base+'/flame', { waitUntil: "domcontentloaded" });
     const adminLink = adminPage.locator(".desktop-sidebar").getByRole("link", { name: "Admin dashboard" });
     await adminLink.waitFor();
     await adminLink.click();

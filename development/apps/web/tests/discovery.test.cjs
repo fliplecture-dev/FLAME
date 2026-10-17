@@ -1,0 +1,46 @@
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const path = require('node:path');
+const {loadTs} = require('./load-local-typescript.cjs');
+test('catalogue URLs preserve literal text and normalize unknown catalogue kinds', async () => {
+  const {catalogueKind, searchHref} = await loadTs(path.resolve(__dirname, '../src/features/discovery/catalogue.ts'));
+  assert.equal(catalogueKind('teachers'), 'teachers');
+  assert.equal(catalogueKind('//foreign.test'), 'books');
+  const url = new URL(searchHref('books', '  maths & science?  '), 'https://example.test');
+  assert.equal(url.pathname, '/search');
+  assert.equal(url.searchParams.get('q'), 'maths & science?');
+});
+test('question handoff expires, consumes once and rejects external return paths', async () => {
+  const store = new Map();
+  global.sessionStorage = { getItem: key => store.get(key) ?? null, setItem: (key,value) => store.set(key,value), removeItem: key => store.delete(key) };
+  const {saveQuestionIntent, takeQuestionIntent, safeReturnPath, pendingQuestionReturnPath} = await loadTs(path.resolve(__dirname, '../src/features/discovery/question-intent.ts'));
+  saveQuestionIntent('  Explain fractions  ', 'ta');
+  assert.equal(pendingQuestionReturnPath(), '/flame');
+  assert.equal(takeQuestionIntent().question, 'Explain fractions');
+  assert.equal(takeQuestionIntent(), null);
+  saveQuestionIntent('Continue after sign-in','en',undefined,true);
+  assert.equal(takeQuestionIntent(true),null);
+  assert.equal(pendingQuestionReturnPath(),'/flame');
+  assert.equal(takeQuestionIntent().question,'Continue after sign-in');
+  assert.equal(takeQuestionIntent(),null);
+  assert.equal(safeReturnPath('/profile'),'/profile');
+  saveQuestionIntent('Old question','en');
+  const [key, raw] = [...store][0], value=JSON.parse(raw);value.createdAt=Date.now()-31*60*1000;store.set(key,JSON.stringify(value));
+  assert.equal(takeQuestionIntent(),null);
+  for(const value of ['https://foreign.test','//foreign.test','/learn/../../admin','/learn\\foreign','/admin']) assert.equal(safeReturnPath(value),null);
+  assert.equal(safeReturnPath('/learn'),'/flame');
+  assert.equal(safeReturnPath('/flame'),'/flame');
+  assert.equal(safeReturnPath('/search?kind=books'),'/search?kind=books');
+  delete global.sessionStorage;
+});
+test('catalogue shortcuts appear only for requested categories, with negation respected', async () => {
+  const {requestedCatalogues} = await loadTs(path.resolve(__dirname, '../src/features/discovery/requested-catalogues.ts'));
+  const ids = text => requestedCatalogues(text).map(item => item.id);
+  for (const question of ['What is algebra?', 'Explain classes in Python', 'What is the meaning of book?', 'My teacher asked me to find roots', 'I want to create a class in Python']) assert.deepEqual(ids(question), [], question);
+  assert.deepEqual(ids('Recommend books for algebra'), ['books']);
+  assert.deepEqual(ids('Show me science kits'), ['kits']);
+  assert.deepEqual(ids('I need a maths tutor'), ['teachers']);
+  assert.deepEqual(ids('Find online classes'), ['classes']);
+  assert.deepEqual(ids('Suggest books and kits, but not teachers'), ['books','kits']);
+  assert.deepEqual(ids("Don't recommend any books"), []);
+});

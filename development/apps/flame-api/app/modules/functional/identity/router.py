@@ -17,11 +17,13 @@ from app.core.config import Settings
 from app.modules.functional.identity.import_profiles import lock_profile_email
 from app.modules.functional.identity.models import AdminRole, BrowserSession, StudentProfile
 
+from app.modules.functional.identity.profile_data import PhoneInput, clean_phone
+
 router = APIRouter(prefix="/api/v1")
 AUTH_FAILED = HTTPException(401, "Authentication required")
 
 
-class RegisterBody(BaseModel):
+class RegisterBody(PhoneInput):
     model_config = ConfigDict(extra="forbid")
     email: str = Field(min_length=3, max_length=320)
     password: str = Field(min_length=12, max_length=128)
@@ -35,7 +37,7 @@ class RegisterBody(BaseModel):
         return value.strip()
 
 
-class LoginBody(BaseModel):
+class LoginBody(PhoneInput):
     model_config = ConfigDict(extra="forbid")
     email: str
     password: str
@@ -203,8 +205,12 @@ def _principal(request: Request, raw: str):
                 existing = pending[0]
 
         if existing is None:
+            try:
+                phone = clean_phone((claims.get("user_metadata") or {}).get("phone_number"))
+            except ValueError:
+                phone = None
             session.execute(insert(StudentProfile).values(
-                auth_subject=claims["sub"], email=claims.get("email"),
+                auth_subject=claims["sub"], email=claims.get("email"), phone_number=phone,
                 display_name=(claims.get("user_metadata") or {}).get("display_name")
             ).on_conflict_do_nothing(index_elements=["auth_subject"]))
         profile = existing or session.scalar(select(StudentProfile).where(StudentProfile.auth_subject == claims["sub"]))
@@ -220,7 +226,7 @@ def register(request: Request, body: RegisterBody):
     try:
         result = _provider(_config(request), "POST", "/signup", body={
             "email": body.email.strip().lower(), "password": body.password,
-            "data": {"display_name": body.display_name.strip()},
+            "data": {"display_name": body.display_name.strip(), **({"phone_number": body.phone_number} if body.phone_number else {})},
         })
         if result.get("access_token"):
             raise HTTPException(503, "Email verification must be enabled")
@@ -242,7 +248,15 @@ def login(request: Request, body: LoginBody):
     user = _provider(_config(request), "GET", "/user", token=payload["access_token"])
     if not user.get("email_confirmed_at"):
         raise AUTH_FAILED
-    return {"session": _store(request, payload)}
+    raw = _store(request, payload)
+    if body.phone_number:
+        principal = _principal(request, raw)
+        with request.app.state.database.session() as db, db.begin():
+            profile = db.scalar(select(StudentProfile).where(StudentProfile.id == UUID(principal["id"])).with_for_update())
+            if profile is None or profile.status != "active":
+                raise HTTPException(403, "Account inactive")
+            profile.phone_number = body.phone_number
+    return {"session": raw}
 
 
 

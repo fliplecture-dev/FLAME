@@ -56,6 +56,6 @@ export function LearningShortcuts({ title, items, activeId, expanded, onExpanded
     </div>
     {position && createPortal(<div ref={menu} id={`${id}-menu`} className="shortcut-menu" role="menu" aria-label={`${title} options`} style={position} onKeyDown={event => { if (["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) { event.preventDefault(); menu.current?.querySelector<HTMLButtonElement>("button")?.focus(); } if (event.key === "Tab") closeMenu(); }}>
       <button role="menuitem" disabled={busy || !items.length} onClick={event => { event.stopPropagation(); closeMenu(true); onSectionAction(); }}>{action}</button>
-    </div>, document.body)}
+    </div>, trigger.current?.closest("dialog") ?? document.body)}
   </section>;
 }

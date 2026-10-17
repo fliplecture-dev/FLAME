@@ -14,12 +14,18 @@ For the Interactive-only HTML5 build, source files, upload/delivery/viewer flow,
 
 For clickable Browse Media thumbnails, provider images, private uploaded-video thumbnail management and publication requirements, read [Video thumbnail handoff](backend/stage-9-video-thumbnails.md).
 
+For current Fliplecture branding, Tilt Warp font loading, light/dark logo colours and verification boundaries, read the [brand specification](FLIPLECTURE-DISCOVERY-IMPLEMENTATION.md#fliplecture-logo-refresh--2026-10-17).
+
+For current guest/member access, midnight India question resets, optional phone and private student profiles, read [USER-ACCESS-PROFILES.md](USER-ACCESS-PROFILES.md).
+
 ## Document ownership
 
 | File | Owns |
 | --- | --- |
 | PROJECT_CONTEXT.md | Agent entry point, code/design/runtime locations and integration cautions |
 | DEVELOPMENT-HANDOFF.md | Dated orientation: actual stack, folder/module map, setup, evidence, gaps and handoff priorities |
+| FLIPLECTURE-DISCOVERY-IMPLEMENTATION.md | Current discovery delivery, brand specification/source ownership and verification boundaries |
+| USER-ACCESS-PROFILES.md | Current visitor/member rules, profile privacy, guest boundary, migration activation and checks |
 | STAGES-STEPS.md | Numbered steps, current totals/statuses, stage prerequisites, decisions, evidence and execution sequence |
 | backend/stage-1/module-architecture.md | Module boundaries, transactions and relational schema rules |
 | backend/stage-1/api-contracts.md | API contracts, Excel input, mapping, response and lifecycle rules |

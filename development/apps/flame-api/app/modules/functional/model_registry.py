@@ -5,6 +5,7 @@ Register declarations only; never open database connections or load application 
 from importlib import import_module
 
 MODEL_MODULES = (
+    "app.modules.functional.discovery.models",
     "app.modules.functional.bulk_transfer.models",
     "app.modules.functional.curriculum.models",
     "app.modules.functional.curriculum.import_models",

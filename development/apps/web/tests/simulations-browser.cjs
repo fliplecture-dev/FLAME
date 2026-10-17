@@ -118,7 +118,7 @@ const mock = http.createServer(async(req,res)=>{
     const results=[];
     // Ordinary answers must not flash simulation progress during eligibility checks.
     currentSpec={status:'ineligible'};eligibilityDelay=1500;
-    await page.goto(base,{waitUntil:'networkidle'});
+    await page.goto(base+'/flame',{waitUntil:'networkidle'});
     const eligibility=page.waitForResponse(response=>response.url().includes('/simulation')&&!response.url().includes('/compile'));
     await page.locator('.desktop-sidebar').getByRole('button',{name:'Falling objects (study)',exact:true}).click();
     await page.waitForTimeout(300);
@@ -132,7 +132,7 @@ const mock = http.createServer(async(req,res)=>{
     const trackCatalogueCompile=request=>{if(request.url().includes('/api/simulations/compile'))catalogueCompiles++;};
     page.on('request',trackCatalogueCompile);
     currentSpec={status:'resource',resource_id:uid(67),version:2,title:'Published gravity lab',html_document:'<!doctype html><html><head><title>Gravity</title></head><body><p>Catalogue gravity experiment</p></body></html>'};
-    await page.goto(base,{waitUntil:'networkidle'});
+    await page.goto(base+'/flame',{waitUntil:'networkidle'});
     await page.locator('.desktop-sidebar').getByRole('button',{name:'Falling objects (study)',exact:true}).click();
     const catalogue=page.locator('.flame-message .catalogue-simulation');
     await catalogue.frameLocator('iframe').getByText('Catalogue gravity experiment',{exact:true}).waitFor();
@@ -146,7 +146,7 @@ const mock = http.createServer(async(req,res)=>{
       pendingReplies=2;simulationStarts=[];
       currentSpec={status:'ready',version:1,title:spec.name,description:'Explore this illustrative simulation.',...spec};
       if(spec.name==='isolation-probe')currentSpec.source=currentSpec.source.replace("['https:','','example.invalid','blocked.js'].join('/')",JSON.stringify(`http://127.0.0.1:${mock.address().port}/sandbox-network-probe`));
-      await page.goto(base,{waitUntil:'networkidle'});
+      await page.goto(base+'/flame',{waitUntil:'networkidle'});
       await page.locator('.desktop-sidebar').getByRole('button',{name:'Falling objects (study)',exact:true}).click();
       await page.getByText('Preparing interactive simulation…',{exact:true}).waitFor();
       const generatingProgress=page.getByRole('progressbar',{name:'Interactive simulation preparation'});
@@ -225,13 +225,13 @@ const mock = http.createServer(async(req,res)=>{
       const dir=path.resolve(cwd,'../../../work/f13');fs.mkdirSync(dir,{recursive:true});
       await player.evaluate(el=>el.scrollIntoView({block:'center'}));
       await player.screenshot({path:path.join(dir,spec.name+'.png')});
-      await page.goto(base,{waitUntil:'networkidle'});for(let i=0;i<20&&page.workers().length;i++)await page.waitForTimeout(100);assert.equal(page.workers().length,0,'Leaving the answer must terminate physics/render workers');
+      await page.goto(base+'/flame',{waitUntil:'networkidle'});for(let i=0;i<20&&page.workers().length;i++)await page.waitForTimeout(100);assert.equal(page.workers().length,0,'Leaving the answer must terminate physics/render workers');
       results.push({name:spec.name,engine:spec.engine,status:'passed'});console.log('INLINE RUNTIME PASSED',spec.name,spec.engine);
     }
     // A failed source request exits loading; explicit retry only retrieves the existing job.
     currentSpec={status:'ready',version:1,engine:'html5',title:'Recover source request',description:'Connection recovery',source:'export default ()=>({})'};
     failSimulation=true;simulationStarts=[];
-    await page.goto(base,{waitUntil:'networkidle'});
+    await page.goto(base+'/flame',{waitUntil:'networkidle'});
     await page.locator('.desktop-sidebar').getByRole('button',{name:'Falling objects (study)',exact:true}).click();
     await page.getByRole('button',{name:'Check simulation',exact:true}).waitFor();
     assert.equal(await page.getByText('Preparing interactive simulation…',{exact:true}).count(),0);
@@ -244,14 +244,14 @@ const mock = http.createServer(async(req,res)=>{
     const reduced=await browser.newContext({viewport:{width:1200,height:1000},reducedMotion:'reduce'});
     await reduced.addCookies([{name:'flame_session',value:'rich-test-session',url:base,httpOnly:true}]);
     const reducedPage=await reduced.newPage();currentSpec={status:'ready',version:1,engine:'html5',title:'Reduced motion',description:'Paused initially',source:'export default ()=>({})'};
-    await reducedPage.goto(base,{waitUntil:'networkidle'});
+    await reducedPage.goto(base+'/flame',{waitUntil:'networkidle'});
     const recent=reducedPage.getByRole('button',{name:'Falling objects (study)',exact:true});
     await recent.first().click();const reducedPlayer=reducedPage.locator('.simulation-player');await reducedPlayer.frameLocator('iframe').getByRole('button',{name:'Resume',exact:true}).waitFor();
     await reduced.close();
     // True text streaming remains usable when the independent compiler is slow/fails.
     streamFixture=true;
     currentSpec={status:'ready',version:1,engine:'html5',title:'Independent compile',description:'Separate compilation',source:'export default ()=>({})'};
-    await page.goto(base,{waitUntil:'networkidle'});await page.locator('.desktop-sidebar').getByRole('button',{name:'Falling objects (study)',exact:true}).click();
+    await page.goto(base+'/flame',{waitUntil:'networkidle'});await page.locator('.desktop-sidebar').getByRole('button',{name:'Falling objects (study)',exact:true}).click();
     await page.waitForFunction(()=>document.querySelector('.simulation-player')?.dataset.simulationState==='ready');
     let releaseCompile,notifyCompile;let compilationHeld=false;
     const compilationStarted=new Promise(resolve=>notifyCompile=resolve);
@@ -278,10 +278,10 @@ const mock = http.createServer(async(req,res)=>{
     // Runtime containment: a compiled infinite loop must terminate while host controls work.
     for(const source of ['export default ()=>{while(true){}}','throw Error("synthetic runtime failure");export default ()=>({})','postMessage({type:"ready"});export default ()=>{while(true){const t=performance.now();while(performance.now()-t<500){}postMessage({type:"heartbeat"});}}']){
       currentSpec={status:'ready',version:1,engine:'html5',title:'Failure probe',description:'Failure containment',source};
-      await page.goto(base,{waitUntil:'networkidle'});await page.locator('.desktop-sidebar').getByRole('button',{name:'Falling objects (study)',exact:true}).click();
+      await page.goto(base+'/flame',{waitUntil:'networkidle'});await page.locator('.desktop-sidebar').getByRole('button',{name:'Falling objects (study)',exact:true}).click();
       await page.waitForFunction(()=>document.querySelector('.simulation-player')?.dataset.simulationState==='error',{},{timeout:22000});
       assert(await page.locator('.flame-message').getByText('Interactive science',{exact:false}).isVisible());
-      await page.goto(base,{waitUntil:'networkidle'});
+      await page.goto(base+'/flame',{waitUntil:'networkidle'});
     }
     if(process.argv.includes('--live'))assert.equal(results.length,4,'All four requested live demos must generate and execute');
     assert.equal(networkLeaks,0,'The sandbox must not reach the network sentinel');

@@ -79,7 +79,7 @@ const mock=http.createServer(async(req,res)=>{
   browser=await chromium.launch({channel:'msedge',headless:true});const ctx=await browser.newContext({viewport:{width:1536,height:920}});await ctx.addCookies([{name:'flame_session',value:'explore-test-session',url:base,httpOnly:true}]);const page=await ctx.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.route('**/fixture.png',route=>route.fulfill({contentType:'image/png',body:Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a3AAAAABJRU5ErkJggg==','base64')}));
   await page.route('https://i.ytimg.com/**',route=>route.fulfill({contentType:'image/png',body:Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a3AAAAABJRU5ErkJggg==','base64')}));
-  await page.goto(base,{waitUntil:'networkidle'});assert.equal(listings,0);
+  await page.goto(base+'/flame',{waitUntil:'networkidle'});assert.equal(listings,0);
   const brand=page.locator('.desktop-sidebar .flame-mode-brand');
   await brand.locator('summary').press('ArrowUp');await brand.getByRole('menuitemradio',{name:'Curiosity',exact:true}).press('Enter');await page.getByRole('heading',{name:'What are you curious about?',exact:true}).waitFor();
   await brand.locator('summary').press('ArrowDown');await brand.getByRole('menuitemradio',{name:'Study',exact:true}).press('Enter');await page.getByRole('heading',{name:'What will you learn today?',exact:true}).waitFor();
@@ -112,7 +112,7 @@ const mock=http.createServer(async(req,res)=>{
   const navAfter=await page.locator('.desktop-sidebar').evaluate(el=>el.getBoundingClientRect().width);assert(navAfter>=navBefore+70);
   const mediaBefore=await panel.evaluate(el=>el.getBoundingClientRect().width);edge=await rightDivider.boundingBox();await page.mouse.move(edge.x+edge.width/2,200);await page.mouse.down();await page.mouse.move(edge.x+edge.width/2-100,200,{steps:8});await page.mouse.up();
   const mediaAfter=await panel.evaluate(el=>el.getBoundingClientRect().width);assert(mediaAfter>=mediaBefore+90);assert(await page.locator('.learning-column').evaluate(el=>el.getBoundingClientRect().width>=399));assert.equal(listings,listBeforeResize);
-  const restored=await ctx.newPage();await restored.goto(base,{waitUntil:'networkidle'});assert(Math.abs(await restored.locator('.desktop-sidebar').evaluate(el=>el.getBoundingClientRect().width)-navAfter)<2);await restored.getByRole('button',{name:'Explore',exact:true}).click();await restored.getByRole('dialog',{name:'Explore',exact:true}).waitFor();await restored.waitForTimeout(250);assert(Math.abs(await restored.locator('.explore-panel').evaluate(el=>el.getBoundingClientRect().width)-mediaAfter)<2);await restored.close();
+  const restored=await ctx.newPage();await restored.goto(base+'/flame',{waitUntil:'networkidle'});assert(Math.abs(await restored.locator('.desktop-sidebar').evaluate(el=>el.getBoundingClientRect().width)-navAfter)<2);await restored.getByRole('button',{name:'Explore',exact:true}).click();await restored.getByRole('dialog',{name:'Explore',exact:true}).waitFor();await restored.waitForTimeout(250);assert(Math.abs(await restored.locator('.explore-panel').evaluate(el=>el.getBoundingClientRect().width)-mediaAfter)<2);await restored.close();
   await rightDivider.press('ArrowRight');assert(await panel.evaluate(el=>el.getBoundingClientRect().width)<mediaAfter);await rightDivider.dblclick();await leftDivider.dblclick();
   assert(!await page.locator('.student-app').evaluate(el=>el.classList.contains('pane-resizing')));
 

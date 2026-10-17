@@ -27,6 +27,7 @@ const mock = http.createServer(async (request, response) => {
   const route = new URL(request.url, 'http://fixture').pathname.replace('/api/v1/', '');
   if (route.endsWith('/ask')) asks++;
   if (request.headers['x-bff-key'] !== 'sidebar-test-secret' || request.headers['x-flame-session'] !== 'sidebar-test-session') return json(response, {}, 401);
+  if (route === 'me/usage') return json(response, {limit:25,used:0,remaining:25,timezone:'Asia/Kolkata',resets_at:new Date(Date.now()+86400000).toISOString()});
   if (route === 'me') return json(response, { id: uid(99), role: 'member', email: 'sidebar@example.test' });
   if (route === 'curricula') return json(response, { items: [{ id: ids.c }] });
   if (route === `curricula/${ids.c}/tree`) return json(response, tree);
@@ -59,14 +60,17 @@ const mock = http.createServer(async (request, response) => {
     browser = await chromium.launch({ channel: 'msedge', headless: true });
     const anonymous = await browser.newContext();
     const anonymousPage = await anonymous.newPage();
-    await anonymousPage.goto(base, { waitUntil: 'networkidle' });
-    assert.equal(new URL(anonymousPage.url()).pathname, '/sign-in');
+    await anonymousPage.goto(base+'/flame', { waitUntil: 'networkidle' });
+    assert.equal(new URL(anonymousPage.url()).pathname, '/flame');
+    assert.equal(await anonymousPage.locator('.workspace-modes').getByRole('button',{name:'Curiosity',exact:true}).getAttribute('aria-pressed'),'true');
+    await anonymousPage.locator('.workspace-modes').getByRole('button',{name:'Study',exact:true}).click();
+    await anonymousPage.waitForURL('**/sign-in?next=*');
     await anonymous.close();
     const browserContext = await browser.newContext({ viewport: { width: 1200, height: 850 } });
     await browserContext.addCookies([{ name: 'flame_session', value: 'sidebar-test-session', url: base, httpOnly: true }]);
     const page = await browserContext.newPage();
     const errors = []; page.on('pageerror', error => errors.push(error.message));
-    await page.goto(base, { waitUntil: 'networkidle' });
+    await page.goto(base+'/flame', { waitUntil: 'networkidle' });
     assert.equal(await page.locator('.development-response').count(), 0);
     assert(await page.getByLabel('Progress unavailable', {exact:true}).count() > 0);
     assert.equal(await page.getByLabel(/^\d+% progress$/).count(), 0);
