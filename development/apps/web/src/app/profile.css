@@ -1,0 +1,60 @@
+/* Shared guest allowance and member-owned profile surfaces. */
+.profile-popover .question-allowance { display:grid; gap:10px; padding:12px 10px; border-bottom:1px solid var(--line); color:var(--ink); font-size:12px; line-height:1.6; }
+.question-allowance>span>span { display:block; color:var(--muted); font-size:11px; }
+.question-allowance a { color:var(--ink); text-underline-offset:3px; }
+.guest-navigation { padding:20px 18px; color:var(--muted); line-height:1.6; }
+.guest-navigation h2 { color:var(--ink); font-size:16px; }
+.guest-navigation nav { display:grid; gap:8px; margin:20px 0; }
+.guest-navigation a { color:var(--ink); text-underline-offset:3px; }
+.profile-page-header { display:flex; justify-content:space-between; align-items:center; gap:20px; padding:24px; border-bottom:1px solid var(--line); }
+.profile-page-header>div { display:flex; align-items:center; gap:16px; }
+.profile-page-content { width:min(720px,100%); padding:40px 24px 70px; margin:0 auto; }
+.profile-page-content>p { color:var(--muted); line-height:1.6; }
+.student-profile-form { display:grid; gap:18px; margin-top:28px; }
+.profile-address-field { display:grid; gap:8px; }
+.student-profile-form label { display:grid; gap:8px; color:var(--ink); }
+.student-profile-form :is(input,textarea) { width:100%; min-width:0; border:1px solid var(--line); border-radius:10px; background:var(--paper); color:var(--ink); padding:12px; }
+.student-profile-form input[readonly] { color:var(--muted); }
+.profile-field-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.student-profile-form small { color:var(--muted); }
+.student-profile-form .account-link { justify-self:start; }
+@media(max-width:600px) { .profile-field-grid { grid-template-columns:1fr; } .profile-page-header { padding:18px; gap:10px; } .profile-page-header .fliplecture-logo { font-size:23px; } .profile-page-header>div { gap:8px; } }
+
+/* Account menu: shared by the expanded sidebar, compact rail and mobile drawer. */
+.student-app .profile-popover { --muted:#5e697c; padding:6px; border-radius:18px; max-height:calc(100dvh - 100px); overflow-y:auto; overscroll-behavior:contain; box-shadow:0 12px 40px #14223418; }
+.student-app .student-profile { transition:background .15s ease; }
+.student-app .student-profile:hover { background:var(--selected); }
+.student-profile::-webkit-details-marker { display:none; }
+.account-menu-header { display:flex; align-items:center; gap:10px; padding:12px 10px 15px; border-bottom:1px solid var(--line); }
+.account-menu-avatar { display:grid; place-items:center; width:38px; height:38px; flex-shrink:0; border-radius:13px; background:var(--selected); color:var(--ink); }
+.account-menu-header>div { min-width:0; }
+.account-menu-header strong { display:block; font-size:13px; font-weight:600; color:var(--ink); overflow-wrap:anywhere; }
+.account-menu-header span:not(.account-menu-avatar) { display:block; margin-top:4px; font-size:11px; color:var(--muted); overflow-wrap:anywhere; }
+.account-menu-actions { display:grid; gap:3px; padding:7px 0; }
+.profile-popover .account-menu-action { display:flex; align-items:center; gap:11px; width:100%; min-height:44px; padding:10px; border:0; border-radius:11px; background:transparent; color:var(--ink); font:inherit; font-size:13px; font-weight:500; text-align:left; text-decoration:none; cursor:pointer; transition:background .15s ease,color .15s ease; }
+.account-menu-action>svg { flex-shrink:0; }
+.account-menu-action>span { flex:1; }
+.account-menu-action>svg:last-child:not(:first-child) { color:var(--muted); }
+.profile-popover .account-menu-action:hover { background:var(--selected); }
+.profile-popover :is(a,button):focus-visible { outline:2px solid #416daf; outline-offset:-2px; }
+.account-menu-danger { padding-top:6px; border-top:1px solid var(--line); }
+.profile-popover .account-menu-delete { color:#b42335; }
+.profile-popover .account-menu-delete:hover { background:#fff0f1; }
+.account-delete-confirmation { margin:4px; padding:12px; border:1px solid var(--line); border-radius:12px; background:var(--paper); }
+.account-delete-confirmation>strong { font-size:13px; color:var(--ink); }
+.profile-popover .account-delete-confirmation p { margin:8px 0 12px; font-size:12px; }
+.account-delete-actions { display:flex; flex-wrap:wrap; gap:8px; }
+.account-delete-actions button { flex:1 1 auto; min-height:38px; padding:8px 10px; border:1px solid var(--line); border-radius:9px; font:inherit; font-size:12px; font-weight:600; cursor:pointer; }
+.account-delete-cancel { background:var(--paper); color:var(--ink); }
+.account-delete-cancel:hover { background:var(--selected); }
+.account-delete-actions .account-delete-confirm { background:#b42335; border-color:#b42335; color:white; }
+.account-delete-actions .account-delete-confirm:hover { background:#901c2b; }
+.profile-popover button:disabled { cursor:wait; opacity:.65; }
+.profile-popover .account-menu-error { padding:0 10px; color:#b42335; font-size:12px; }
+.account-menu-guest { padding:7px 0; }
+.account-menu-guest :is(p,small) { padding:0 10px; }
+[data-theme="dark"] .profile-popover .account-menu-delete,[data-theme="dark"] .profile-popover .account-menu-error { color:#ffabb5; }
+[data-theme="dark"] .profile-popover .account-menu-delete:hover { background:#40232e; }
+[data-theme="dark"] .profile-popover :is(a,button):focus-visible { outline-color:#a6c8ff; }
+
+[data-theme="dark"] .student-app .profile-popover { --muted:#abb6c8; }

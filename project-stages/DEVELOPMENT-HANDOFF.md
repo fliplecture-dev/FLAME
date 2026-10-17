@@ -4,6 +4,14 @@ Documentation reconciled: **9 October 2026, Asia/Calcutta**. Original environmen
 
 This is a technical orientation and dated handoff snapshot. [STAGES-STEPS.md](STAGES-STEPS.md) remains the **only active progress tracker**. This document does not close stages or authorize deployment. Current code and later owner decisions take precedence over historical planning examples.
 
+## Current user access and activation — 17 October 2026
+
+Public home/catalogues, guest Curiosity (10 questions/day), signed-in student questions (25/day), Study sign-in, optional phone and private `/profile` are implemented. Reset is midnight Asia/Kolkata; configurable member/per-user policies remain deferred. Owner-approved development Supabase migrations 31/32 are applied (head 20261017_32; clean drift), with nine rollback-only PostgreSQL/grant checks passing. Local API/web run on 8000/3000. See the [access/profile handoff](USER-ACCESS-PROFILES.md) for source, evidence and remaining release limits.
+
+## Current product branding — 17 October 2026
+
+Fliplecture is the product identity; FLAME is its agentic model engine. The wordmark uses locally bundled Tilt Warp, regular 400, with #00513F text on light surfaces and #60FF00 on dark surfaces. The white admin header keeps #00513F. The rounded symbol uses the same green background/lime braces. See the [current brand specification and source owners](FLIPLECTURE-DISCOVERY-IMPLEMENTATION.md#fliplecture-logo-refresh--2026-10-17). This supersedes older logo references in the historical UI notes.
+
 ## Interactive HTML5 follow-up — 9 October 2026
 
 Interactive-only development now supports self-contained HTML/HTM uploads using existing private resource storage, PostgreSQL metadata/mappings and authorized JSON delivery into a sandboxed Next.js viewer. Image/Video implementation and provider rules are unchanged; no schema migration. The real Gravity Lab — Interactive is saved as an available unpublished draft v2 with one Grade 1 Gravity topic link and eight subtopic links; stored admin preview completes a 10 m fall. Current local frontend upstream is the reload API on 127.0.0.1:8001, superseding this document's earlier port-8000 runtime snapshot. Read the [Interactive stage handoff](backend/stage-9-interactive-html5.md) for build flow, source ownership, reproducible checks, live record, remaining publication/learner/cloud/device/educator acceptance and reversal. Exact statuses/evidence remain only in STAGES-STEPS.md.

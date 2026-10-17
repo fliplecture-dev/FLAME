@@ -1,7 +1,7 @@
-import { BookOpen, Lightbulb, ChevronDown } from "lucide-react";
+import { BookOpen, Lightbulb, ChevronDown, LockKeyhole } from "lucide-react";
 import { useEffect, useRef } from "react";
 export type LearningMode = "study" | "curiosity";
-export function ModeSwitcher({ mode, onChange, variant = "tabs" }: { mode: LearningMode; onChange: (mode: LearningMode) => void; variant?: "tabs" | "brand" }) {
+export function ModeSwitcher({ mode, onChange, variant = "tabs", studyLocked = false }: { mode: LearningMode; onChange: (mode: LearningMode) => void; studyLocked?: boolean; variant?: "tabs" | "brand" }) {
   const menu = useRef<HTMLDetailsElement>(null);
   useEffect(() => {
     const outside = (event: PointerEvent) => { if (menu.current && !menu.current.contains(event.target as Node)) menu.current.open = false; };
@@ -9,7 +9,7 @@ export function ModeSwitcher({ mode, onChange, variant = "tabs" }: { mode: Learn
     return () => document.removeEventListener("pointerdown", outside);
   }, []);
   return <div className={variant === "brand" ? "flame-mode-brand" : "mode-switcher"} role="group" aria-label="Learning mode">
-    {variant === "tabs" ? <><button type="button" aria-pressed={mode === "study"} onClick={() => onChange("study")}><BookOpen size={18} aria-hidden="true" />Study</button>
+    {variant === "tabs" ? <><button type="button" aria-pressed={mode === "study"} title={studyLocked ? "Sign in to use Study mode" : undefined} onClick={() => onChange("study")}><BookOpen size={18} aria-hidden="true" />Study{studyLocked && <LockKeyhole size={12} aria-hidden="true" />}</button>
     <button type="button" aria-pressed={mode === "curiosity"} onClick={() => onChange("curiosity")}><Lightbulb size={18} aria-hidden="true" />Curiosity</button></> : <details ref={menu} className="mode-dropdown" onKeyDown={event => {
       if (event.key === "Escape") { event.preventDefault(); event.stopPropagation(); if (menu.current) menu.current.open = false; menu.current?.querySelector("summary")?.focus(); }
       if (["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) {

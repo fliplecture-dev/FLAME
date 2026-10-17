@@ -22,6 +22,12 @@ class Context(Contract):
     subtopic_id: UUID | None = None
 
 
+class CatalogueReference(Contract):
+    kind: Literal["books", "kits", "teachers", "classes"]
+    id: UUID
+    version: int = Field(ge=1)
+
+
 class AnswerRequest(Contract):
     # Identity, version and history are loaded server-side from the session.
     question: str = Field(min_length=1, max_length=4000)
@@ -30,6 +36,7 @@ class AnswerRequest(Contract):
     mode: Literal["study", "curiosity"]
     action: Literal["explain"] = "explain"
     topic_check_id: UUID | None = None
+    catalogue_item: CatalogueReference | None = None
 
     @model_validator(mode="after")
     def validate_context(self):

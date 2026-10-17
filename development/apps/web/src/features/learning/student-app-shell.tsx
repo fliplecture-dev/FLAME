@@ -6,10 +6,12 @@ import { StudentProfile } from "./student-profile";
 import { ModeSwitcher, type LearningMode } from "./mode-switcher";
 import { DesktopPaneResizer } from "./desktop-pane-resizer";
 import { ThemeToggle } from "./theme-toggle";
+import Link from "next/link";
+import { FliplectureLogo } from "@/components/ui/fliplecture-logo";
 
 const layoutPreferenceKey = "flame.sidebar.collapsed";
-export function StudentAppShell({ navigation, breadcrumb, children, mode, onModeChange, headerAction, explorePanel }: {
-  navigation: ReactNode; breadcrumb: ReactNode; children: ReactNode; mode: LearningMode; onModeChange: (mode: LearningMode) => void; headerAction?: ReactNode; explorePanel?: ReactNode;
+export function StudentAppShell({ navigation, breadcrumb, children, mode, onModeChange, headerAction, explorePanel, accountAllowance, guest = false }: {
+  accountAllowance?: ReactNode; guest?: boolean; navigation: ReactNode; breadcrumb: ReactNode; children: ReactNode; mode: LearningMode; onModeChange: (mode: LearningMode) => void; headerAction?: ReactNode; explorePanel?: ReactNode;
 }) {
   const app = useRef<HTMLDivElement>(null);
   const [collapsed, setCollapsed] = useState(false);
@@ -77,15 +79,15 @@ export function StudentAppShell({ navigation, breadcrumb, children, mode, onMode
     heading.focus({ preventScroll: true });
     heading.scrollIntoView({ block: "nearest" });
   }, [collapsed, mode, device, open]);
-  const switcher = <ModeSwitcher mode={mode} onChange={onModeChange} />;
-  const brandSwitcher = <ModeSwitcher mode={mode} onChange={onModeChange} variant="brand" />;
+  const switcher = <ModeSwitcher mode={mode} onChange={onModeChange} studyLocked={guest} />;
+  const brandSwitcher = <div className="workspace-brand"><Link className="workspace-product-link" href="/" aria-label="Fliplecture home"><FliplectureLogo /></Link><ModeSwitcher mode={mode} onChange={onModeChange} studyLocked={guest} variant="brand" /></div>;
   return <div ref={app} className={`student-app ${collapsed ? "sidebar-hidden" : ""}`}>
     <header className="flame-topbar"><button ref={trigger} className="icon-button navigation-toggle" aria-label="Open navigation" aria-expanded={open} onClick={() => { dialog.current?.showModal(); setOpen(true); }}><PanelLeftOpen size={20} /></button><div className="workspace-modes">{switcher}</div><ThemeToggle /></header>
     <a className="skip-link" href="#learning-workspace">Skip to learning workspace</a>
     <aside className="desktop-sidebar" aria-label="Learning navigation">
       <div className="sidebar-brand">{brandSwitcher}<button ref={collapseTrigger} className="icon-button" title="Collapse sidebar" aria-label="Collapse sidebar" onClick={() => { rememberCollapse(true); requestAnimationFrame(() => railTrigger.current?.focus()); }}><PanelLeftClose size={18} /></button></div>
       <div className="sidebar-scroll">{navigation}</div>
-      <div className="sidebar-account">{device === "desktop" && !collapsed && <StudentProfile />}</div>
+      <div className="sidebar-account">{device === "desktop" && !collapsed && <StudentProfile guest={guest} allowance={accountAllowance} />}</div>
       <DesktopPaneResizer pane="sidebar" />
     </aside>
     <aside className="sidebar-rail" aria-label="Compact learning navigation">
@@ -96,7 +98,7 @@ export function StudentAppShell({ navigation, breadcrumb, children, mode, onMode
         <button className="rail-button" aria-label="Curiosity" aria-pressed={mode === "curiosity"} data-tooltip="Curiosity" onClick={() => onModeChange("curiosity")}><Lightbulb size={20} aria-hidden="true" /></button>
         <button className="rail-button" aria-label="My Learning" data-tooltip="My Learning" onClick={showLearning}><Library size={20} aria-hidden="true" /></button>
       </nav>
-      <div className="sidebar-account">{device !== "mobile" && (collapsed || device === "tablet") && <StudentProfile compact />}</div>
+      <div className="sidebar-account">{device !== "mobile" && (collapsed || device === "tablet") && <StudentProfile compact guest={guest} allowance={accountAllowance} />}</div>
     </aside>
     <dialog ref={dialog} className="curriculum-drawer" aria-label="Learning navigation" onClose={() => setOpen(false)} onCancel={event => { event.preventDefault(); close(); }} onClick={e => { if (e.target === e.currentTarget) close(); }} onKeyDown={e => {
       if (e.key !== "Tab") return;
@@ -106,7 +108,7 @@ export function StudentAppShell({ navigation, breadcrumb, children, mode, onMode
       if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first?.focus(); }
     }}>
       <div className="drawer-inner"><div className="sidebar-brand">{brandSwitcher}<button className="icon-button" aria-label="Close navigation" onClick={close}><X size={20} /></button></div>
-      <div className="drawer-navigation" onClick={e => { if ((e.target as HTMLElement).closest('.topic-button, .topic-open, .shortcut-link')) close(); }}>{navigation}</div><div className="sidebar-account">{open && <StudentProfile />}</div></div>
+      <div className="drawer-navigation" onClick={e => { if ((e.target as HTMLElement).closest('.topic-button, .topic-open, .shortcut-link')) close(); }}>{navigation}</div><div className="sidebar-account">{open && <StudentProfile guest={guest} allowance={accountAllowance} />}</div></div>
     </dialog>
     <main id="learning-workspace" className="workspace" tabIndex={-1}>
       <header className="workspace-header"><div className="workspace-breadcrumb">{breadcrumb}</div><span className="workspace-motto">A calmer way to learn</span>{headerAction}</header>

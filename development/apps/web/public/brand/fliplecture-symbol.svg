@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+  <rect width="128" height="128" rx="18" fill="#00513F"/>
+  <defs>
+    <path id="brace" d="M49 12H44C27 12 24 19 24 35V43C24 55 20 58 12 58V71C20 71 24 75 24 86V94C24 110 27 116 44 116H49V103H45C39 103 38 101 38 94V86C38 75 35 69 28 64.5C35 60 38 54 38 43V34C38 27 39 25 45 25H49V12Z"/>
+  </defs>
+  <g fill="#60FF00">
+    <use href="#brace"/>
+    <use href="#brace" transform="translate(128 0) scale(-1 1)"/>
+  </g>
+</svg>

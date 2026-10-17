@@ -1,3 +1,27 @@
+## Current user-access rules — 2026-10-17
+
+Public home/catalogues remain open. `/flame` now supports guest Curiosity with 10 questions per India calendar day; Study requests sign-in. Signed-in students share 25 questions per day across both modes. Reset: midnight Asia/Kolkata. Optional phone is collected on sign-up/sign-in; `/profile` edits private phone/contact/address/city/state/country/pincode details. No configurable membership/per-user policy was added. Source/local tests are recorded in the [access/profile handoff](USER-ACCESS-PROFILES.md); owner-approved migrations 31/32 are applied to the development Supabase target (head 20261017_32; drift clean), nine rollback-only PostgreSQL/grant checks passed, and the hidden local API/web launcher is running on 8000/3000. Production website/domain release remains separate. This supersedes older no-guest/100-per-rolling-day notes below.
+
+## FLAME interaction refinements — 2026-10-17
+
+The canonical workspace route is `/flame`, with `/learn` retained as a compatibility redirect. All current entry/auth/admin links and browser harnesses use `/flame`. Responses no longer append all four catalogue links: shortcuts are shown only for categories explicitly requested in the question. The application provider now retains per-history-entry mode/topic/resumed-session/tree snapshots and shared reading positions, so Back from a catalogue restores the prior response and draft without another model request. Composer attachment/image/audio SVGs are explicitly centred inside their buttons. About identifies FLAME as Fliplecture's agentic model engine, developed by Fliplecture, and describes adaptation to shared age/prior-skills/educational-needs context. These are frontend refinements under existing F14/F15 packages; no count promotion, database change, live data write or deployment. [Handoff](FLIPLECTURE-DISCOVERY-IMPLEMENTATION.md#owner-interaction-refinements--2026-10-17).
+
+## Fliplecture discovery — source delivery 2026-10-17
+
+The new public `/` homepage centres Fliplecture and Ask FLAME anything; Books/Kits/Teachers/Classes open `/search` with top search, categories, filters, results, details and paging. Member-only `/learn` retains the current workspace; first questions enter Curiosity once, while Study still requires selected published context. Sign-in keeps a short-lived same-tab question outside URLs, and a root provider preserves in-memory drafts/requests across client navigation. Branding is Fliplecture across entry/account/admin; FLAME remains the engine. Existing browser harnesses now enter `/learn`.
+
+`functional/discovery` adds independent published-only search and version-checked Books/Classes manual administration; original Teachers/Kits owners are reused. Selected item questions carry a typed kind/ID/version, are revalidated before provider/finalization and enter a bounded untrusted-data prompt. Find related links open catalogue search; automatic new Books/Classes recommendation ranking is not yet delivered. Source migration `20261017_31` adds one catalogue table with RLS/direct-access revocation; it is NOT applied to the external database. No live records, model calls, deployment or domain/auth settings were changed. Canonical-origin redirects are opt-in and unset; marketing-site/staging/domain migration remains pending.
+
+Production build/TypeScript, 47 web units and 398 offline API checks passed (26 skipped, 28 DB integration checks deselected). Synthetic production-browser checks pass catalogue/sign-in/admin/responsive/axe flows and existing sidebar/rich-response language/theme journeys. Physical-device, configured signup/recovery, actual PostgreSQL migration/JSONB/RLS/locking, covers, expanded filters, structured class schedules, live inventory and earlier acceptance gates remain open. [Implementation/activation handoff](FLIPLECTURE-DISCOVERY-IMPLEMENTATION.md). Current [tracker](STAGES-STEPS.md) totals: **244 packages: 200 completed, 38 partial, six not started**, zero blocked. New-stage split: 15 completed, 15 partial, one not started; the earlier planning snapshot below is historical.
+
+## Fliplecture search and FLAME engine — planning update 2026-10-17
+
+The owner defined Fliplecture as the main-domain search/discovery product and FLAME as its agentic question-answering, interactive-learning and recommendation engine. The planned centred homepage has Ask FLAME anything and Books, Kits, Teachers, Classes beneath it. Submitting a question reveals the existing learning workspace; selecting a catalogue opens a dedicated top-search/results layout with category chips and filters. Independent catalogue search must work without a teaching-topic selection or model call. Search-to-learning and answer-to-catalogue handoffs preserve student intent and validate real item references.
+
+Owner-reported baseline: Books is absent from the existing design; Teachers/Kits features exist with no database records; Classes connectivity requires an audit. No fresh database inventory is claimed. Public browsing, guest AI access and initial mode defaults need an explicit contract; existing authentication/curriculum gates are not implicitly changed. Main-domain routing must account for the existing marketing site, legacy FLAME URLs and auth/cookie/CSRF settings before a separately authorized release.
+
+The [canonical tracker](STAGES-STEPS.md#f14--fliplecture-home-and-flame-workspace-entry) adds F14 (8 steps), F15 (8), B17 (9) and B18 (6), all NOT STARTED. Current totals: **244 packages: 185 completed, 23 partial, 36 not started**, zero blocked. Earlier dated counts below are historical. This is documentation-only planning; no application implementation, data population, migration, publication or deployment occurred.
+
 ## Learning workspace dark mode — 2026-10-16
 
 A moon/sun icon in the top-right header toggles the learning workspace between light and dark. `features/learning/theme-toggle.tsx` saves `flame.theme` locally, follows the device theme until an explicit preference exists, and synchronizes system/cross-tab changes. `lib/theme.ts` supplies the pre-paint root theme bootstrap to avoid a light flash on reload; the HTML attribute intentionally uses hydration-warning suppression. `app/theme.css` covers shell/navigation, composer, answers, menus, charts and mathematics controls. Response charts use CSS palette variables for readable series in both themes. Uploaded/generated sandbox documents retain their own isolated styling. No account/API setting or new dependency was added.
@@ -68,7 +92,7 @@ Resumed verification also completed F8.5 production fixture/progress/unsupported
 
 ## Current connector and local startup — 2026-10-12
 
-Current applied migration head is `20261012_30`. B13 now includes a saved administrator-owned Google Sheets connection over Image/Video/Interactive tabs, reviewed resource exports and additive imports, stable automatic identifiers, separately confirmed linked-row deletions and retryable pending write-back. Existing nonempty FLAME values remain authoritative; mappings/assets/HTML remain in FLAME. Native numeric/boolean cell output and unchanged saved-video source retention fixes are implemented. Invalid previews can be refreshed with Validate again. Sync remains manual; latest live read/comparison passed, but no latest live write was performed during verification. See [current tracker summary](STAGES-STEPS.md#latest-resource-and-google-sheets-upgrades--2026-10-12) and [connector guide](GOOGLE-SHEETS-CONNECTOR.md).
+Historical October 12 applied head was `20261012_30`; the approved October 17 development activation above advances it to `20261017_32`. B13 now includes a saved administrator-owned Google Sheets connection over Image/Video/Interactive tabs, reviewed resource exports and additive imports, stable automatic identifiers, separately confirmed linked-row deletions and retryable pending write-back. Existing nonempty FLAME values remain authoritative; mappings/assets/HTML remain in FLAME. Native numeric/boolean cell output and unchanged saved-video source retention fixes are implemented. Invalid previews can be refreshed with Validate again. Sync remains manual; latest live read/comparison passed, but no latest live write was performed during verification. See [current tracker summary](STAGES-STEPS.md#latest-resource-and-google-sheets-upgrades--2026-10-12) and [connector guide](GOOGLE-SHEETS-CONNECTOR.md).
 
 Local startup now uses `Start-FLAME.ps1` for a detached session, with explicit stop/status actions and a Windows background reload wrapper. API 8000 / web 3000 supersede earlier port-8001 routing notes below. Actual worker reload, API/database readiness and sign-in HTTP 200 were verified. Existing stage totals/release gates are unchanged.
 
@@ -146,7 +170,8 @@ Critical boundaries: direct LLM, not knowledge RAG; individual members and contr
 | development/apps/web/src/features/learning | Workspace, shell, conversations, composer and resource rendering |
 | development/apps/web/src/features/progress | Display-only proficiency components |
 | development/apps/web/src/app/globals.css and student.css | Theme/layout; source of visual truth |
-| development/apps/web/public/brand and learning-assets | Original brand and development media |
+| development/apps/web/public/brand and learning-assets | Current rounded brace SVG, unused historical brand assets and development media |
+| development/apps/web/src/app/brand.css, layout.tsx and fonts | Tilt Warp loading/license, current brand colours and responsive logo sizing |
 | development/apps/flame-api/app/main.py | Factory, lifecycle, safe request middleware and health registration |
 | development/apps/flame-api/app/core | Settings, engine/session lifecycle, errors/logging |
 | development/apps/flame-api/app/modules/health/router.py | Only implemented HTTP routes |
@@ -161,8 +186,8 @@ Local setup/run/test commands belong in the [API README](../development/apps/fla
 
 Primary visual reference: Ref UI/Sample_2.png. Preserve completed design, not a new dashboard theme.
 
-- FLAME with smaller “by FlipLecture”; original public/brand/flame-logo-horizontal-v1.png.
-- Neutral sidebar, Segoe UI/Arial/Helvetica, outline icons, bounded reading column, compact growing composer.
+- Product identity: lowercase Fliplecture in Tilt Warp, regular 400. Wordmark #00513F on light surfaces and #60FF00 on dark surfaces; the white admin header retains #00513F. Shared rounded SVG: #00513F background, #60FF00 braces, 18/128 corner radius. FLAME names the agentic engine. See the [current brand specification](FLIPLECTURE-DISCOVERY-IMPLEMENTATION.md#fliplecture-logo-refresh--2026-10-17).
+- Neutral sidebar, Segoe UI/Arial/Helvetica for interface text (Tilt Warp for the product wordmark), outline icons, bounded reading column, compact growing composer.
 - Tokens: ink #111827; muted #5e697c; line #e6e8ed; paper #fcfcfd; sidebar #f6f6f7; selected #eaf0fc. Spacing 4/8/12/16/20/24/32px.
 - Desktop >=1100px; tablet 768–1099px; mobile <=767px. Sidebar/68px rail, tablet overlay and mobile drawer; retain independent content scrolling, focus containment/return, Escape and skip link.
 - Only layout preference persists (localStorage flame.sidebar.collapsed). Current learning/history/drafts/attachments/removal archives are in memory.
@@ -258,3 +283,7 @@ B9 implementation update, 2026-09-28: B9.3–B9.10 are complete in development. 
 ### Local sign-in recovery — 2026-10-09
 
 Frontend local configuration still pointed to port 8001 after the API was restarted on port 8000. No listener existed on 8001; the current API on 8000 has both authentication and latest Explore/Curiosity routes. Corrected only FLAME_API_URL in the ignored frontend environment to http://127.0.0.1:8000. This supersedes the 2026-10-08 port-8001 runtime handoff; use the configured address and running backend consistently. Also corrected the authentication BFF to return the signed_in envelope only on a successful login/verify response, preserving operation-specific upstream errors otherwise. A credential-free empty login request previously returned HTTP 503 with a false signed_in body; after correction it reaches backend validation and returns HTTP 422 with validation_error. No user credentials, identity roles, auth rules, or database data were changed. Actual successful account sign-in remains for the user to retry.
+
+### Fliplecture logo refresh — 2026-10-17
+
+F14.2/F14.7: the lowercase Fliplecture wordmark uses **Tilt Warp**, native regular **400** with default rotation, bundled locally from Google Fonts with its OFL license. Text is **#00513F** on light surfaces (matching the symbol background) and **#60FF00** on dark surfaces (matching the braces). The white admin header keeps #00513F in either theme preference. The shared SVG has an **18/128 corner radius** and supplies the compact sidebar/browser-tab icon. [Current specification and verification](FLIPLECTURE-DISCOVERY-IMPLEMENTATION.md#fliplecture-logo-refresh--2026-10-17). Existing package statuses, totals and release gates are unchanged.

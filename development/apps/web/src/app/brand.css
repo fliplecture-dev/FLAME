@@ -1,0 +1,25 @@
+:root { --brand-text:#00513f; }
+:root[data-theme="dark"] { --brand-text:#60ff00; }
+.fliplecture-logo { display:inline-flex; align-items:center; gap:.1em; max-width:100%; vertical-align:middle; font-family:var(--font-brand),Arial,Helvetica,sans-serif; font-size:26px; font-weight:400; letter-spacing:-.015em; line-height:1.15; white-space:nowrap; }
+.fliplecture-logo-symbol { display:block; width:1.15em; height:1.15em; flex:none; }
+.fliplecture-logo-text { color:var(--brand-text); }
+.fliplecture-wordmark { margin:0; line-height:1; letter-spacing:normal; }
+.home-centre .fliplecture-logo { font-size:clamp(36px,6vw,68px); }
+.fliplecture-wordmark.compact { flex-shrink:0; }
+.fliplecture-wordmark.compact .fliplecture-logo { font-size:26px; }
+.workspace-product-link { display:inline-flex; margin:0; }
+.workspace-product-link .fliplecture-logo { font-size:23px; }
+.sidebar-rail .workspace-brand { align-items:center; }
+.sidebar-rail .fliplecture-logo-symbol { width:32px; height:32px; }
+.sidebar-rail .fliplecture-logo-text { display:none; }
+.auth-brand { letter-spacing:normal; }
+.auth-brand .fliplecture-logo { font-size:30px; }
+.about-page>.fliplecture-wordmark .fliplecture-logo { font-size:36px; }
+/* Administration currently uses a light surface in both theme preferences. */
+.b4-admin-page { --brand-text:#00513f; }
+.brand .brand-parent { padding-left:33px; margin-top:4px; }
+@media(max-width:600px) {
+  .fliplecture-wordmark.compact .fliplecture-logo { font-size:23px; }
+  .workspace-product-link .fliplecture-logo { font-size:22px; }
+  .admin-topbar-brand .brand .fliplecture-logo { font-size:20px; }
+}

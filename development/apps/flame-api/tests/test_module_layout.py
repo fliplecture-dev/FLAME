@@ -1,5 +1,6 @@
 """Layer direction, canonical model identity and pre-move API/schema compatibility."""
 import ast
+import copy
 import hashlib
 import importlib
 import json
@@ -78,13 +79,38 @@ def test_public_api_and_postgresql_schema_match_the_pre_move_baseline():
     app = create_app(Settings(_env_file=None, environment="test", database_url=None))
     api = app.openapi()
     assert app.openapi() is api  # Cached calls keep stable names and valid references.
+    # B17 adds independent discovery routes/table and an optional item reference.
+    # Keep the original B15 golden contract intact for every pre-existing declaration.
+    api = copy.deepcopy(api)
+    added_paths = [path for path in api["paths"] if path.startswith(("/api/v1/catalogue", "/api/v1/admin/catalogue"))]
+    assert len(added_paths) == 5
+    for path in added_paths:
+        del api["paths"][path]
+    # Guest access/profile is additive; project only its known additions away.
+    for path in list(api["paths"]):
+        if path.startswith("/api/v1/guest/") or path in ("/api/v1/me/profile", "/api/v1/me/usage"):
+            del api["paths"][path]
+    schemas = api["components"]["schemas"]
+    for name in ("GuestSessionInput", "GuestAnswer", "ProfileEdit"):
+        del schemas[name]
+    for name in ("RegisterBody", "LoginBody"):
+        del schemas[name]["properties"]["phone_number"]
+    for name in ("CatalogueReference", "EntryDraft", "EntryEdit", "Publication"):
+        del schemas[name]
+    del schemas["AnswerRequest"]["properties"]["catalogue_item"]
     ddl = []
+    contact_fields = ("phone_number ", "contact_number ", "address ", "city ", "state ", "country ", "pincode ")
     for name, table in sorted(Base.metadata.tables.items()):
-        ddl.append(str(CreateTable(table).compile(dialect=dialect())))
+        if name in ("flame.catalogue_entries", "flame.guest_access"):
+            continue
+        definition = str(CreateTable(table).compile(dialect=dialect()))
+        if name == "flame.student_profiles":
+            definition = "".join(line for line in definition.splitlines(keepends=True) if not line.lstrip().startswith(contact_fields))
+        ddl.append(definition)
         ddl.extend(sorted(str(CreateIndex(index).compile(dialect=dialect())) for index in table.indexes))
     def digest(value):
         return hashlib.sha256(value.encode()).hexdigest()
     actual = dict(openapi_sha256=digest(json.dumps(api, sort_keys=True)),
-        schema_sha256=digest("\n".join(ddl)), table_count=len(Base.metadata.tables), path_count=len(api["paths"]))
+        schema_sha256=digest("\n".join(ddl)), table_count=len(Base.metadata.tables) - 2, path_count=len(api["paths"]))
     baseline = json.loads((ROOT / "tests/fixtures/module-layout-baseline.json").read_text(encoding="utf-8"))
     assert actual == baseline

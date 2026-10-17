@@ -208,7 +208,7 @@ def cancel(request: Request, principal: Admin, job_id: UUID):
 def export_data(db, kind):
     query = select(MODELS[kind])
     if kind == "resources": query = query.where(MODELS[kind].deleted_at.is_(None), MODELS[kind].type.in_(["image", "video", "interactive"]))
-    if kind == "students": query = query.where(~StudentProfile.auth_subject.in_(select(AdminRole.auth_subject)))
+    if kind == "students": query = query.where(StudentProfile.status != "guest", ~StudentProfile.auth_subject.in_(select(AdminRole.auth_subject)))
     rows = db.scalars(query.order_by(MODELS[kind].id).limit(5001)).all()
     if len(rows) > 5000: fail(413, "Export is limited to 5,000 records; use smaller catalogue batches.")
     records, mappings, media = [], [], {}

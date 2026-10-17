@@ -21,7 +21,7 @@ from app.modules.application.teaching.simulations import TransientSimulations
 from app.modules.application.teaching.usage import daily_usage_limit
 
 
-@pytest.mark.parametrize("role,expected", [("admin", None), ("member", 100), (None, 100)])
+@pytest.mark.parametrize("role,expected", [("admin", None), ("member", 25), (None, 25)])
 @pytest.mark.parametrize("mode", ["study", "curiosity"])
 def test_complete_and_streamed_answers_use_verified_role_quota(monkeypatch, role, expected, mode):
     assert daily_usage_limit({"role": role}, 100) == expected

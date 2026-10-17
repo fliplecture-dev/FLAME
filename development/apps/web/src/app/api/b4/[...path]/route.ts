@@ -20,6 +20,7 @@ const allowed = [
   /^sessions(?:\/[0-9a-f-]+(?:\/messages|\/pin|\/recent|\/topic-check(?:\/history)?|\/ask|\/ask-stream|\/simulation|\/capability-check|\/clarifications\/[0-9a-f-]+)?)?$/,
   /^me\/activity$/,
   /^me$/,
+  /^me\/usage$/,
 ];
 
 async function forward(request: Request, context: { params: Promise<{ path: string[] }> }, method: "GET" | "POST" | "PATCH" | "DELETE") {

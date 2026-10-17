@@ -1,7 +1,7 @@
 import { Worker } from "node:worker_threads";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { apiRequest, checkMutation, sessionValue } from "@/lib/api/auth-bff";
+import { apiRequest, checkMutation, sessionValue, guestValue } from "@/lib/api/auth-bff";
 import { isSimulationSpec } from "@/lib/simulations/spec";
 import { trustedAdapter, runtimeDir } from "@/lib/simulations/compiler.cjs";
 
@@ -31,9 +31,10 @@ function compile(engine: string, source: string, signal: AbortSignal): Promise<s
 export async function POST(request: Request) {
   const headers = { "cache-control": "no-store" };
   const session = await sessionValue();
-  if (!session) return Response.json({ error: "authentication_required" }, { status: 401, headers });
+  const guest = !session ? await guestValue() : undefined;
+  if (!session && !guest) return Response.json({ error: "authentication_required" }, { status: 401, headers });
   if (!await checkMutation(request)) return Response.json({ error: "csrf_failed" }, { status: 403, headers });
-  if (!(await apiRequest("me", "GET", undefined, session)).ok) return Response.json({ error: "authentication_required" }, { status: 401, headers });
+  if (!(await apiRequest(session ? "me" : "guest/me", "GET", undefined, session, guest ? { "x-flame-guest": guest } : undefined)).ok) return Response.json({ error: "authentication_required" }, { status: 401, headers });
   // Bound streamed/chunked input too; Content-Length alone is not sufficient.
   let text = "";
   const reader = request.body?.getReader();

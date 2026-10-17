@@ -1,10 +1,13 @@
 "use client";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { QuestionAllowance } from "./question-allowance";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { b4Mutation, forgetLearningAnswerSession } from "@/lib/api/student-learning";
 import { learningFromMemberships, type Membership } from "@/lib/api/b4-catalogue";
 import { BookOpen, ChevronRight, Home, Lightbulb, Pin } from "lucide-react";
 import { LearningLibrary } from "@/features/curriculum/learning-library";
 import { RemovalConfirmation } from "@/components/ui/removal-confirmation";
+import { takeQuestionIntent } from "@/features/discovery/question-intent";
 import { mergeLearningPath } from "@/features/curriculum/merge-learning-path";
 import { firstBranchKeys, contextKey, ancestorKeys, requestContext } from "@/features/curriculum/learning-tree";
 import { CurriculumNavigator, type TreeViewState } from "@/features/curriculum/curriculum-navigator";
@@ -50,7 +53,14 @@ function TopicFamilyNavigation({ context, onSelect }: { context: TopicContext; o
   </nav>;
 }
 
-export function StudentWorkspace({ curricula, catalogue = [], memberships = [], live = false }: { curricula: Curriculum[]; catalogue?: Curriculum[]; memberships?: Membership[]; live?: boolean }) {
+type WorkspaceProps = { curricula: Curriculum[]; catalogue?: Curriculum[]; memberships?: Membership[]; live?: boolean };
+export function StudentWorkspace(props: WorkspaceProps) {
+  const { bfcacheId } = useRouter();
+  return <WorkspaceSession key={bfcacheId} navigationId={bfcacheId} {...props} />;
+}
+function WorkspaceSession({ curricula, catalogue = [], memberships = [], live = false, navigationId }: WorkspaceProps & { navigationId: string }) {
+  const { sessions, setDraft, restore, forget, addFiles, removeAttachment, submit, workspaceSnapshots } = useLearningConversations();
+  const [previousWorkspace] = useState(() => workspaceSnapshots.current.get(navigationId));
   const [responseLanguage, setResponseLanguage] = useState<ResponseLanguage>("en");
   useEffect(() => {
     try { const saved = localStorage.getItem("flame:response-language"); if (isResponseLanguage(saved)) setResponseLanguage(saved); } catch { /* Browser storage is optional. */ }
@@ -124,17 +134,31 @@ export function StudentWorkspace({ curricula, catalogue = [], memberships = [], 
     setView(prev => ({ query: "", filter: "all", expanded: Array.from(new Set([...prev.expanded, ...firstBranchKeys(path)])) }));
   }
   const [view, setView] = useState<TreeViewState>(() => {
-    return { query: "", filter: "all", expanded: firstBranchKeys(curricula) };
+    return previousWorkspace?.view ?? { query: "", filter: "all", expanded: firstBranchKeys(curricula) };
   });
-  const [mode, setMode] = useState<LearningMode>("study");
-  const [selected, setSelected] = useState<TopicContext | null>(null);
-  const [resumed, setResumed] = useState<SavedSession | null>(null);
-  const { sessions, setDraft, restore, forget, addFiles, removeAttachment, submit } = useLearningConversations(live);
+  const [mode, setMode] = useState<LearningMode>(previousWorkspace?.mode ?? "study");
+  const [selected, setSelected] = useState<TopicContext | null>(previousWorkspace?.selected ?? null);
+  const [resumed, setResumed] = useState<SavedSession | null>(previousWorkspace?.resumed ?? null);
+  const intentRead = useRef(false);
+  useEffect(() => {
+    if (intentRead.current) return;
+    intentRead.current = true;
+    const intent = takeQuestionIntent();
+    if (!intent) return;
+    setMode("curiosity");
+    setResponseLanguage(intent.language);
+    setDraft("curiosity", intent.question);
+    void submit("curiosity", { message: intent.question, attachments: [], mode: "curiosity", context: null,
+      responseLanguage: intent.language, catalogueItem: intent.item }, undefined, intent.id);
+  }, []);
   const [recent, setRecent] = useState<LearningShortcut[]>([]);
   const [savedRows, setSavedRows] = useState<SavedSession[]>([]);
   const [sectionOpen, setSectionOpen] = useState({ Pinned: true, Recent: true, MyLearning: true });
   const [pinBusy, setPinBusy] = useState(false);
-  const [openedConversationId, setOpenedConversationId] = useState<string | null>(null);
+  const [openedConversationId, setOpenedConversationId] = useState<string | null>(previousWorkspace?.openedConversationId ?? null);
+  useLayoutEffect(() => {
+    workspaceSnapshots.current.set(navigationId, { mode, selected, resumed, openedConversationId, view });
+  }, [navigationId, mode, selected, resumed, openedConversationId, view, workspaceSnapshots]);
   const sidebarGeneration = useRef(0);
   useEffect(() => {
     try {
@@ -390,8 +414,8 @@ export function StudentWorkspace({ curricula, catalogue = [], memberships = [], 
     {mode === "study" ? curriculumNavigation : <div className="curiosity-sidebar-note"><Lightbulb size={18} aria-hidden="true" /><p>Follow your curiosity.<span>Your explorations don’t change academic progress.</span></p></div>}
   </>;
   const breadcrumb = <nav aria-label="Learning context"><Home size={17} aria-hidden="true" />{context ? [context.curriculum.name, context.level.name, context.subject.name, context.domain.name, context.topic.name, ...(context.subtopic ? [context.subtopic.name] : [])].map((name, i) => <span key={i} className={i === 5 ? "current-crumb" : i === 0 || i === 1 || i === 3 ? "detail-crumb" : ""}><ChevronRight size={14} aria-hidden="true" />{name}</span>) : <span>{mode === "curiosity" ? "Curiosity" : "My learning space"}</span>}</nav>;
-  return <ExploreWorkspace catalogue={catalogue} context={context} curiosity={mode === "curiosity"} curiosityTurn={mode === "curiosity" ? session.turns.at(-1) ?? null : null} live={live}>{(exploreTrigger, explorePanel) => <StudentAppShell headerAction={exploreTrigger} explorePanel={explorePanel} mode={mode} onModeChange={next => { resumeRequest.current += 1; setLoadingHistory(false); setOpenedConversationId(null); setResumed(null); setMode(next); }} breadcrumb={breadcrumb} navigation={navigation}>
-    <ConversationViewport sessionId={activeId}>
+  return <ExploreWorkspace catalogue={catalogue} context={context} curiosity={mode === "curiosity"} curiosityTurn={mode === "curiosity" ? session.turns.at(-1) ?? null : null} live={live}>{(exploreTrigger, explorePanel) => <StudentAppShell accountAllowance={live ? <QuestionAllowance /> : undefined} headerAction={exploreTrigger} explorePanel={explorePanel} mode={mode} onModeChange={next => { resumeRequest.current += 1; setLoadingHistory(false); setOpenedConversationId(null); setResumed(null); setMode(next); }} breadcrumb={breadcrumb} navigation={navigation}>
+    <ConversationViewport sessionId={`${navigationId}:${activeId}`}>
       {removalNotice && <p className="removal-notice" role="status">{removalNotice}</p>}
       {loadingHistory && <p className="removal-notice" role="status">Loading conversation…</p>}
       {live && mode === "study" && resumed && !context && <p className="removal-notice" role="status">This topic is no longer published. Its conversation history is available to read.</p>}

@@ -1,4 +1,16 @@
-# FLAME frontend
+# Fliplecture frontend
+
+The product wordmark uses locally bundled **Tilt Warp**, regular **400**. Its text matches the symbol background (**#00513F**) in light mode and the braces (**#60FF00**) in dark mode; the white admin header keeps #00513F. The brace SVG has rounded corners (18/128). See the [current brand specification, source files and verification](../../../project-stages/FLIPLECTURE-DISCOVERY-IMPLEMENTATION.md#fliplecture-logo-refresh--2026-10-17).
+
+## Fliplecture discovery entry (F14/F15/B17/B18)
+
+The public `/` route is now the Fliplecture homepage. Books, Kits, Teachers and Classes open `/search`; submitting a question enters FLAME Curiosity at `/flame` without requiring sign-in. Guests receive 10 questions per India calendar day; signed-in students share 25 across Curiosity and Study, resetting at midnight Asia/Kolkata. Study requests sign-in. Optional phone is available on sign-up/sign-in; `/profile` edits private contact/address details. [Access contract and approved development activation](../../../project-stages/USER-ACCESS-PROFILES.md). Existing learner browser scripts now target `/flame`; `/learn` redirects there for compatibility. Browser Back restores the active workspace and response, and catalogue response links appear only for explicitly requested categories. New Books/Classes administration is available under `/admin`; new records are private drafts until explicitly published. Independent catalogue search uses the server-only-key BFF at `/api/catalogue` and makes no model calls.
+
+Owner-approved development Supabase activation applied `20261017_31` and `20261017_32`; schema drift is clean. Other targets need the reviewed migrations before coordinating API/web activation. No example/live inventory is seeded. Covers, expanded price/availability filters, structured class schedules and automatic Books/Classes recommendation ranking remain tracked follow-ups. [Implementation, activation, verification and domain-cutover handoff](../../../project-stages/FLIPLECTURE-DISCOVERY-IMPLEMENTATION.md).
+
+For isolated browser verification, set `$env:FLAME_NEXT_DIST_DIR='.next-discovery'`, run `npm run build`, then `node tests/discovery-browser.cjs`. The harness owns its synthetic local API and web server on port 3128 and requires the existing Playwright/Edge/axe tools (override with FLAME_UI_TOOLS). It does not use real accounts, provider calls or database records.
+
+The guest/profile browser suite is `node tests/user-access-browser.cjs` (port 3134, synthetic API, existing Playwright/Edge/axe tools). Member-policy tiers are deferred.
 
 Current development progress and remaining integration/admin steps: [canonical tracker](../../../project-stages/STAGES-STEPS.md). FRONTEND-STAGES.md and FRONTEND-VALIDATION.md preserve local UI delivery evidence.
 
@@ -34,7 +46,7 @@ From the project root, `./Start-FLAME.ps1` starts an independent background sess
 
 On Windows, the background launcher uses `scripts/dev-api.py` for backend reloads. It replaces its owned worker directly rather than relying on a console Ctrl+C event, which is unavailable in a detached session. Source reloads briefly interrupt backend requests while the frontend remains running. This wrapper uses the installed Uvicorn supervisor; verify it when upgrading Uvicorn.
 
-The `/` route contains a full-screen curriculum and learning workspace. Students can expand Curriculum → Level → Subject → Domain → Topic and select a Subtopic for Study, see 0–10 proficiency when available, and enter a learning request. Category is hidden from student navigation but its ID remains in the Study context. Tablet/mobile navigation uses a native modal drawer with keyboard focus containment and Escape support. Learning content scrolls independently of the prompt input.
+The `/flame` route contains the full-screen curriculum and learning workspace; the public `/` route opens the Fliplecture homepage. Students can expand Curriculum → Level → Subject → Domain → Topic and select a Subtopic for Study, see 0–10 proficiency when available, and enter a learning request. Category is hidden from student navigation but its ID remains in the Study context. Tablet/mobile navigation uses a native modal drawer with keyboard focus containment and Escape support. Learning content scrolls independently of the prompt input.
 
 - `src/features/curriculum/`: curriculum hierarchy types, published-tree adapter, navigation, and replaceable local data.
 - `src/features/progress/`: reusable proficiency labels and indicators.

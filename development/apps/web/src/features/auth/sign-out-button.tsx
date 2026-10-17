@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { LoaderCircle, LogOut } from "lucide-react";
 
-export function SignOutButton() {
+export function SignOutButton({ className, showIcon = false }: { className?: string; showIcon?: boolean }) {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -24,5 +25,11 @@ export function SignOutButton() {
     }
   }
 
-  return <><button type="button" onClick={signOut} disabled={busy}>{busy ? "Signing out…" : "Sign out"}</button>{error && <p role="alert">{error}</p>}</>;
+  return <>
+    <button className={className} type="button" onClick={signOut} disabled={busy} aria-busy={busy}>
+      {showIcon && (busy ? <LoaderCircle size={18} aria-hidden="true" /> : <LogOut size={18} aria-hidden="true" />)}
+      <span>{busy ? "Signing out…" : "Sign out"}</span>
+    </button>
+    {error && <p role="alert">{error}</p>}
+  </>;
 }

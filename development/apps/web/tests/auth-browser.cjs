@@ -25,8 +25,8 @@ const AxeBuilder = require(path.join(toolRoot, '@axe-core/playwright')).default;
         .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
       assert.deepEqual(result.violations.map(v => v.id), [], route + ' accessibility violations');
     }
-    await page.goto(base, { waitUntil: 'networkidle' });
-    assert.match(page.url(), /\/sign-in$/);
+    await page.goto(base+'/flame', { waitUntil: 'networkidle' });
+    assert.match(page.url(), /\/sign-in(?:\?next=.*)?$/);
     await page.goto(base + '/admin', { waitUntil: 'networkidle' });
     assert.match(page.url(), /\/admin\/sign-in$/);
     console.log('B3 account screens: 5 axe audits and 2 unauthenticated redirects passed');

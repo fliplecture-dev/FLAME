@@ -9,7 +9,8 @@
 [data-theme="dark"] :is(.flame-message,.student-app .prompt-form,.curriculum-drawer,.library-dialog,.resource-dialog,.removal-dialog,.profile-popover,.mode-dropdown-menu,.response-language-options,.response-language-trigger,.response-language-list>button,.explore-panel,.explore-item,.curriculum-search,.response-code,.response-chart,.learning-content .math-activity,.simulation-player,.auth-card) { background:#1a2230; color:var(--ink); border-color:var(--line); box-shadow:none; }
 [data-theme="dark"] :is(.learning-content,.learning-content .response-chart figcaption,.learning-content .response-chart figcaption strong,.math-activity figcaption,.math-activity figcaption strong,.math-activity-controls label,.math-activity small,.topic-button,.shortcut-link,.proficiency,.profile-admin-link,.explore-item h3,.explore-item p) { color:var(--ink); }
 [data-theme="dark"] :is(input:not([type=range]):not([type=checkbox]),textarea,select) { background:#171e2a; color:var(--ink); border-color:var(--line); }
-[data-theme="dark"] .student-app .prompt-form textarea { background:transparent; }
+/* Rounded composers/search bars supply their own surface; avoid an inner input strip. */
+[data-theme="dark"] :is(.student-app .prompt-form textarea,.home-composer .prompt-form textarea,.catalogue-search-form input) { background:transparent; }
 [data-theme="dark"] :is(textarea,input)::placeholder { color:#a0aec3; }
 [data-theme="dark"] .student-message { background:#243958; border-color:#405575; color:#e7efff; box-shadow:none; }
 [data-theme="dark"] .student-message .message-author { color:#b8cdf1; }

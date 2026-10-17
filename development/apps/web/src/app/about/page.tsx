@@ -1,0 +1,5 @@
+import Link from "next/link";
+import { FliplectureLogo } from "@/components/ui/fliplecture-logo";
+export default function About() {
+  return <main className="discovery about-page"><Link className="fliplecture-wordmark" href="/" aria-label="Fliplecture home"><FliplectureLogo /></Link><h1>Learning starts with a question.</h1><p>Discover books, kits, teachers and classes in Fliplecture.</p><h2>Meet FLAME</h2><p>FLAME is Fliplecture’s agentic model engine, developed by Fliplecture.</p><p>FLAME’s learning responses are designed to identify students’ skills and guide their next step, taking account of their age, prior knowledge, earlier skills and educational needs. The learning context students share helps FLAME tailor its explanations and recommendations.</p><p>Ask FLAME to clear a doubt, explain a concept or create an interactive experience. When you need more support, it can help you explore relevant books, kits, teachers and classes in Fliplecture.</p><p>Study follows your selected curriculum. Curiosity lets you explore open questions.</p><Link className="account-link" href="/">Ask FLAME anything</Link></main>;
+}

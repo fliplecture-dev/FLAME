@@ -84,7 +84,7 @@ const mock = http.createServer(async(req,res)=>{
     const page=await context.newPage(),errors=[],requests=[];
     page.on('pageerror',error=>errors.push(error.message));
     page.on('request',req=>{if(req.url().startsWith('https://example.com'))requests.push(req.url());});
-    await page.goto(base,{waitUntil:'networkidle'});
+    await page.goto(base+'/flame',{waitUntil:'networkidle'});
     await page.locator('.desktop-sidebar').getByRole('button',{name:'Falling objects (study)',exact:true}).click();
     await page.locator('.response-markdown strong').filter({hasText:'Strong explanation'}).waitFor();
     assert.equal(await page.locator('.response-markdown input[type=checkbox]').count(),2);

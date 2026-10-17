@@ -28,6 +28,11 @@ from app.modules.application.recommendations.router import router as recommendat
 from app.modules.application.learning_response.explore_router import router as explore_router
 from app.modules.functional.activity_kits.router import router as kits_router
 from app.modules.functional.teachers.router import router as teachers_router
+from app.modules.functional.discovery.router import router as discovery_router
+
+from app.modules.functional.identity.profile import router as profile_router
+from app.modules.functional.identity.guests import router as guest_identity_router
+from app.modules.application.teaching.guest_router import router as guest_teaching_router
 
 register_models()
 
@@ -88,6 +93,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     application.include_router(bulk_router)
     application.include_router(health_router)
     application.include_router(identity_router)
+    application.include_router(profile_router)
+    application.include_router(guest_identity_router)
+    application.include_router(guest_teaching_router)
     application.include_router(curriculum_router)
     application.include_router(conversations_router)
     application.include_router(teaching_router)
@@ -100,6 +108,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     application.include_router(explore_router)
     application.include_router(teachers_router)
     application.include_router(kits_router)
+    application.include_router(discovery_router)
     install_schema_compatibility(application)
     return application
 

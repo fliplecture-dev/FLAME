@@ -12,6 +12,8 @@ from app.modules.functional.conversations.requests import claim, fail, finalize,
 from app.modules.functional.conversations.router import bounded_history, owned
 from app.modules.functional.curriculum.models import Level
 from app.modules.functional.identity.models import StudentProfile
+from app.modules.functional.discovery.service import detail as catalogue_detail
+from app.modules.application.teaching.catalogue_context import with_listing
 from app.modules.decision_engine.teaching.capabilities import unsupported_capability
 from app.modules.functional.curriculum.teaching_context import load_context
 from app.modules.application.teaching.gateway import GatewayError
@@ -23,6 +25,8 @@ from app.modules.application.teaching.rich_answer import parse_blocks, readable
 from app.modules.application.teaching.math_visuals import apply_decision, TEMPLATES
 from app.modules.application.teaching.simulations import transient
 from app.modules.decision_engine.recommendation.learning_need import INSTRUCTION, split_intent
+
+from app.modules.application.teaching.usage import quota_day_start
 
 MAX_ANSWER_CHARS = 6000
 
@@ -59,11 +63,13 @@ def _answer(request_id, context, generated, *, max_words: int | None = None, ren
         blocks=blocks).model_dump(mode="json")
 
 
-def ask(database, gateway, student_id: UUID, session_id: UUID, key: str, body, *, daily_limit: int | None = 100, on_delta=None):
+def ask(database, gateway, student_id: UUID, session_id: UUID, key: str, body, *, daily_limit: int | None = 25, on_delta=None):
     canonical = body.model_dump(mode="json")
     # Preserve hashes for pre-language-selector requests when Auto is selected.
     if canonical.get("response_language") is None:
         canonical.pop("response_language", None)
+    if canonical.get("catalogue_item") is None:
+        canonical.pop("catalogue_item", None)
     unsupported = unsupported_capability(body.question)
     with database.session() as db, db.begin():
         # Serialize a member's quota across all owned sessions before creating a claim.
@@ -72,9 +78,10 @@ def ask(database, gateway, student_id: UUID, session_id: UUID, key: str, body, *
             StoredRequest.student_id == student_id, StoredRequest.session_id == session_id,
             StoredRequest.idempotency_key == key))
         if existing is None and daily_limit is not None:
+            start = quota_day_start()
             count = db.scalar(select(func.count()).select_from(StoredRequest).where(
                 StoredRequest.student_id == student_id,
-                StoredRequest.created_at >= datetime.now(timezone.utc) - timedelta(days=1))) or 0
+                StoredRequest.created_at >= start, StoredRequest.created_at < start + timedelta(days=1))) or 0
             if count >= daily_limit:
                 raise HTTPException(429, "daily_limit_reached")
         claimed = claim(db, student_id, session_id, key, canonical)
@@ -89,6 +96,10 @@ def ask(database, gateway, student_id: UUID, session_id: UUID, key: str, body, *
         if not getattr(gateway, "available", True):
             raise HTTPException(503, "provider_unavailable")
         context, prompt, max_words = _prepared(db, student_id, session_id, body)
+        if body.catalogue_item is not None:
+            reference = body.catalogue_item
+            listing = catalogue_detail(db, reference.kind, reference.id, reference.version)
+            prompt = with_listing(prompt, listing)
     started = perf_counter()
     try:
         messages = prompt.messages
@@ -126,6 +137,9 @@ def ask(database, gateway, student_id: UUID, session_id: UUID, key: str, body, *
             # Study rechecks publication/revision after network I/O; open Curiosity has no path.
             if context is not None:
                 load_context(db, context.ids, expected_revision=context.revision)
+            if body.catalogue_item is not None:
+                reference = body.catalogue_item
+                catalogue_detail(db, reference.kind, reference.id, reference.version)
             saved = finalize(db, claimed.request_id, claimed.token, body.question, result,
                 resolved=context, prompt_version=prompt.version + ("-intent1" if context else ""),
                 profile_version=prompt.profile_version, model=generated.model,
@@ -135,7 +149,7 @@ def ask(database, gateway, student_id: UUID, session_id: UUID, key: str, body, *
             transient.arm(student_id, saved["message_id"], response_language=body.response_language)
         return saved
     except HTTPException as exc:
-        if exc.detail == "unavailable_context":
+        if exc.detail in ("unavailable_context", "catalogue_item_unavailable"):
             with database.session() as db, db.begin():
-                fail(db, claimed.request_id, claimed.token, "unavailable_context")
+                fail(db, claimed.request_id, claimed.token, exc.detail)
         raise

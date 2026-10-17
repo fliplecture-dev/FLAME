@@ -10,7 +10,7 @@ const SimulationPlayer = dynamic(() => import("./simulation-player").then(module
 // Tab-memory only. Reloading history never automatically requests a new paid generation.
 type SimulationJob = { promise: ReturnType<typeof requestSimulation>; preparing: boolean; listeners: Set<() => void> };
 const generated = new Map<string, SimulationJob>();
-export function ResponseSimulation({ sessionId, messageId, fresh = false }: { sessionId: string; messageId: string; fresh?: boolean }) {
+export function ResponseSimulation({ sessionId, messageId, fresh = false, guest = false }: { sessionId: string; messageId: string; fresh?: boolean; guest?: boolean }) {
   const [spec, setSpec] = useState<SimulationSpec | null>(null), [state, setState] = useState("loading");
   const [resource, setResource] = useState<CatalogueSimulation | null>(null);
   const [attempt, setAttempt] = useState(0);
@@ -23,7 +23,7 @@ export function ResponseSimulation({ sessionId, messageId, fresh = false }: { se
       const entry: SimulationJob = {
         preparing: false, listeners: new Set(),
         promise: requestSimulation(async (start, signal) => {
-          const value = await b4Mutation(`sessions/${sessionId}/simulation`, "POST", { message_id: messageId, start }, undefined, signal);
+          const value = await b4Mutation(`sessions/${sessionId}/simulation`, "POST", { message_id: messageId, start }, undefined, signal, guest);
           // Eligibility checks run for all answers. Only confirmed simulation
           // work may display progress; ordinary text/F12 answers stay untouched.
           if (value?.status === "pending") {
@@ -46,7 +46,7 @@ export function ResponseSimulation({ sessionId, messageId, fresh = false }: { se
     if (pending.preparing) preparing();
     void pending.promise.then(value => { if (!active) return; if (value.status === "ready") setSpec(value.spec); if (value.status === "resource") setResource(value.resource); setState(value.status); }, () => { if (active) setState("interrupted"); });
     return () => { active = false; pending.listeners.delete(preparing); };
-  }, [sessionId, messageId, fresh, attempt]);
+  }, [sessionId, messageId, fresh, attempt, guest]);
   if (spec) return <SimulationPlayer spec={spec} />;
   if (resource) return <div className="catalogue-simulation" data-simulation-source="catalogue"><InteractiveExperience inline key={`${resource.resourceId}/${resource.version}`} title={resource.title} document={resource.document} /></div>;
   if (state === "loading" || state === "ineligible") return null;

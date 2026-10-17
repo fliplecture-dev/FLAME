@@ -3,7 +3,7 @@
 Historical delivery notes for the original eight local UI stages. Current frontend/backend status and remaining integration/admin work are maintained only in [STAGES-STEPS.md](../../../project-stages/STAGES-STEPS.md). Older “Stage 8 pending” entries below are historical; FRONTEND-VALIDATION.md records its subsequent local completion.
 
 Primary visual reference: `../../../Ref UI/Sample_2.png`.
-Brand: FLAME, with a smaller “by FlipLecture” endorsement. Use the original logo asset.
+Current brand (supersedes the original FLAME/by FlipLecture reference): lowercase Fliplecture in Tilt Warp, regular 400, with #00513F text on light surfaces and #60FF00 on dark surfaces. The white admin header keeps #00513F. Use the shared rounded-brace SVG and wordmark component; see the [current brand specification](../../../project-stages/FLIPLECTURE-DISCOVERY-IMPLEMENTATION.md#fliplecture-logo-refresh--2026-10-17).
 
 ## Student hierarchy update — 26 September 2026
 

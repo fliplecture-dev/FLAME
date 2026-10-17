@@ -80,7 +80,7 @@ const mock = http.createServer(async(req,res)=>{
     await context.addCookies([{name:'flame_session',value:'rich-test-session',url:base,httpOnly:true}]);
     const page=await context.newPage(),errors=[];
     page.on('pageerror',error=>errors.push(error.message));
-    await page.goto(base,{waitUntil:'networkidle'});
+    await page.goto(base+'/flame',{waitUntil:'networkidle'});
     const started=Date.now();
     await page.locator('.desktop-sidebar').getByRole('button',{name:'Falling objects (study)',exact:true}).click();
     await page.waitForFunction(()=>document.querySelectorAll('.math-activity').length===17 && document.querySelectorAll('.math-geometry-board svg').length===7 && document.querySelectorAll('.math-activity .MafsView').length===4 && document.querySelectorAll('.math-activity canvas').length>=6);
@@ -171,7 +171,7 @@ const mock = http.createServer(async(req,res)=>{
     const failedContext=await browser.newContext({viewport:{width:1200,height:1000}});
     await failedContext.addCookies([{name:'flame_session',value:'rich-test-session',url:base,httpOnly:true}]);
     await failedContext.route('**/'+mafsChunk,route=>route.abort());
-    const failedPage=await failedContext.newPage();await failedPage.goto(base,{waitUntil:'networkidle'});
+    const failedPage=await failedContext.newPage();await failedPage.goto(base+'/flame',{waitUntil:'networkidle'});
     await failedPage.locator('.desktop-sidebar').getByRole('button',{name:'Rich Curiosity answer (curiosity)',exact:true}).click();
     const failedActivity=failedPage.locator('.math-activity[data-template="linear_function"]').first();
     await failedActivity.getByText('The drawing is unavailable.',{exact:false}).waitFor();

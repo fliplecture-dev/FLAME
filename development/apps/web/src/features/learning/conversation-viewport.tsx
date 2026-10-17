@@ -1,9 +1,10 @@
 import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { ArrowDown } from "lucide-react";
+import { useLearningConversations } from "./use-learning-conversations";
 export function ConversationViewport({ sessionId, children }: { sessionId: string; children: ReactNode }) {
   const viewport = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
-  const positions = useRef(new Map<string, number>());
+  const { viewportPositions: positions } = useLearningConversations();
   const follow = useRef(true);
   const [away, setAway] = useState(false);
   useLayoutEffect(() => {

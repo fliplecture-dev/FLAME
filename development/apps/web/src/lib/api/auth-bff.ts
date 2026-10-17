@@ -87,3 +87,5 @@ export function clearSession(response: NextResponse) {
 export async function apiJson(response: Response) {
   try { return await response.json(); } catch { return { error: { code: "unavailable", message: "Authentication is unavailable." } }; }
 }
+
+export async function guestValue() { return (await cookies()).get("flame_guest")?.value; }
